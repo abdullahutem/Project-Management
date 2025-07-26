@@ -1,5 +1,6 @@
 import 'package:cmp/controller/user/cubit/user_cubit.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
+import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,6 +22,10 @@ class _AddUsersPageState extends State<AddUsersPage> {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text("تم إضافة الموظف الجديد")));
+        } else if (state is AddUserFaliure) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.errormessage)));
         }
       },
       builder: (context, state) {
@@ -46,14 +51,22 @@ class _AddUsersPageState extends State<AddUsersPage> {
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
-                    context.read<UserCubit>().phoneController,
-                    'رقم الهاتف',
-                    keyboardType: TextInputType.phone,
-                    validator: (v) => v == null || v.isEmpty
-                        ? 'الرجاء إدخال رقم الهاتف'
-                        : null,
+                    context.read<UserCubit>().passwordController,
+                    'كلمة المرور',
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'الرجاء إدخال كلمة المرور';
+                      }
+                      if (value.length < 6) {
+                        return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                      }
+                      return null;
+                    },
                   ),
+
                   const SizedBox(height: 16),
+
                   _buildTextField(
                     context.read<UserCubit>().emailController,
                     'البريد الإلكتروني',
@@ -72,30 +85,43 @@ class _AddUsersPageState extends State<AddUsersPage> {
                     },
                   ),
                   const SizedBox(height: 16),
-
-                  // Dropdown for role
-                  DropdownButtonFormField<String>(
-                    value: context.read<UserCubit>().selectedRole,
-                    decoration: InputDecoration(
-                      labelText: 'الدور',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                    ),
-                    items: const [
-                      DropdownMenuItem(value: 'employee', child: Text('موظف')),
-                      DropdownMenuItem(value: 'admin', child: Text('مدير')),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        //context.read<UserCubit>().selectedRole = value;
-                      });
-                    },
-                    validator: (value) => value == null || value.isEmpty
-                        ? 'الرجاء اختيار الدور'
+                  _buildTextField(
+                    context.read<UserCubit>().phoneController,
+                    'رقم الهاتف',
+                    keyboardType: TextInputType.phone,
+                    validator: (v) => v == null || v.isEmpty
+                        ? 'الرجاء إدخال رقم الهاتف'
                         : null,
+                  ),
+                  const SizedBox(height: 16),
+
+                  BlocBuilder<UserCubit, UserState>(
+                    builder: (context, state) {
+                      return DropdownButtonFormField<String>(
+                        value: context.read<UserCubit>().selectedRole,
+                        decoration: InputDecoration(
+                          labelText: 'الدور',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                        ),
+                        items: const [
+                          DropdownMenuItem(
+                            value: 'employee',
+                            child: Text('موظف'),
+                          ),
+                          DropdownMenuItem(value: 'admin', child: Text('مدير')),
+                        ],
+                        onChanged: (value) {
+                          context.read<UserCubit>().updateRole(value);
+                        },
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'الرجاء اختيار الدور'
+                            : null,
+                      );
+                    },
                   ),
                   const SizedBox(height: 16),
 
@@ -126,7 +152,11 @@ class _AddUsersPageState extends State<AddUsersPage> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        print("Form is valid. Employee saved:");
+                        context.read<UserCubit>().addNewUser();
+                        Navigator.pop(
+                          context,
+                          true,
+                        ); // return to previous page with success flag
                       }
                     },
                     icon: const Icon(Icons.save, color: Colors.white),

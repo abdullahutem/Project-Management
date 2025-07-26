@@ -32,8 +32,14 @@ class UsersPage extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             backgroundColor: ColorManager.primaryColor,
             child: const Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              Navigator.pushNamed(context, Routes.addUsersPage);
+            onPressed: () async {
+              final result = await Navigator.pushNamed(
+                context,
+                Routes.addUsersPage,
+              );
+              if (result == true) {
+                context.read<UserCubit>().getAllUsers(); // Refresh the list
+              }
             },
           ),
           appBar: AppBar(

@@ -3,8 +3,8 @@ import 'package:cmp/core/api/dio_consumer.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/resources/styles_manager.dart';
 import 'package:cmp/presentation/screens/dashboard_page.dart';
-import 'package:cmp/presentation/screens/employees/add_users_page.dart';
-import 'package:cmp/presentation/screens/employees/users_page.dart';
+import 'package:cmp/presentation/screens/users/add_users_page.dart';
+import 'package:cmp/presentation/screens/users/users_page.dart';
 import 'package:cmp/presentation/screens/login.dart';
 import 'package:cmp/presentation/screens/projects/add_project_page.dart';
 import 'package:cmp/presentation/screens/projects/projects_page.dart';
@@ -31,7 +31,6 @@ class RoutesGenerator {
     switch (settings.name) {
       case Routes.login:
         return MaterialPageRoute(builder: (_) => Login());
-
       case Routes.usersPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -41,7 +40,6 @@ class RoutesGenerator {
             child: const UsersPage(),
           ),
         );
-
       case Routes.addUsersPage:
         return MaterialPageRoute(builder: (_) => AddUsersPage());
       case Routes.projectPage:

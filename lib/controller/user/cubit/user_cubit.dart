@@ -17,11 +17,13 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController signInPassword = TextEditingController();
   LoginModel? loginModel;
 
+  TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController roleController = TextEditingController();
   TextEditingController salaryController = TextEditingController();
-  String selectedRole = 'employee';
+  String? selectedRole;
 
   // signInUser() async {
   //   try {
@@ -76,17 +78,26 @@ class UserCubit extends Cubit<UserState> {
     });
   }
 
-  // getAllUsers() async {
-  //   try {
-  //     emit(UsersLoading());
-  //     final response = await userRepo.getUsersData();
-  //     if (response != null) {
-  //       emit(UsersLoaded(usersList: [response]));
-  //     }
-  //   } on ServerException catch (e) {
-  //     emit(UsersFaliure(errormessage: e.errorModel.message));
-  //   } catch (e) {
-  //     emit(UsersFaliure(errormessage: 'Unexpected error: $e'));
-  //   }
-  // }
+  addNewUser() async {
+    emit(AddUserLoading());
+    final response = await userRepo.addNewUser(
+      name: nameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+      phone: phoneController.text,
+      role: selectedRole.toString(),
+      base_salary: salaryController.text,
+    );
+    print("=================***********=====${response}");
+
+    response.fold(
+      (error) => emit(AddUserFaliure(errormessage: error)),
+      (newUser) => emit(AddUserSucsess(newUser: newUser)),
+    );
+  }
+
+  void updateRole(String? role) {
+    selectedRole = role!;
+    //emit(UserRoleUpdated()); // or any meaningful state
+  }
 }

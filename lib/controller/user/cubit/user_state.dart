@@ -44,3 +44,17 @@ final class SingleUserFaliure extends UserState {
 }
 
 final class UserDeletedSuccess extends UserState {}
+
+final class AddUserSucsess extends UserState {
+  final UserModel newUser;
+
+  AddUserSucsess({required this.newUser});
+}
+
+final class AddUserLoading extends UserState {}
+
+final class AddUserFaliure extends UserState {
+  final String errormessage;
+
+  AddUserFaliure({required this.errormessage});
+}
