@@ -1,6 +1,7 @@
 import 'package:cmp/controller/user/cubit/user_cubit.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
+import 'package:cmp/presentation/screens/users/edite_users_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/widgets/employee_card.dart';
@@ -64,7 +65,26 @@ class UsersPage extends StatelessWidget {
                       name: emp.name,
                       phone: emp.phone,
                       role: emp.role,
-                      onEdit: () => print('Delete ${emp.name}'),
+                      onEdit: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => EditeUsersPage(
+                              name: emp.name,
+                              email: emp.email,
+                              phone: emp.phone,
+                              id: emp.id.toString(),
+                              salary: emp.base_salary.toString(),
+                              role: emp.role,
+                            ),
+                          ),
+                        );
+                        if (result == true) {
+                          context
+                              .read<UserCubit>()
+                              .getAllUsers(); // Refresh the list
+                        }
+                      },
 
                       onDelete: () =>
                           context.read<UserCubit>().deletelSingleUsers(emp.id),

@@ -107,4 +107,34 @@ class UserRepo {
       return Left(e.errorModel.message);
     }
   }
+
+  Future<Either<String, UserModel>> updateUser({
+    required String id,
+    required String name,
+    required String email,
+    required String password,
+    required String phone,
+    required String role,
+    required String base_salary,
+  }) async {
+    try {
+      final response = await api.patch(
+        EndPoint.updateUserEndPoint(id),
+        data: {
+          ApiKeys.name: name,
+          ApiKeys.email: email,
+          ApiKeys.password: password,
+          ApiKeys.phone: phone,
+          ApiKeys.role: role,
+          ApiKeys.base_salary: base_salary,
+        },
+      );
+      final userModel = UserModel.fromJson(response);
+      print("=================***********=====${userModel.id}");
+      print("=================***********=====${userModel}");
+      return Right(userModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
 }

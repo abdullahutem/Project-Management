@@ -17,6 +17,7 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController signInPassword = TextEditingController();
   LoginModel? loginModel;
 
+  TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -74,6 +75,25 @@ class UserCubit extends Cubit<UserState> {
       message,
     ) {
       emit(UserDeletedSuccess());
+      getAllUsers();
+    });
+  }
+
+  updateSingleUsers() async {
+    emit(UsersLoading());
+    final response = await userRepo.updateUser(
+      id: idController.text,
+      name: nameController.text,
+      email: emailController.text,
+      password: passwordController.text,
+      phone: phoneController.text,
+      role: roleController.text,
+      base_salary: salaryController.text,
+    );
+    response.fold((error) => emit(UsersFaliure(errormessage: error)), (
+      message,
+    ) {
+      emit(UsersUpdated(user: message));
       getAllUsers();
     });
   }

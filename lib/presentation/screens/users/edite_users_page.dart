@@ -5,35 +5,67 @@ import 'package:cmp/presentation/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddUsersPage extends StatefulWidget {
-  const AddUsersPage({super.key});
+class EditeUsersPage extends StatefulWidget {
+  final String id;
+  final String name;
+  final String email;
+  final String phone;
+  final String salary;
+  final String role;
+
+  const EditeUsersPage({
+    super.key,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.salary,
+    required this.role,
+  });
 
   @override
-  State<AddUsersPage> createState() => _AddUsersPageState();
+  State<EditeUsersPage> createState() => _EditeUsersPageState();
 }
 
-class _AddUsersPageState extends State<AddUsersPage> {
+class _EditeUsersPageState extends State<EditeUsersPage> {
   final _formKey = GlobalKey<FormState>();
+  void initState() {
+    super.initState();
+
+    final userCubit = context.read<UserCubit>();
+
+    userCubit.idController.text = widget.id;
+    userCubit.nameController.text = widget.name;
+    userCubit.emailController.text = widget.email;
+    userCubit.phoneController.text = widget.phone;
+    userCubit.salaryController.text = widget.salary;
+    userCubit.roleController.text = widget.role;
+    userCubit.selectedRole = widget.role;
+
+    print("name in the Edit user screen=================${widget.name}");
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
-        if (state is AddUserSucsess) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("تم إضافة الموظف الجديد")));
-        } else if (state is AddUserFaliure) {
+        if (state is UsersUpdated) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("تم تعديل الموظف بنجاح")),
+          );
+        } else if (state is UsersFaliure) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.errormessage)));
         }
       },
       builder: (context, state) {
+        final cubit = context.read<UserCubit>();
+
         return Scaffold(
           appBar: AppBar(
             title: const Text(
-              'إضافة موظف',
+              'تعديل الموظف',
               style: TextStyle(color: Colors.white),
             ),
             backgroundColor: ColorManager.primaryColor,
@@ -46,17 +78,16 @@ class _AddUsersPageState extends State<AddUsersPage> {
               child: ListView(
                 children: [
                   customTextField(
-                    context.read<UserCubit>().nameController,
+                    cubit.nameController,
                     'الاسم الكامل',
                     icon: Icons.person,
                     validator: (v) =>
                         v == null || v.isEmpty ? 'الرجاء إدخال الإسم' : null,
                   ),
-
                   customTextField(
-                    icon: Icons.email,
-                    context.read<UserCubit>().emailController,
+                    cubit.emailController, // ✅ This is a TextEditingController
                     'البريد الإلكتروني',
+                    icon: Icons.email,
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -72,32 +103,31 @@ class _AddUsersPageState extends State<AddUsersPage> {
                     },
                   ),
                   customTextField(
-                    context.read<UserCubit>().phoneController,
+                    cubit.phoneController,
                     'رقم الهاتف',
-                    keyboardType: TextInputType.phone,
                     icon: Icons.phone,
+                    keyboardType: TextInputType.phone,
                     validator: (v) => v == null || v.isEmpty
                         ? 'الرجاء إدخال رقم الهاتف'
                         : null,
                   ),
-
                   customTextField(
-                    context.read<UserCubit>().passwordController,
+                    cubit.passwordController,
                     'كلمة المرور',
-                    obscureText: true,
                     icon: Icons.lock,
+                    obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال كلمة المرور ';
+                        return 'الرجاء إدخال كلمة المرور';
                       }
+                      return null;
                     },
                   ),
-
                   customTextField(
-                    context.read<UserCubit>().salaryController,
+                    cubit.salaryController,
                     'الراتب الأساسي',
-                    keyboardType: TextInputType.number,
                     icon: Icons.attach_money,
+                    keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'الرجاء إدخال الراتب';
@@ -108,18 +138,15 @@ class _AddUsersPageState extends State<AddUsersPage> {
                       return null;
                     },
                   ),
-
                   const SizedBox(height: 16),
-
                   customDropdownField(
-                    value: context.read<UserCubit>().selectedRole,
+                    value: cubit.selectedRole,
+                    icon: Icons.security,
                     items: const [
                       DropdownMenuItem(value: 'employee', child: Text('موظف')),
                       DropdownMenuItem(value: 'admin', child: Text('مدير')),
                     ],
-                    onChanged: (val) =>
-                        context.read<UserCubit>().updateRole(val),
-                    icon: Icons.security,
+                    onChanged: (val) => cubit.updateRole(val),
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton.icon(
@@ -132,13 +159,13 @@ class _AddUsersPageState extends State<AddUsersPage> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        context.read<UserCubit>().addNewUser();
+                        cubit.updateSingleUsers();
                         Navigator.pop(context, true);
                       }
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
                     label: const Text(
-                      'إضافة الموظف',
+                      'تحديث البيانات',
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),

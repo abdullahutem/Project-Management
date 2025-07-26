@@ -5,6 +5,10 @@ class EndPoint {
   static String getUserDataEndPoint(int id) {
     return "users/$id";
   }
+
+  static String updateUserEndPoint(String id) {
+    return "users/$id";
+  }
 }
 
 class ApiKeys {

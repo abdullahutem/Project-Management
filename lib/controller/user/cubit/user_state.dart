@@ -58,3 +58,8 @@ final class AddUserFaliure extends UserState {
 
   AddUserFaliure({required this.errormessage});
 }
+
+final class UsersUpdated extends UserState {
+  final UserModel user;
+  UsersUpdated({required this.user});
+}

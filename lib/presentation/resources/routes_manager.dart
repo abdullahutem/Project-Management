@@ -4,6 +4,7 @@ import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/resources/styles_manager.dart';
 import 'package:cmp/presentation/screens/dashboard_page.dart';
 import 'package:cmp/presentation/screens/users/add_users_page.dart';
+import 'package:cmp/presentation/screens/users/edite_users_page.dart';
 import 'package:cmp/presentation/screens/users/users_page.dart';
 import 'package:cmp/presentation/screens/login.dart';
 import 'package:cmp/presentation/screens/projects/add_project_page.dart';
@@ -19,6 +20,7 @@ class Routes {
   static const String login = '/';
   static const String usersPage = '/users';
   static const String addUsersPage = '/add_Users';
+  static const String editUsersPage = '/edit_Users';
   static const String projectPage = '/project';
   static const String addProjectPage = '/add_project';
   static const String taskPage = '/task';
@@ -42,6 +44,8 @@ class RoutesGenerator {
         );
       case Routes.addUsersPage:
         return MaterialPageRoute(builder: (_) => AddUsersPage());
+      // case Routes.editUsersPage:
+      //   return MaterialPageRoute(builder: (_) => EditeUsersPage());
       case Routes.projectPage:
         return MaterialPageRoute(builder: (_) => ProjectsPage());
       case Routes.addProjectPage:
