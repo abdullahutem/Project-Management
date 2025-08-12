@@ -5,7 +5,7 @@ import 'package:cmp/presentation/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class EditeUsersPage extends StatefulWidget {
+class EditUsersPage extends StatefulWidget {
   final String id;
   final String name;
   final String email;
@@ -13,7 +13,7 @@ class EditeUsersPage extends StatefulWidget {
   final String salary;
   final String role;
 
-  const EditeUsersPage({
+  const EditUsersPage({
     super.key,
     required this.id,
     required this.name,
@@ -24,16 +24,15 @@ class EditeUsersPage extends StatefulWidget {
   });
 
   @override
-  State<EditeUsersPage> createState() => _EditeUsersPageState();
+  State<EditUsersPage> createState() => _EditUsersPageState();
 }
 
-class _EditeUsersPageState extends State<EditeUsersPage> {
+class _EditUsersPageState extends State<EditUsersPage> {
   final _formKey = GlobalKey<FormState>();
+  @override
   void initState() {
     super.initState();
-
     final userCubit = context.read<UserCubit>();
-
     userCubit.idController.text = widget.id;
     userCubit.nameController.text = widget.name;
     userCubit.emailController.text = widget.email;
@@ -41,8 +40,20 @@ class _EditeUsersPageState extends State<EditeUsersPage> {
     userCubit.salaryController.text = widget.salary;
     userCubit.roleController.text = widget.role;
     userCubit.selectedRole = widget.role;
+  }
 
-    print("name in the Edit user screen=================${widget.name}");
+  late UserCubit userCubit;
+  @override
+  void dispose() {
+    // Clear without using context
+    userCubit.idController.clear();
+    userCubit.nameController.clear();
+    userCubit.emailController.clear();
+    userCubit.phoneController.clear();
+    userCubit.salaryController.clear();
+    userCubit.roleController.clear();
+
+    super.dispose();
   }
 
   @override
@@ -77,6 +88,15 @@ class _EditeUsersPageState extends State<EditeUsersPage> {
               key: _formKey,
               child: ListView(
                 children: [
+                  const Text(
+                    'الاسم الكامل',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   customTextField(
                     cubit.nameController,
                     'الاسم الكامل',
@@ -84,6 +104,16 @@ class _EditeUsersPageState extends State<EditeUsersPage> {
                     validator: (v) =>
                         v == null || v.isEmpty ? 'الرجاء إدخال الإسم' : null,
                   ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'البريد الإلكتروني',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   customTextField(
                     cubit.emailController, // ✅ This is a TextEditingController
                     'البريد الإلكتروني',
@@ -102,6 +132,16 @@ class _EditeUsersPageState extends State<EditeUsersPage> {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'رقم الهاتف',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   customTextField(
                     cubit.phoneController,
                     'رقم الهاتف',
@@ -111,18 +151,16 @@ class _EditeUsersPageState extends State<EditeUsersPage> {
                         ? 'الرجاء إدخال رقم الهاتف'
                         : null,
                   ),
-                  customTextField(
-                    cubit.passwordController,
-                    'كلمة المرور',
-                    icon: Icons.lock,
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'الرجاء إدخال كلمة المرور';
-                      }
-                      return null;
-                    },
+                  const SizedBox(height: 8),
+                  const Text(
+                    'الراتب الأساسي',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
+                  const SizedBox(height: 8),
                   customTextField(
                     cubit.salaryController,
                     'الراتب الأساسي',

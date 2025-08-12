@@ -1,138 +1,233 @@
-import 'package:cmp/models/user_model.dart';
+import 'package:cmp/controller/project/cubit/project_cubit.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
+import 'package:cmp/presentation/widgets/custom_dropdown_field.dart';
+import 'package:cmp/presentation/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddProjectPage extends StatefulWidget {
+class AddProjectPage extends StatelessWidget {
   const AddProjectPage({super.key});
 
   @override
-  State<AddProjectPage> createState() => _AddProjectPageState();
-}
-
-class _AddProjectPageState extends State<AddProjectPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  final TextEditingController _titleController = TextEditingController();
-
-  // Sample employee list (in real app, fetch from a data source)
-  List<UserModel> employees = [
-    UserModel(
-      id: 1,
-      name: 'عبدالله علي',
-      phone: '0501234567',
-      email: 'abdullah@example.com',
-      base_salary: 2000,
-      role: '',
-    ),
-    UserModel(
-      id: 2,
-      name: 'سارة محمد',
-      phone: '0509876543',
-      email: 'sarah@example.com',
-      base_salary: 2000,
-      role: '',
-    ),
-  ];
-
-  UserModel? selectedEmployee;
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'إضافة مشروع',
-          style: TextStyle(color: Colors.white, fontSize: 22),
-        ),
-        backgroundColor: ColorManager.primaryColor,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              // Project Title
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'اسم المشروع',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'يرجى إدخال اسم المشروع';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
+    final cubit = context.read<ProjectCubit>();
 
-              // Dropdown to select Employee
-              DropdownButtonFormField<UserModel>(
-                value: selectedEmployee,
-                decoration: const InputDecoration(
-                  labelText: 'اختر الموظف',
-                  border: OutlineInputBorder(),
-                ),
-                items: employees.map((emp) {
-                  return DropdownMenuItem<UserModel>(
-                    value: emp,
-                    child: Text(emp.name),
-                  );
-                }).toList(),
-                onChanged: (UserModel? value) {
-                  setState(() {
-                    selectedEmployee = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'يرجى اختيار الموظف';
-                  }
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 30),
-
-              // Submit Button
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorManager.primaryColor,
+    return BlocConsumer<ProjectCubit, ProjectState>(
+      listener: (context, state) {
+        if (state is AddProjectSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("تم إضافة المشروع بنجاح")),
+          );
+          Navigator.pop(context, true);
+        } else if (state is AddProjectFailure) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.errormessage)));
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'إضافة مشروع',
+              style: TextStyle(color: Colors.white, fontFamily: "EXPOARABIC"),
+            ),
+            backgroundColor: ColorManager.primaryColor,
+            iconTheme: const IconThemeData(color: Colors.white),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+              key: cubit.formKey,
+              child: ListView(
+                children: [
+                  const Text(
+                    "اسم المشروع",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "EXPOARABIC",
+                    ),
                   ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Will process the form later
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          backgroundColor: ColorManager.primaryColor,
-                          content: Text(
-                            'تمت إضافة المشروع بنجاح!',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  const SizedBox(height: 8),
+                  customTextField(
+                    cubit.nameController,
+                    'اسم المشروع',
+                    icon: Icons.work,
+                    validator: (v) =>
+                        v == null || v.isEmpty ? 'الرجاء إدخال الاسم' : null,
+                  ),
+                  const SizedBox(height: 8),
+
+                  const Text(
+                    "تاريخ البدء",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "EXPOARABIC",
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // START DATE PICKER
+                  GestureDetector(
+                    onTap: () async {
+                      DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (picked != null) {
+                        cubit.updateStartDate(picked);
+                      }
+                    },
+                    child: AbsorbPointer(
+                      child: customTextField(
+                        cubit.startDateController,
+                        'تاريخ البدء',
+                        icon: Icons.date_range,
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'الرجاء إدخال تاريخ البدء'
+                            : null,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  const Text(
+                    "تاريخ الانتهاء",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "EXPOARABIC",
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // END DATE PICKER
+                  GestureDetector(
+                    onTap: () async {
+                      DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (picked != null) {
+                        cubit.updateEndDate(picked);
+                      }
+                    },
+                    child: AbsorbPointer(
+                      child: customTextField(
+                        cubit.endDateController,
+                        'تاريخ الانتهاء',
+                        icon: Icons.event,
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'الرجاء إدخال تاريخ الانتهاء'
+                            : null,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  const Text(
+                    "حالة المشروع",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: "EXPOARABIC",
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  customDropdownField(
+                    value: cubit.statusController.text.isEmpty
+                        ? "pending"
+                        : cubit.statusController.text,
+                    icon: Icons.info,
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'pending',
+                        child: Text(
+                          'قيد الانتظار',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "EXPOARABIC",
                           ),
                         ),
-                      );
-                    }
-                  },
-                  child: const Text(
-                    'إضافة المشروع',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                      DropdownMenuItem(
+                        value: 'completed',
+                        child: Text(
+                          'مكتمل',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "EXPOARABIC",
+                          ),
+                        ),
+                      ),
+                    ],
+                    onChanged: (val) => cubit.statusController.text = val ?? '',
                   ),
-                ),
+                  const SizedBox(height: 16),
+                  BlocBuilder<ProjectCubit, ProjectState>(
+                    builder: (context, state) {
+                      return SwitchListTile(
+                        title: const Text(
+                          'هل المشروع مفعل؟',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "EXPOARABIC",
+                          ),
+                        ),
+                        value: cubit.isUpdateValue,
+                        onChanged: cubit.updateValue,
+                        activeColor: ColorManager.primaryColor,
+                        secondary: const Icon(Icons.check_circle),
+                      );
+                    },
+                  ),
+
+                  const SizedBox(height: 30),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorManager.primaryColor,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (cubit.formKey.currentState!.validate()) {
+                        cubit.addNewProject();
+                        Navigator.pop(context);
+                      }
+                    },
+                    icon: const Icon(Icons.save, color: Colors.white),
+                    label: const Text(
+                      'إضافة المشروع',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "EXPOARABIC",
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

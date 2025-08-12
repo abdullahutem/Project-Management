@@ -1,6 +1,10 @@
+import 'package:cmp/cache/cache_helper.dart';
+
+import 'package:cmp/core/api/end_point.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SideMenu extends StatelessWidget {
@@ -25,14 +29,21 @@ class SideMenu extends StatelessWidget {
             ),
           ),
           DrawerListTile(
-            title: "لوحة التحكم",
+            title: "الرئيسية",
             svgSrc: "assets/icons/menu_dashboard.svg",
             press: () {
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                Routes.dashboardPage,
+                Routes.homePage,
                 (route) => false,
               );
+            },
+          ),
+          DrawerListTile(
+            title: "لوحة التحكم",
+            svgSrc: "assets/icons/menu_dashboard.svg",
+            press: () {
+              Navigator.pushNamed(context, Routes.dashboardPage);
             },
           ),
 
@@ -51,10 +62,17 @@ class SideMenu extends StatelessWidget {
             },
           ),
           DrawerListTile(
+            title: "إسناد المشاريع",
+            svgSrc: "assets/icons/menu_store.svg",
+            press: () {
+              Navigator.pushNamed(context, Routes.projectUserPage);
+            },
+          ),
+          DrawerListTile(
             title: "المهام",
             svgSrc: "assets/icons/menu_task.svg",
             press: () {
-              Navigator.pushNamed(context, Routes.taskPage);
+              Navigator.pushNamed(context, Routes.allProjects);
             },
           ),
 
@@ -62,6 +80,35 @@ class SideMenu extends StatelessWidget {
             title: "التقارير",
             svgSrc: "assets/icons/menu_tran.svg",
             press: () {},
+          ),
+          DrawerListTile(
+            title: "ملفي",
+            svgSrc: "assets/icons/menu_tran.svg",
+            press: () {
+              Navigator.pushNamed(context, Routes.profilePage);
+            },
+          ),
+          DrawerListTile(
+            title: "مشروعي",
+            svgSrc: "assets/icons/menu_tran.svg",
+            press: () {
+              Navigator.pushNamed(context, Routes.projectDetailsPage);
+            },
+          ),
+          DrawerListTile(
+            title: "موظفي",
+            svgSrc: "assets/icons/menu_tran.svg",
+            press: () {
+              Navigator.pushNamed(context, Routes.userDetailsPage);
+            },
+          ),
+
+          DrawerListTile(
+            title: "تسجيل الخروج",
+            svgSrc: "assets/icons/logout.svg", // Make sure this SVG exists
+            press: () {
+              logoutUser(context);
+            },
           ),
         ],
       ),
@@ -92,8 +139,20 @@ class DrawerListTile extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: TextStyle(color: ColorManager.white, fontSize: 20),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontFamily: "EXPOARABIC",
+        ),
       ),
     );
   }
+}
+
+void logoutUser(BuildContext context) {
+  // Remove the token from SharedPreferences
+  CacheHelper().removeData(key: ApiKeys.token);
+
+  // Navigate to the login screen and remove all previous routes
+  Navigator.pushNamedAndRemoveUntil(context, Routes.login, (route) => false);
 }

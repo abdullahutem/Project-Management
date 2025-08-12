@@ -1,10 +1,11 @@
 import 'package:cmp/controller/user/cubit/user_cubit.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
-import 'package:cmp/presentation/screens/users/edite_users_page.dart';
+import 'package:cmp/presentation/screens/users/edit_users_page.dart';
+import 'package:cmp/presentation/screens/users/user_details_with_project_page.dart';
+import 'package:cmp/presentation/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
-import 'package:cmp/presentation/widgets/employee_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UsersPage extends StatelessWidget {
@@ -14,14 +15,16 @@ class UsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
-        // You can show a snackbar or alert on failure here
         if (state is UsersFaliure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errormessage)));
-        } else if (state is UserDeletedSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              content: Text(state.errormessage),
+              backgroundColor: Colors.redAccent,
+            ),
+          );
+        } else if (state is UserDeletedSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
               content: Text("تم حذف الموظف"),
               backgroundColor: Colors.green,
             ),
@@ -30,26 +33,20 @@ class UsersPage extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: ColorManager.primaryColor,
-            child: const Icon(Icons.add, color: Colors.white),
-            onPressed: () async {
-              final result = await Navigator.pushNamed(
-                context,
-                Routes.addUsersPage,
-              );
-              if (result == true) {
-                context.read<UserCubit>().getAllUsers(); // Refresh the list
-              }
-            },
-          ),
           appBar: AppBar(
-            iconTheme: const IconThemeData(color: Colors.white),
+            backgroundColor: ColorManager.primaryColor,
             title: const Text(
               'الموظفين',
-              style: TextStyle(color: Colors.white, fontSize: 22),
+              style: TextStyle(
+                fontFamily: "EXPOARABIC",
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            backgroundColor: ColorManager.primaryColor,
+            centerTitle: true,
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.white),
           ),
           body: Builder(
             builder: (_) {
@@ -57,47 +54,102 @@ class UsersPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is UsersLoaded) {
                 final List<UserModel> employees = state.usersList;
-                return ListView.builder(
-                  itemCount: employees.length,
-                  itemBuilder: (context, index) {
-                    final emp = employees[index];
-                    return EmployeeCard(
-                      name: emp.name,
-                      phone: emp.phone,
-                      role: emp.role,
-                      onEdit: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => EditeUsersPage(
-                              name: emp.name,
-                              email: emp.email,
-                              phone: emp.phone,
-                              id: emp.id.toString(),
-                              salary: emp.base_salary.toString(),
-                              role: emp.role,
-                            ),
-                          ),
-                        );
-                        if (result == true) {
-                          context
+                if (employees.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'لا توجد بيانات',
+                      style: TextStyle(
+                        fontFamily: "EXPOARABIC",
+                        fontSize: 18,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                      itemCount: employees.length,
+                      // In UsersPage, inside ListView.builder's itemBuilder:
+                      itemBuilder: (context, index) {
+                        final user = employees[index];
+                        return UserCard(
+                          user: user,
+                          onEdit: () async {
+                            // This is your existing edit logic
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => EditUsersPage(
+                                  name: user.name,
+                                  email: user.email,
+                                  phone: user.phone,
+                                  id: user.id.toString(),
+                                  salary: user.base_salary.toString(),
+                                  role: user.role,
+                                ),
+                              ),
+                            );
+                            if (result == true) {
+                              context.read<UserCubit>().getAllUsers();
+                            }
+                          },
+                          onDelete: () => context
                               .read<UserCubit>()
-                              .getAllUsers(); // Refresh the list
-                        }
+                              .deletelSingleUsers(user.id),
+                          // Add an onTap for the whole card to navigate to details
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    UserDetailsWithProjectPage(user: user),
+                              ),
+                            );
+                          },
+                        );
                       },
-
-                      onDelete: () =>
-                          context.read<UserCubit>().deletelSingleUsers(emp.id),
-                    );
-                  },
-                );
+                    ),
+                  );
+                }
               } else if (state is UsersFaliure) {
-                return Center(child: Text('حدث خطأ: ${state.errormessage}'));
+                return Center(
+                  child: Text(
+                    'حدث خطأ: ${state.errormessage}',
+                    style: const TextStyle(
+                      fontFamily: "EXPOARABIC",
+                      color: Colors.redAccent,
+                      fontSize: 16,
+                    ),
+                  ),
+                );
               } else {
-                return const SizedBox(); // default empty state
+                return const SizedBox();
               }
             },
           ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () async {
+              final result = await Navigator.pushNamed(
+                context,
+                Routes.addUsersPage,
+              );
+              if (result == true) {
+                context.read<UserCubit>().getAllUsers();
+              }
+            },
+            icon: const Icon(Icons.person_add, color: Colors.white),
+            label: const Text(
+              'أضف موظف',
+              style: TextStyle(fontFamily: "EXPOARABIC", color: Colors.white),
+            ),
+            backgroundColor: ColorManager.primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
         );
       },
     );

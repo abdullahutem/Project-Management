@@ -11,6 +11,12 @@ final class SignInSucsess extends UserState {
   SignInSucsess({required this.message});
 }
 
+final class LogoutSucsess extends UserState {
+  final String message;
+
+  LogoutSucsess({required this.message});
+}
+
 final class SignInLoading extends UserState {}
 
 final class SignInFaliure extends UserState {

@@ -28,7 +28,10 @@ Widget customDropdownField({
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: 'اختر الدور',
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: TextStyle(
+                fontFamily: "EXPOARABIC",
+                color: Colors.grey,
+              ),
             ),
             items: items,
             onChanged: onChanged,

@@ -35,7 +35,10 @@ Widget customTextField(
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: label,
-              hintStyle: const TextStyle(color: Colors.grey),
+              hintStyle: const TextStyle(
+                fontFamily: "EXPOARABIC",
+                color: Colors.grey,
+              ),
             ),
           ),
         ),

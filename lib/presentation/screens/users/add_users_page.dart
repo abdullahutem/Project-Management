@@ -34,7 +34,7 @@ class _AddUsersPageState extends State<AddUsersPage> {
           appBar: AppBar(
             title: const Text(
               'إضافة موظف',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white, fontFamily: "EXPOARABIC"),
             ),
             backgroundColor: ColorManager.primaryColor,
             iconTheme: const IconThemeData(color: Colors.white),
@@ -108,14 +108,24 @@ class _AddUsersPageState extends State<AddUsersPage> {
                       return null;
                     },
                   ),
-
                   const SizedBox(height: 16),
-
                   customDropdownField(
                     value: context.read<UserCubit>().selectedRole,
                     items: const [
-                      DropdownMenuItem(value: 'employee', child: Text('موظف')),
-                      DropdownMenuItem(value: 'admin', child: Text('مدير')),
+                      DropdownMenuItem(
+                        value: 'employee',
+                        child: Text(
+                          'موظف',
+                          style: TextStyle(fontFamily: "EXPOARABIC"),
+                        ),
+                      ),
+                      DropdownMenuItem(
+                        value: 'admin',
+                        child: Text(
+                          'مدير',
+                          style: TextStyle(fontFamily: "EXPOARABIC"),
+                        ),
+                      ),
                     ],
                     onChanged: (val) =>
                         context.read<UserCubit>().updateRole(val),
@@ -139,7 +149,11 @@ class _AddUsersPageState extends State<AddUsersPage> {
                     icon: const Icon(Icons.save, color: Colors.white),
                     label: const Text(
                       'إضافة الموظف',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                        fontFamily: "EXPOARABIC",
+                      ),
                     ),
                   ),
                 ],

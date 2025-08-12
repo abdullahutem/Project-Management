@@ -25,47 +25,55 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController roleController = TextEditingController();
   TextEditingController salaryController = TextEditingController();
   String? selectedRole;
-
-  // signInUser() async {
-  //   try {
-  //     emit(SignInLoading());
-  //     final response = await userRepo.siginUser(
-  //       signInEmail: signInEmail.text,
-  //       signInPassword: signInPassword.text,
-  //     );
-  //     if (response != null) {
-  //       emit(SignInSucsess(message: loginModel!.token));
-  //     }
-  //   } on ServerException catch (e) {
-  //     emit(SignInFaliure(errormessage: e.errorModel.message));
-  //   } catch (e) {
-  //     emit(SignInFaliure(errormessage: 'Unexpected error: $e'));
-  //   }
-  // }
+  List<UserModel> usersList = [];
 
   signInUser() async {
     emit(SignInLoading());
-    final response = await userRepo.siginUser(
+    final response = await userRepo.signInUser(
       signInEmail: signInEmail.text,
       signInPassword: signInPassword.text,
     );
-    print("=================***********=====${response}");
-
     response.fold(
       (error) => emit(SignInFaliure(errormessage: error)),
       (loginModel) => emit(SignInSucsess(message: loginModel.token)),
     );
   }
 
+  logoutUser() async {
+    emit(SignInLoading());
+    final response = await userRepo.logoutUser();
+    response.fold(
+      (error) => emit(SignInFaliure(errormessage: error)),
+      (logout) => emit(LogoutSucsess(message: logout.message)),
+    );
+  }
+
+  int getUserId(String name, UserCubit cubit) {
+    final state = cubit.state;
+    if (state is UsersLoaded) {
+      final user = state.usersList.firstWhere(
+        (u) => u.name == name,
+        orElse: () => UserModel(
+          id: 0,
+          name: 'Unknown',
+          email: '',
+          phone: '',
+          role: '',
+          base_salary: 0,
+        ),
+      );
+      return user.id;
+    }
+    return 0;
+  }
+
   getAllUsers() async {
     emit(UsersLoading());
     final response = await userRepo.getUsersData();
-    print("=================***********=====${response}");
-
-    response.fold(
-      (error) => emit(UsersFaliure(errormessage: error)),
-      (users) => emit(UsersLoaded(usersList: users)),
-    );
+    response.fold((error) => emit(UsersFaliure(errormessage: error)), (users) {
+      usersList = users;
+      emit(UsersLoaded(usersList: users));
+    });
   }
 
   deletelSingleUsers(int id) async {

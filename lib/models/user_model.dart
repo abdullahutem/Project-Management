@@ -26,4 +26,14 @@ class UserModel {
       base_salary: double.parse(json["data"][ApiKeys.base_salary].toString()),
     );
   }
+  factory UserModel.fromJsonNoData(Map<String, dynamic> json) {
+    return UserModel(
+      id: json[ApiKeys.id],
+      name: json[ApiKeys.name],
+      email: json[ApiKeys.email],
+      phone: json[ApiKeys.phone],
+      role: json[ApiKeys.role],
+      base_salary: double.parse(json[ApiKeys.base_salary].toString()),
+    );
+  }
 }

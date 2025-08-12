@@ -60,6 +60,7 @@ class DashboardCard extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
+                  fontFamily: "EXPOARABIC",
                   fontSize: 18,
                   fontWeight: FontWeight.w600, // Semi-bold for label
                   color: Colors.white.withOpacity(
@@ -73,6 +74,7 @@ class DashboardCard extends StatelessWidget {
                 Text(
                   count.toString(),
                   style: const TextStyle(
+                    fontFamily: "EXPOARABIC",
                     fontSize: 38, // Very large and bold for impact
                     fontWeight: FontWeight.w900,
                     color: Colors.white,

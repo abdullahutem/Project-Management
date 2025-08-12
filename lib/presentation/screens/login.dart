@@ -20,7 +20,7 @@ class Login extends StatelessWidget {
       child: BlocListener<UserCubit, UserState>(
         listener: (context, state) {
           if (state is SignInSucsess) {
-            Navigator.pushReplacementNamed(context, Routes.dashboardPage);
+            Navigator.pushReplacementNamed(context, Routes.homePage);
           } else if (state is SignInFaliure) {
             ScaffoldMessenger.of(
               context,
@@ -92,7 +92,8 @@ class Login extends StatelessWidget {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 40,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "EXPOARABIC",
                                 ),
                               ),
                             ),
@@ -215,7 +216,9 @@ class Login extends StatelessWidget {
                                             "تسجيل الدخول",
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "EXPOARABIC",
                                             ),
                                           ),
                                         ),

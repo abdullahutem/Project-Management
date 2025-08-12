@@ -2,6 +2,7 @@ import 'package:cmp/cache/cache_helper.dart';
 import 'package:cmp/core/api/api_consumer.dart';
 import 'package:cmp/core/api/end_point.dart';
 import 'package:cmp/core/errors/exceptions.dart';
+import 'package:cmp/models/logout_model.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/models/login_model.dart';
 import 'package:dartz/dartz.dart';
@@ -11,7 +12,7 @@ class UserRepo {
 
   UserRepo({required this.api});
 
-  Future<Either<String, LoginModel>> siginUser({
+  Future<Either<String, LoginModel>> signInUser({
     required String signInEmail,
     required String signInPassword,
   }) async {
@@ -21,10 +22,25 @@ class UserRepo {
         data: {ApiKeys.email: signInEmail, ApiKeys.password: signInPassword},
       );
       final loginModel = LoginModel.fromJson(response);
-      print("=================***********=====${loginModel.token}");
-      print("=================***********=====${loginModel}");
       await CacheHelper().saveData(key: ApiKeys.token, value: loginModel.token);
+      await CacheHelper().saveData(key: ApiKeys.role, value: loginModel.role);
+      await CacheHelper().saveData(key: ApiKeys.name, value: loginModel.name);
+      await CacheHelper().saveData(key: ApiKeys.phone, value: loginModel.phone);
+      await CacheHelper().saveData(key: ApiKeys.email, value: loginModel.email);
+      await CacheHelper().saveData(
+        key: ApiKeys.base_salary,
+        value: loginModel.base_salary,
+      );
       return Right(loginModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
+
+  Future<Either<String, LogoutModel>> logoutUser() async {
+    try {
+      final response = await api.post(EndPoint.logout);
+      return Right(response);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
     }
@@ -48,14 +64,14 @@ class UserRepo {
     }
   }
 
-  Future<Either<String, UserModel>> getSingleUserData(int id) async {
-    try {
-      final response = await api.get(EndPoint.getUserDataEndPoint(id));
-      return Right(UserModel.fromJson(response));
-    } on ServerException catch (e) {
-      return Left(e.errorModel.message);
-    }
-  }
+  // Future<Either<String, UserModel>> getSingleUserData(int id) async {
+  //   try {
+  //     final response = await api.get(EndPoint.getUserDataEndPoint(id));
+  //     return Right(UserModel.fromJson(response));
+  //   } on ServerException catch (e) {
+  //     return Left(e.errorModel.message);
+  //   }
+  // }
 
   // Future<Either<String, UserModel>> deleteSingleUserData(int id) async {
   //   try {
@@ -69,10 +85,7 @@ class UserRepo {
   Future<Either<String, dynamic>> deleteSingleUserData(int id) async {
     try {
       final response = await api.delete(EndPoint.getUserDataEndPoint(id));
-
-      print("delete===========================$response");
       final dynamic userListJson = response;
-
       return Right(userListJson);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
@@ -130,8 +143,6 @@ class UserRepo {
         },
       );
       final userModel = UserModel.fromJson(response);
-      print("=================***********=====${userModel.id}");
-      print("=================***********=====${userModel}");
       return Right(userModel);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);

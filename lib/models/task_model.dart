@@ -1,16 +1,44 @@
-import 'package:cmp/models/user_model.dart';
-import 'package:cmp/models/project_model.dart';
+import 'package:cmp/core/api/end_point.dart';
 
-class Task {
+class TaskModel {
   final int id;
-  final String title;
-  final Project project;
-  final UserModel user;
+  final String task;
+  final String status;
+  final bool is_active;
+  final int project_user_id;
+  final int created_by;
+  final int updated_by;
 
-  Task({
+  TaskModel({
     required this.id,
-    required this.title,
-    required this.project,
-    required this.user,
+    required this.task,
+    required this.status,
+    required this.is_active,
+    required this.project_user_id,
+    required this.created_by,
+    required this.updated_by,
   });
+
+  factory TaskModel.fromJson(Map<String, dynamic> json) {
+    return TaskModel(
+      id: json["data"][ApiKeys.id],
+      task: json["data"][ApiKeys.task],
+      status: json["data"][ApiKeys.status],
+      is_active: json["data"][ApiKeys.is_active],
+      project_user_id: json["data"][ApiKeys.project_user_id],
+      created_by: json["data"][ApiKeys.created_by],
+      updated_by: json["data"][ApiKeys.updated_by],
+    );
+  }
+  factory TaskModel.fromJsonNoData(Map<String, dynamic> json) {
+    return TaskModel(
+      id: json[ApiKeys.id],
+      task: json[ApiKeys.task],
+      status: json[ApiKeys.status],
+      is_active: json[ApiKeys.is_active],
+      project_user_id: json[ApiKeys.project_user_id],
+      created_by: json[ApiKeys.created_by],
+      updated_by: json[ApiKeys.updated_by],
+    );
+  }
 }
