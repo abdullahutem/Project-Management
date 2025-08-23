@@ -92,8 +92,6 @@ class ProjectUserCubit extends Cubit<ProjectUserState> {
       costPerHour: costPerHourController.text,
       minHours: int.parse(minHoursController.text),
       maxHours: int.parse(maxHoursController.text),
-      user_name: userNameController.text,
-      project_name: projectNameController.text,
     );
 
     response.fold(

@@ -8,8 +8,8 @@ import 'package:cmp/presentation/widgets/project_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProjectsPage extends StatelessWidget {
-  const ProjectsPage({super.key});
+class ProjectsDashbaordPage extends StatelessWidget {
+  const ProjectsDashbaordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,7 @@ class ProjectsPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
                       itemCount: projects.length,
-                      // In ProjectsPage, inside ListView.builder's itemBuilder:
+                      // In ProjectsDashbaordPage, inside ListView.builder's itemBuilder:
                       itemBuilder: (context, index) {
                         final project = projects[index];
                         return ProjectCard(
@@ -138,11 +138,7 @@ class ProjectsPage extends StatelessWidget {
                               ),
                             );
                           },
-                          onTap: () {
-                            context.read<ProjectCubit>().getSingleProjects(
-                              project.id,
-                            );
-                          },
+                          onTap: () {},
                           changeToActive: () {
                             context.read<ProjectCubit>().updateTaskStatus(
                               project.id,

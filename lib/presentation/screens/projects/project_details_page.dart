@@ -1,5 +1,6 @@
 import 'package:cmp/models/single_project_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
+import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:cmp/presentation/screens/users/user_details_page.dart';
 import 'package:cmp/presentation/widgets/beautiful_assigned_user_card.dart';
 import 'package:flutter/material.dart';
@@ -22,22 +23,30 @@ class ProjectDetailsPage extends StatelessWidget {
     if (progress > 1.0) progress = 1.0; // Cap at 100%
     if (progress < 0.0) progress = 0.0; // Cap at 0%
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          Navigator.pushNamed(context, Routes.addProjectUserPage);
+        },
+        icon: const Icon(Icons.person_add, color: Colors.white),
+        label: const Text(
+          'أضف موظف للمشروع',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: ColorManager.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         backgroundColor: ColorManager.primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         title: Text(
           project.projectModel.name,
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
+            fontSize: 22,
             fontWeight: FontWeight.w500,
-            fontFamily: "EXPOARABIC",
           ),
         ),
         centerTitle: true,
@@ -65,7 +74,6 @@ class ProjectDetailsPage extends StatelessWidget {
                         color: ColorManager.primaryColor,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        fontFamily: "EXPOARABIC",
                       ),
                     ),
                     const Divider(height: 20, thickness: 1),
@@ -161,9 +169,7 @@ class ProjectDetailsPage extends StatelessWidget {
                     const SizedBox(height: 15),
                     Text(
                       'التقدم:',
-
                       style: TextStyle(
-                        fontFamily: "EXPOARABIC",
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Colors.grey[700],
@@ -183,7 +189,6 @@ class ProjectDetailsPage extends StatelessWidget {
                       child: Text(
                         '${(progress * 100).toStringAsFixed(0)}%',
                         style: const TextStyle(
-                          fontFamily: "EXPOARABIC",
                           fontSize: 12,
                           color: Colors.grey,
                         ),
@@ -199,7 +204,6 @@ class ProjectDetailsPage extends StatelessWidget {
             Text(
               'أعضاء الفريق المعينون',
               style: TextStyle(
-                fontFamily: "EXPOARABIC",
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: ColorManager.primaryColor,
@@ -212,11 +216,7 @@ class ProjectDetailsPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 20.0),
                   child: Text(
                     'لا يوجد موظفون معينون لهذا المشروع.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                      fontFamily: "EXPOARABIC",
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
               )
@@ -243,6 +243,7 @@ class ProjectDetailsPage extends StatelessWidget {
                   );
                 },
               ),
+            SizedBox(height: 100),
           ],
         ),
       ),
@@ -266,7 +267,7 @@ class ProjectDetailsPage extends StatelessWidget {
             label,
             style: const TextStyle(
               fontSize: 16,
-              fontFamily: "EXPOARABIC",
+
               fontWeight: FontWeight.w600,
               color: Colors.black87,
             ),
@@ -276,7 +277,6 @@ class ProjectDetailsPage extends StatelessWidget {
             child: Text(
               value,
               style: TextStyle(
-                fontFamily: "EXPOARABIC",
                 fontSize: 16,
                 color: valueColor ?? Colors.black54,
               ),

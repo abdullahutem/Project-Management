@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cmp/models/project_user_model.dart';
 import 'package:cmp/models/single_task_model.dart';
 import 'package:cmp/models/task_model.dart';
+import 'package:cmp/models/task_replies_model.dart';
 import 'package:cmp/repo/task_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -100,11 +101,34 @@ class TaskCubit extends Cubit<TaskState> {
       id: idController.text,
       task: titleController.text,
       status: statusController.text,
-      isActive: isUpdateValue!,
+      isActive: isActive!,
       projectUserId: projectUserIdController.text,
     );
     response.fold((error) => emit(TaskError(error)), (message) {
       emit(TaskUpdated(task: message));
+    });
+  }
+
+  updateTaskStatus(String id, String status, bool is_active) async {
+    emit(TaskLoading());
+    final response = await taskRepo.updateTaskStatus(
+      id: id,
+      status: status,
+      is_active: is_active,
+    );
+    response.fold((error) => emit(TaskError(error)), (message) {
+      emit(TaskUpdated(task: message));
+    });
+  }
+
+  updateRepliesTaskStatus(String id, String status) async {
+    emit(TaskLoading());
+    final response = await taskRepo.updateTaskRepliesStatus(
+      id: id,
+      status: status,
+    );
+    response.fold((error) => emit(TaskError(error)), (message) {
+      emit(TaskRepliesUpdated(task: message));
     });
   }
 }

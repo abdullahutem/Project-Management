@@ -1,5 +1,4 @@
 import 'package:cmp/models/task_model.dart';
-import 'package:cmp/presentation/screens/tasks/task_replies_page.dart';
 import 'package:flutter/material.dart';
 
 class BeautifulTaskCard extends StatelessWidget {
@@ -7,6 +6,8 @@ class BeautifulTaskCard extends StatelessWidget {
   final VoidCallback changeToActive;
   final VoidCallback changeToComplete;
   final VoidCallback changeToPending;
+  final VoidCallback changeToTrue;
+  final VoidCallback changeToFalse;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback onTap;
@@ -20,6 +21,8 @@ class BeautifulTaskCard extends StatelessWidget {
     required this.onEdit,
     required this.onDelete,
     required this.onTap,
+    required this.changeToTrue,
+    required this.changeToFalse,
   });
 
   Color _getStatusColor(String status) {
@@ -30,8 +33,6 @@ class BeautifulTaskCard extends StatelessWidget {
         return Colors.green;
       case 'pending':
         return Colors.orange;
-      case 'ملغى':
-        return Colors.red;
       default:
         return Colors.grey;
     }
@@ -132,15 +133,6 @@ class BeautifulTaskCard extends StatelessWidget {
                   ),
                 ],
               ),
-              // const SizedBox(height: 4),
-              // Text(
-              //   'المشروع: ${task.task}',
-              //   style: const TextStyle(
-              //     color: Colors.grey,
-              //     fontSize: 13,
-              //     fontWeight: FontWeight.w400,
-              //   ),
-              // ),
             ],
           ),
           trailing: PopupMenuButton<String>(
@@ -155,39 +147,113 @@ class BeautifulTaskCard extends StatelessWidget {
                 onEdit();
               } else if (value == 'delete') {
                 onDelete();
+              } else if (value == 'true') {
+                changeToTrue();
+              } else if (value == 'false') {
+                changeToFalse();
               }
             },
             itemBuilder: (BuildContext context) => [
-              PopupMenuItem<String>(
-                value: 'active',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text('نشيط', style: TextStyle(color: Colors.black)),
-                    Icon(Icons.directions_run, color: Colors.green),
-                  ],
+              if (task.status == "active") ...[
+                PopupMenuItem<String>(
+                  value: 'completed',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text('مكتمل', style: TextStyle(color: Colors.black)),
+                      Icon(Icons.check_circle_outline, color: Colors.blue),
+                    ],
+                  ),
                 ),
-              ),
-              PopupMenuItem<String>(
-                value: 'completed',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text('مكتمل', style: TextStyle(color: Colors.black)),
-                    Icon(Icons.check_circle_outline, color: Colors.blue),
-                  ],
+                PopupMenuItem<String>(
+                  value: 'pending',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        'قيد الانتظار',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      Icon(Icons.hourglass_empty, color: Colors.orange),
+                    ],
+                  ),
                 ),
-              ),
-              PopupMenuItem<String>(
-                value: 'pending',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text('قيد الانتظار', style: TextStyle(color: Colors.black)),
-                    Icon(Icons.hourglass_empty, color: Colors.orange),
-                  ],
+              ],
+              if (task.status == "completed") ...[
+                PopupMenuItem<String>(
+                  value: 'active',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text('نشيط', style: TextStyle(color: Colors.black)),
+                      Icon(Icons.directions_run, color: Colors.green),
+                    ],
+                  ),
                 ),
-              ),
+                PopupMenuItem<String>(
+                  value: 'pending',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        'قيد الانتظار',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      Icon(Icons.hourglass_empty, color: Colors.orange),
+                    ],
+                  ),
+                ),
+              ],
+              if (task.status == "pending") ...[
+                PopupMenuItem<String>(
+                  value: 'active',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text('نشيط', style: TextStyle(color: Colors.black)),
+                      Icon(Icons.directions_run, color: Colors.green),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<String>(
+                  value: 'completed',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text('مكتمل', style: TextStyle(color: Colors.black)),
+                      Icon(Icons.check_circle_outline, color: Colors.blue),
+                    ],
+                  ),
+                ),
+              ],
+              if (task.is_active == true) ...[
+                PopupMenuItem<String>(
+                  value: 'false',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        'إلغاء التفعيل',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      Icon(Icons.stop_circle, color: Colors.red),
+                    ],
+                  ),
+                ),
+              ],
+              if (task.is_active == false) ...[
+                PopupMenuItem<String>(
+                  value: 'true',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text('تفعيل', style: TextStyle(color: Colors.black)),
+                      Icon(Icons.check_circle_outline, color: Colors.green),
+                    ],
+                  ),
+                ),
+              ],
+
               PopupMenuItem<String>(
                 value: 'edit',
                 child: Row(

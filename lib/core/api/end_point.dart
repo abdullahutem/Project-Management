@@ -44,6 +44,10 @@ class EndPoint {
     return "tasks/$id";
   }
 
+  static String updateTaskRepliesEndPoint(String id) {
+    return "task-replies/$id";
+  }
+
   static String deleteTaskEndPoint(int id) {
     return "tasks/$id";
   }

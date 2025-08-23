@@ -88,24 +88,10 @@ class SideMenu extends StatelessWidget {
               Navigator.pushNamed(context, Routes.profilePage);
             },
           ),
-          DrawerListTile(
-            title: "مشروعي",
-            svgSrc: "assets/icons/menu_tran.svg",
-            press: () {
-              Navigator.pushNamed(context, Routes.projectDetailsPage);
-            },
-          ),
-          DrawerListTile(
-            title: "موظفي",
-            svgSrc: "assets/icons/menu_tran.svg",
-            press: () {
-              Navigator.pushNamed(context, Routes.userDetailsPage);
-            },
-          ),
 
           DrawerListTile(
             title: "تسجيل الخروج",
-            svgSrc: "assets/icons/logout.svg", // Make sure this SVG exists
+            svgSrc: "assets/icons/logout.svg",
             press: () {
               logoutUser(context);
             },

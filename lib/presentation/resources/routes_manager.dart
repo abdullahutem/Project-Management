@@ -7,11 +7,12 @@ import 'package:cmp/presentation/resources/styles_manager.dart';
 import 'package:cmp/presentation/screens/dashboard_page.dart';
 import 'package:cmp/presentation/screens/home_page.dart';
 import 'package:cmp/presentation/screens/profile_page.dart';
-import 'package:cmp/presentation/screens/user_dashboard_page.dart';
+import 'package:cmp/presentation/screens/projects/projects_dashbaord_page.dart';
 import 'package:cmp/presentation/screens/project_user/add_project_user_page.dart';
 import 'package:cmp/presentation/screens/project_user/project_user_page.dart';
 import 'package:cmp/presentation/screens/tasks/all_projects.dart';
 import 'package:cmp/presentation/screens/users/add_users_page.dart';
+import 'package:cmp/presentation/screens/users/users_dashbord_page.dart';
 import 'package:cmp/presentation/screens/users/users_page.dart';
 import 'package:cmp/presentation/screens/login.dart';
 import 'package:cmp/presentation/screens/projects/add_project_page.dart';
@@ -26,9 +27,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class Routes {
   static const String login = '/';
   static const String usersPage = '/users';
+  static const String usersDashbaordPage = '/users_dashbaord';
   static const String addUsersPage = '/add_Users';
   static const String editUsersPage = '/edit_Users';
   static const String projectPage = '/project';
+  static const String projectDashbaordPage = '/project_dashbaord';
   static const String projectDetailsPage = '/project_details';
   static const String userDetailsPage = '/user_details';
   static const String addProjectPage = '/add_project';
@@ -57,6 +60,15 @@ class RoutesGenerator {
             child: const UsersPage(),
           ),
         );
+      case Routes.userdashboardPage:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) =>
+                UserCubit(UserRepo(api: DioConsumer(dio: Dio())))
+                  ..getAllUsers(),
+            child: const UsersDashbordPage(),
+          ),
+        );
       case Routes.addUsersPage:
         return MaterialPageRoute(builder: (_) => AddUsersPage());
       // case Routes.editUsersPage:
@@ -68,6 +80,15 @@ class RoutesGenerator {
                 ProjectCubit(ProjectRepo(api: DioConsumer(dio: Dio())))
                   ..getAllProjects(),
             child: const ProjectsPage(),
+          ),
+        );
+      case Routes.projectDashbaordPage:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) =>
+                ProjectCubit(ProjectRepo(api: DioConsumer(dio: Dio())))
+                  ..getAllProjects(),
+            child: const ProjectsDashbaordPage(),
           ),
         );
       case Routes.addProjectPage:
@@ -84,8 +105,7 @@ class RoutesGenerator {
       //   return MaterialPageRoute(builder: (_) => AddTaskPage());
       case Routes.dashboardPage:
         return MaterialPageRoute(builder: (_) => DashboardPage());
-      case Routes.userdashboardPage:
-        return MaterialPageRoute(builder: (_) => UserDashboardPage());
+
       case Routes.projectUserPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(

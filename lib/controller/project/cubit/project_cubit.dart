@@ -109,4 +109,16 @@ class ProjectCubit extends Cubit<ProjectState> {
       (newProject) => emit(AddProjectSuccess(newProject: newProject)),
     );
   }
+
+  updateTaskStatus(int id, String status, bool is_active) async {
+    emit(ProjectLoading());
+    final response = await projectRepo.updateProjectStatus(
+      id: id,
+      status: status,
+      is_active: is_active,
+    );
+    response.fold((error) => emit(ProjectError(error)), (message) {
+      emit(ProjectUpdatedSuccess(projectModel: message));
+    });
+  }
 }

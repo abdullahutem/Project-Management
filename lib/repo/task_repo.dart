@@ -4,6 +4,7 @@ import 'package:cmp/core/errors/exceptions.dart';
 import 'package:cmp/models/project_user_model.dart';
 import 'package:cmp/models/single_task_model.dart';
 import 'package:cmp/models/task_model.dart';
+import 'package:cmp/models/task_replies_model.dart';
 import 'package:dartz/dartz.dart';
 
 class TaskRepo {
@@ -122,6 +123,40 @@ class TaskRepo {
       );
 
       final taskModel = TaskModel.fromJson(response);
+      return Right(taskModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
+
+  Future<Either<String, TaskModel>> updateTaskStatus({
+    required String id,
+    required String status,
+    required bool is_active,
+  }) async {
+    try {
+      final response = await api.patch(
+        EndPoint.updateTaskEndPoint(id),
+        data: {ApiKeys.status: status, ApiKeys.is_active: is_active},
+      );
+
+      final taskModel = TaskModel.fromJson(response);
+      return Right(taskModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
+
+  Future<Either<String, TaskRepliesModel>> updateTaskRepliesStatus({
+    required String id,
+    required String status,
+  }) async {
+    try {
+      final response = await api.patch(
+        EndPoint.updateTaskRepliesEndPoint(id),
+        data: {ApiKeys.status: status},
+      );
+      final taskModel = TaskRepliesModel.fromJsonWithData(response);
       return Right(taskModel);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);

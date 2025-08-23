@@ -37,6 +37,12 @@ class TaskUpdated extends TaskState {
   TaskUpdated({required this.task});
 }
 
+class TaskRepliesUpdated extends TaskState {
+  final TaskRepliesModel task;
+
+  TaskRepliesUpdated({required this.task});
+}
+
 class SingleTaskLoaded extends TaskState {
   final SingleTaskModel task;
 

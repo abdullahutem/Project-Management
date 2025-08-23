@@ -1,5 +1,4 @@
 import 'package:cmp/core/api/end_point.dart';
-import 'package:flutter/foundation.dart';
 
 class TaskRepliesModel {
   // "id": 72,
@@ -33,6 +32,17 @@ class TaskRepliesModel {
       start_date: json[ApiKeys.startDate],
       end_date: json[ApiKeys.endDate],
       status: json[ApiKeys.status],
+    );
+  }
+
+  factory TaskRepliesModel.fromJsonWithData(Map<String, dynamic> json) {
+    return TaskRepliesModel(
+      id: json["data"][ApiKeys.id],
+      note: json["data"][ApiKeys.note],
+      task_id: json["data"][ApiKeys.task_id],
+      start_date: json["data"][ApiKeys.startDate],
+      end_date: json["data"][ApiKeys.endDate],
+      status: json["data"][ApiKeys.status],
     );
   }
 }

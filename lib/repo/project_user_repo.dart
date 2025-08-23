@@ -71,8 +71,6 @@ class ProjectUserRepo {
   Future<Either<String, ProjectUserModel>> addProjectUser({
     required int userId,
     required int projectId,
-    required String user_name,
-    required String project_name,
     required String startDate,
     required String endDate,
     required String costPerHour,
@@ -85,13 +83,13 @@ class ProjectUserRepo {
         data: {
           "user_id": userId,
           "project_id": projectId,
-          "user_name": user_name,
-          "project_name": project_name,
           "start_date": startDate,
           "end_date": endDate,
           "cost_per_hour": costPerHour,
           "min_hours": minHours,
           "max_hours": maxHours,
+          "created_by": 1,
+          "updated_by": 1,
         },
       );
       return Right(ProjectUserModel.fromJson(response));

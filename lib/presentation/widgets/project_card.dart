@@ -8,6 +8,11 @@ class ProjectCard extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback onTap;
+  final VoidCallback changeToActive;
+  final VoidCallback changeToComplete;
+  final VoidCallback changeToPending;
+  final VoidCallback changeToTrue;
+  final VoidCallback changeToFalse;
 
   const ProjectCard({
     super.key,
@@ -15,6 +20,11 @@ class ProjectCard extends StatelessWidget {
     required this.onEdit,
     required this.onDelete,
     required this.onTap,
+    required this.changeToActive,
+    required this.changeToComplete,
+    required this.changeToPending,
+    required this.changeToTrue,
+    required this.changeToFalse,
   });
 
   @override
@@ -32,6 +42,19 @@ class ProjectCard extends StatelessWidget {
     double progress = totalDuration > 0 ? elapsedDuration / totalDuration : 0.0;
     if (progress > 1.0) progress = 1.0;
     if (progress < 0.0) progress = 0.0;
+
+    Color _getStatusColor(String status) {
+      switch (status.toLowerCase()) {
+        case 'active':
+          return Colors.blue;
+        case 'completed':
+          return Colors.green;
+        case 'pending':
+          return Colors.orange;
+        default:
+          return Colors.grey;
+      }
+    }
 
     return InkWell(
       onTap: onTap,
@@ -66,7 +89,6 @@ class ProjectCard extends StatelessWidget {
                           color: statusColor,
                           // fontSize: 12,
                           fontWeight: FontWeight.w400,
-                          fontFamily: "EXPOARABIC",
                         ),
                       ),
                     ],
@@ -77,9 +99,109 @@ class ProjectCard extends StatelessWidget {
                         onEdit();
                       } else if (value == 'delete') {
                         onDelete();
+                      } else if (value == 'active') {
+                        changeToActive();
+                      } else if (value == 'completed') {
+                        changeToComplete();
+                      } else if (value == 'pending') {
+                        changeToPending();
+                      } else if (value == 'true') {
+                        changeToTrue();
+                      } else if (value == 'false') {
+                        changeToFalse();
                       }
                     },
                     itemBuilder: (BuildContext context) => [
+                      if (project.status == "active") ...[
+                        PopupMenuItem<String>(
+                          value: 'completed',
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'مكتمل',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.blue,
+                              ),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'pending',
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'قيد الانتظار',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Icon(Icons.hourglass_empty, color: Colors.orange),
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (project.status == "completed") ...[
+                        PopupMenuItem<String>(
+                          value: 'active',
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'نشيط',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Icon(Icons.directions_run, color: Colors.green),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'pending',
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'قيد الانتظار',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Icon(Icons.hourglass_empty, color: Colors.orange),
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (project.status == "pending") ...[
+                        PopupMenuItem<String>(
+                          value: 'active',
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'نشيط',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Icon(Icons.directions_run, color: Colors.green),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'completed',
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'مكتمل',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.blue,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                       PopupMenuItem<String>(
                         value: 'edit',
                         child: Row(
@@ -87,10 +209,7 @@ class ProjectCard extends StatelessWidget {
                           children: const [
                             Text(
                               'تعديل',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontFamily: "EXPOARABIC",
-                              ),
+                              style: const TextStyle(color: Colors.black),
                             ),
                             Icon(Icons.edit_outlined, color: Colors.blue),
                           ],
@@ -103,15 +222,45 @@ class ProjectCard extends StatelessWidget {
                           children: const [
                             Text(
                               'حذف',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontFamily: "EXPOARABIC",
-                              ),
+                              style: const TextStyle(color: Colors.black),
                             ),
                             Icon(Icons.delete_outline, color: Colors.red),
                           ],
                         ),
                       ),
+                      if (project.isActive == true) ...[
+                        PopupMenuItem<String>(
+                          value: 'false',
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'إلغاء التفعيل',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Icon(Icons.stop_circle, color: Colors.red),
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (project.isActive == false) ...[
+                        PopupMenuItem<String>(
+                          value: 'true',
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                'تفعيل',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.green,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ],
@@ -123,19 +272,29 @@ class ProjectCard extends StatelessWidget {
                   color: Colors.black87,
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
-                  fontFamily: "EXPOARABIC",
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 8),
-              Text(
-                'الحالة: ${project.status}',
-                style: const TextStyle(
-                  color: Colors.black54,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: "EXPOARABIC",
-                ),
+              Row(
+                children: [
+                  Text(
+                    "الحالة:  ",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  Text(
+                    project.status,
+                    style: TextStyle(
+                      color: _getStatusColor(project.status),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               LinearProgressIndicator(
@@ -150,19 +309,11 @@ class ProjectCard extends StatelessWidget {
                 children: [
                   Text(
                     intl.DateFormat('dd/MM/yyyy').format(startDate),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12,
-                      fontFamily: "EXPOARABIC",
-                    ),
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                   Text(
                     intl.DateFormat('dd/MM/yyyy').format(endDate),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12,
-                      fontFamily: "EXPOARABIC",
-                    ),
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
                   ),
                 ],
               ),

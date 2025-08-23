@@ -109,4 +109,22 @@ class ProjectRepo {
       return Left(e.errorModel.message);
     }
   }
+
+  Future<Either<String, ProjectModel>> updateProjectStatus({
+    required int id,
+    required String status,
+    required bool is_active,
+  }) async {
+    try {
+      final response = await api.patch(
+        EndPoint.getProjectDataEndPoint(id),
+        data: {ApiKeys.status: status, ApiKeys.is_active: is_active},
+      );
+
+      final taskModel = ProjectModel.fromJson(response);
+      return Right(taskModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
 }

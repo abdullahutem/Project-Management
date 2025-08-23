@@ -41,6 +41,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
 
   @override
   void initState() {
+    print("widget.project_id=====================${widget.project_id}");
     context.read<TaskCubit>().getUserTasksForSpecificProjet(
       widget.project_id,
       widget.user.id,
@@ -63,11 +64,22 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             widget.project_id,
             widget.user.id,
           );
+        } else if (state is TaskUpdated) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("تم تحديث المهمة"),
+              backgroundColor: Colors.green,
+            ),
+          );
+          context.read<TaskCubit>().getUserTasksForSpecificProjet(
+            widget.project_id,
+            widget.user.id,
+          );
         }
       },
       builder: (context, state) {
-        (context) => taskCubit
-          ..getUserTasksForSpecificProjet(widget.project_id, widget.user.id);
+        // (context) => taskCubit
+        //   ..getUserTasksForSpecificProjet(widget.project_id, widget.user.id);
         return Scaffold(
           appBar: AppBar(
             backgroundColor: ColorManager.primaryColor,
@@ -210,6 +222,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                       );
                     } else if (state is TasksUserLoaded) {
                       final assignedTasks = state.tasks.tasks;
+                      projectUserId = state.tasks.id;
                       if (assignedTasks.isEmpty) {
                         return Center(
                           child: Padding(
@@ -231,13 +244,44 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                           itemCount: assignedTasks.length,
                           itemBuilder: (context, index) {
                             final task = assignedTasks[index];
-                            final id = task.project_user_id;
-                            projectUserId = id;
+
                             return BeautifulTaskCard(
                               task: task,
-                              changeToActive: () {},
-                              changeToComplete: () {},
-                              changeToPending: () {},
+                              changeToActive: () {
+                                context.read<TaskCubit>().updateTaskStatus(
+                                  task.id.toString(),
+                                  'active',
+                                  task.is_active,
+                                );
+                              },
+                              changeToComplete: () {
+                                context.read<TaskCubit>().updateTaskStatus(
+                                  task.id.toString(),
+                                  'completed',
+                                  task.is_active,
+                                );
+                              },
+                              changeToPending: () {
+                                context.read<TaskCubit>().updateTaskStatus(
+                                  task.id.toString(),
+                                  'pending',
+                                  task.is_active,
+                                );
+                              },
+                              changeToTrue: () {
+                                context.read<TaskCubit>().updateTaskStatus(
+                                  task.id.toString(),
+                                  task.status,
+                                  true,
+                                );
+                              },
+                              changeToFalse: () {
+                                context.read<TaskCubit>().updateTaskStatus(
+                                  task.id.toString(),
+                                  task.status,
+                                  false,
+                                );
+                              },
                               onEdit: () async {
                                 final result = await Navigator.push(
                                   context,
@@ -261,17 +305,57 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                       );
                                 }
                               },
-                              onDelete: () => context
-                                  .read<TaskCubit>()
-                                  .deletelSingleTask(task.id),
+                              onDelete: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text("حذف"),
+                                    content: const Text(
+                                      "هل تريد حقا حذف المهمة؟",
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(ctx).pop(),
+                                        child: const Text("إلغاء"),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(ctx).pop();
+                                          context
+                                              .read<TaskCubit>()
+                                              .deletelSingleTask(task.id);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Theme.of(
+                                            context,
+                                          ).colorScheme.error,
+                                          foregroundColor: Theme.of(
+                                            context,
+                                          ).colorScheme.onError,
+                                        ),
+                                        child: const Text("حذف"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                               onTap: () async {
-                                await Navigator.push(
+                                final result = await await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) =>
                                         TaskRepliesPage(taskId: task.id),
                                   ),
                                 );
+                                if (result == true) {
+                                  context
+                                      .read<TaskCubit>()
+                                      .getUserTasksForSpecificProjet(
+                                        widget.project_id,
+                                        widget.user.id,
+                                      );
+                                }
                               },
                             );
                           },
@@ -285,7 +369,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               ],
             ),
           ),
-
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () async {
               Navigator.push(

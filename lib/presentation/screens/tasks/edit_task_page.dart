@@ -40,34 +40,10 @@ class _EditTaskPageState extends State<EditTaskPage> {
     taskCubit.projectUserIdController.text = widget.projectUserId;
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  // }
-
-  // @override
-  // void dispose() {
-  //   taskCubit.idController.clear();
-  //   taskCubit.titleController.clear();
-  //   taskCubit.statusController.clear();
-  //   taskCubit.projectUserIdController.clear();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<TaskCubit, TaskState>(
-      listener: (context, state) {
-        if (state is TaskUpdated) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("تم تعديل المهمة بنجاح")),
-          );
-        } else if (state is TaskError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.error)));
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         final cubit = context.read<TaskCubit>();
         return Scaffold(
@@ -156,43 +132,32 @@ class _EditTaskPageState extends State<EditTaskPage> {
                   //     });
                   //   },
                   // ),
-                  BlocBuilder<TaskCubit, TaskState>(
-                    builder: (context, state) {
-                      return SwitchListTile(
-                        title: const Text(
-                          'هل المهمة مفعلة؟',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        value: cubit.isActive!,
-                        onChanged: cubit.updateIsActive,
-                        activeColor: ColorManager.primaryColor,
-                        secondary: const Icon(Icons.check_circle),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 20),
+                  // SwitchListTile(
+                  //   title: const Text(
+                  //     'هل المهمة مفعلة؟',
+                  //     style: TextStyle(
+                  //       color: Colors.black,
+                  //       fontSize: 16,
+                  //       fontWeight: FontWeight.w500,
+                  //     ),
+                  //   ),
+                  //   value: cubit.isActive!,
+                  //   onChanged: cubit.updateIsActive,
+                  //   activeColor: ColorManager.primaryColor,
+                  //   secondary: const Icon(Icons.check_circle),
+                  // ),
+                  // const SizedBox(height: 20),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorManager.primaryColor,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    // onPressed: () {
-                    //   if (_formKey.currentState!.validate()) {
-                    //     cubit.updateSingleTask();
-                    //     cubit.resetTaskForm();
-                    //     Navigator.pop(context, true);
-                    //   }
-                    // },
+
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         cubit.updateSingleTask();
                         if (mounted) {
-                          // Navigator.pop(context, true);
-                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.pop(context, true);
                         }
                       }
                     },

@@ -2,14 +2,13 @@ import 'package:cmp/controller/user/cubit/user_cubit.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:cmp/presentation/screens/users/edit_users_page.dart';
-import 'package:cmp/presentation/screens/users/user_details_with_project_page.dart';
 import 'package:cmp/presentation/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UsersPage extends StatelessWidget {
-  const UsersPage({super.key});
+class UsersDashbordPage extends StatelessWidget {
+  const UsersDashbordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,7 @@ class UsersPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
                       itemCount: employees.length,
-                      // In UsersPage, inside ListView.builder's itemBuilder:
+                      // In UsersDashbordPage, inside ListView.builder's itemBuilder:
                       itemBuilder: (context, index) {
                         final user = employees[index];
                         return UserCard(
@@ -129,16 +128,7 @@ class UsersPage extends StatelessWidget {
                             );
                           },
 
-                          // Add an onTap for the whole card to navigate to details
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    UserDetailsWithProjectPage(user: user),
-                              ),
-                            );
-                          },
+                          onTap: () {},
                         );
                       },
                     ),

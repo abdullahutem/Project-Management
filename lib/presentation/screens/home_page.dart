@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                               count: employees.length,
                               baseColor: Colors.blue.shade700,
                               function: () {
-                                Navigator.pushNamed(context, Routes.usersPage);
+                                // Navigator.pushNamed(context, Routes.usersPage);
                               },
                             );
                           } else if (state is UsersFaliure) {
@@ -145,10 +145,10 @@ class _HomePageState extends State<HomePage> {
                               count: projects.length,
                               baseColor: Colors.greenAccent.shade700,
                               function: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  Routes.projectPage,
-                                );
+                                // Navigator.pushNamed(
+                                //   context,
+                                //   Routes.projectPage,
+                                // );
                               },
                             );
                           } else if (state is ProjectError) {

@@ -62,10 +62,7 @@ class _EditProjectPageState extends State<EditProjectPage> {
           appBar: AppBar(
             title: const Text(
               'تعديل المشروع',
-              style: const TextStyle(
-                color: Colors.white,
-                fontFamily: "EXPOARABIC",
-              ),
+              style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: ColorManager.primaryColor,
             iconTheme: const IconThemeData(color: Colors.white),
@@ -82,7 +79,6 @@ class _EditProjectPageState extends State<EditProjectPage> {
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      fontFamily: "EXPOARABIC",
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -100,7 +96,6 @@ class _EditProjectPageState extends State<EditProjectPage> {
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      fontFamily: "EXPOARABIC",
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -119,7 +114,6 @@ class _EditProjectPageState extends State<EditProjectPage> {
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      fontFamily: "EXPOARABIC",
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -138,7 +132,6 @@ class _EditProjectPageState extends State<EditProjectPage> {
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      fontFamily: "EXPOARABIC",
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -154,7 +147,6 @@ class _EditProjectPageState extends State<EditProjectPage> {
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            fontFamily: "EXPOARABIC",
                           ),
                         ),
                       ),
@@ -166,7 +158,6 @@ class _EditProjectPageState extends State<EditProjectPage> {
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            fontFamily: "EXPOARABIC",
                           ),
                         ),
                       ),
@@ -178,7 +169,6 @@ class _EditProjectPageState extends State<EditProjectPage> {
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            fontFamily: "EXPOARABIC",
                           ),
                         ),
                       ),
@@ -188,11 +178,10 @@ class _EditProjectPageState extends State<EditProjectPage> {
                   SwitchListTile(
                     title: const Text(
                       'المشروع مفعل؟',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        fontFamily: "EXPOARABIC",
                       ),
                     ),
                     value: cubit.isActive!,
@@ -222,7 +211,6 @@ class _EditProjectPageState extends State<EditProjectPage> {
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        fontFamily: "EXPOARABIC",
                       ),
                     ),
                   ),

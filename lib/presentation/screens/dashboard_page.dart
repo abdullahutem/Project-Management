@@ -105,10 +105,10 @@ class _DashboardPageState extends State<DashboardPage> {
   void _handleCardTap(String route) {
     switch (route) {
       case 'users':
-        Navigator.pushNamed(context, Routes.usersPage);
+        Navigator.pushNamed(context, Routes.userdashboardPage);
         break;
       case 'projects':
-        Navigator.pushNamed(context, Routes.projectPage);
+        Navigator.pushNamed(context, Routes.projectDashbaordPage);
         break;
       case 'reports':
         Navigator.pushNamed(context, Routes.usersPage);
