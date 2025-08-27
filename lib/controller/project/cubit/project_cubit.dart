@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cmp/models/project_model.dart';
+import 'package:cmp/models/projects_model.dart';
 import 'package:cmp/models/projects_of_user_model.dart';
 import 'package:cmp/models/single_project_model.dart';
 import 'package:cmp/repo/project_repo.dart';
@@ -21,6 +22,7 @@ class ProjectCubit extends Cubit<ProjectState> {
   ProjectCubit(this.projectRepo) : super(ProjectInitial());
   final formKey = GlobalKey<FormState>();
   List<ProjectModel> projectList = [];
+  List<ProjectsModel> projectsList = [];
 
   void updateStartDate(DateTime date) {
     startDateController.text = date.toIso8601String().split('T').first;
@@ -46,7 +48,7 @@ class ProjectCubit extends Cubit<ProjectState> {
     emit(ProjectLoading());
     final result = await projectRepo.getProjectsData();
     result.fold((error) => emit(ProjectError(error)), (projects) {
-      projectList = projects;
+      projectsList = projects;
       emit(ProjectLoaded(projects));
     });
   }
@@ -54,10 +56,9 @@ class ProjectCubit extends Cubit<ProjectState> {
   getSingleProjects(int id) async {
     emit(ProjectLoading());
     final result = await projectRepo.getSingleProjectsData(id);
-    result.fold(
-      (error) => emit(ProjectError(error)),
-      (project) => emit(SingleProjectLoaded(project: project)),
-    );
+    result.fold((error) => emit(ProjectError(error)), (project) {
+      emit(SingleProjectLoaded(project: project));
+    });
   }
 
   getPrjectsForSpecificUser(int id) async {
@@ -103,7 +104,6 @@ class ProjectCubit extends Cubit<ProjectState> {
       status: statusController.text,
       isActive: isUpdateValue,
     );
-
     response.fold(
       (error) => emit(AddProjectFailure(errormessage: error)),
       (newProject) => emit(AddProjectSuccess(newProject: newProject)),

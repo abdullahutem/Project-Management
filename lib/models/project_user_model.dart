@@ -4,8 +4,6 @@ class ProjectUserModel {
   final int id;
   final int project_id;
   final int user_id;
-  // final String project_name;
-  // final String user_name;
   final String start_date;
   final String end_date;
   final double cost_per_hour;
@@ -34,7 +32,7 @@ class ProjectUserModel {
       // user_name: json['data']['user_name'],
       start_date: json['data']['start_date'],
       end_date: json['data']['end_date'],
-      cost_per_hour: json['data']['cost_per_hour'],
+      cost_per_hour: (json['data']['cost_per_hour'] as num).toDouble(),
       min_hours: json['data']['min_hours'],
       max_hours: json['data']['max_hours'],
       project_id: json['data']['project_id'],

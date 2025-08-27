@@ -19,10 +19,18 @@ final class LogoutSucsess extends UserState {
 
 final class SignInLoading extends UserState {}
 
+final class LogoutLoading extends UserState {}
+
 final class SignInFaliure extends UserState {
   final String errormessage;
 
   SignInFaliure({required this.errormessage});
+}
+
+final class LogoutFaliure extends UserState {
+  final String logouterrormessage;
+
+  LogoutFaliure({required this.logouterrormessage});
 }
 
 final class UsersLoading extends UserState {}
@@ -40,6 +48,12 @@ final class UsersFaliure extends UserState {
 }
 
 final class SingleUserSucsess extends UserState {}
+
+class SingleUserProjectLoaded extends UserState {
+  final SingleProjectModel project;
+  final List<UserModel> users;
+  SingleUserProjectLoaded({required this.project, required this.users});
+}
 
 final class SingleUserLoading extends UserState {}
 

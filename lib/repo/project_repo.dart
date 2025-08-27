@@ -2,7 +2,8 @@ import 'package:cmp/core/api/api_consumer.dart';
 import 'package:cmp/core/api/end_point.dart';
 import 'package:cmp/core/errors/exceptions.dart';
 import 'package:cmp/models/project_model.dart';
-import 'package:cmp/models/projects_of_user_model.dart';
+import 'package:cmp/models/projects_model.dart';
+import 'package:cmp/models/projects_of_user_model.dart' hide ProjectsModel;
 import 'package:cmp/models/single_project_model.dart';
 import 'package:dartz/dartz.dart';
 
@@ -10,13 +11,14 @@ class ProjectRepo {
   final ApiConsumer api;
   ProjectRepo({required this.api});
 
-  Future<Either<String, List<ProjectModel>>> getProjectsData() async {
+  Future<Either<String, List<ProjectsModel>>> getProjectsData() async {
     try {
       final response = await api.get(EndPoint.projects);
-      final List<dynamic> projectListJson = response['data'];
-      final List<ProjectModel> projects = projectListJson
-          .map((projectJson) => ProjectModel.fromJson({'data': projectJson}))
+      final List<dynamic> projectListJson = response;
+      final List<ProjectsModel> projects = projectListJson
+          .map((projectJson) => ProjectsModel.fromJson(projectJson))
           .toList();
+
       return Right(projects);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);

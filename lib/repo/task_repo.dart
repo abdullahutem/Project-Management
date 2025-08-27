@@ -83,27 +83,6 @@ class TaskRepo {
     }
   }
 
-  // Future<Either<String, int>> updateTask(
-  //   int id,
-  //   String? task,
-  //   String? status,
-  //   bool? is_active,
-  // ) async {
-  //   try {
-  //     final response = await api.update(
-  //       EndPoint.updateTaskEndPoint(id),
-  //       data: {
-  //         ApiKeys.task: task,
-  //         ApiKeys.status: status,
-  //         ApiKeys.is_active: is_active,
-  //       },
-  //     );
-  //     return Right(response);
-  //   } on ServerException catch (e) {
-  //     return Left(e.errorModel.message);
-  //   }
-  // }
-
   Future<Either<String, TaskModel>> updateTask({
     required String id,
     required String task,
@@ -148,7 +127,7 @@ class TaskRepo {
   }
 
   Future<Either<String, TaskRepliesModel>> updateTaskRepliesStatus({
-    required String id,
+    required int id,
     required String status,
   }) async {
     try {
@@ -158,6 +137,31 @@ class TaskRepo {
       );
       final taskModel = TaskRepliesModel.fromJsonWithData(response);
       return Right(taskModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
+
+  Future<Either<String, TaskRepliesModel>> addTaskReplies({
+    required String note,
+    required String status,
+    required String task_id,
+    required String start_date,
+    required String end_date,
+  }) async {
+    try {
+      final response = await api.post(
+        EndPoint.task_replies,
+        data: {
+          ApiKeys.note: note,
+          ApiKeys.status: status,
+          ApiKeys.task_id: task_id,
+          ApiKeys.startDate: start_date,
+          ApiKeys.endDate: end_date,
+        },
+      );
+      final taskReplies = TaskRepliesModel.fromJsonWithData(response);
+      return Right(taskReplies);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
     }

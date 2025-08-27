@@ -1,3 +1,5 @@
+import 'package:cmp/models/projects_model.dart';
+
 class ProjectsOfUserModel {
   final int id;
   final String name;
@@ -29,56 +31,5 @@ class ProjectsOfUserModel {
           .map((item) => ProjectsModel.fromJson(item))
           .toList(),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'role': role,
-      'base_salary': baseSalary,
-    };
-  }
-}
-
-class ProjectsModel {
-  final int id;
-  final String name;
-  final String startDate;
-  final String endDate;
-  final String status;
-  final int isActive;
-
-  ProjectsModel({
-    required this.id,
-    required this.name,
-    required this.startDate,
-    required this.endDate,
-    required this.status,
-    required this.isActive,
-  });
-
-  factory ProjectsModel.fromJson(Map<String, dynamic> json) {
-    return ProjectsModel(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      startDate: json['start_date'] as String,
-      endDate: json['end_date'] as String,
-      status: json['status'] as String,
-      isActive: json['is_active'] as int,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'start_date': startDate,
-      'end_date': endDate,
-      'status': status,
-      'is_active': isActive,
-    };
   }
 }

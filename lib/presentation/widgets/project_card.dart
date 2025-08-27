@@ -1,10 +1,10 @@
-import 'package:cmp/models/project_model.dart';
+import 'package:cmp/models/projects_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
 class ProjectCard extends StatelessWidget {
-  final ProjectModel project;
+  final ProjectsModel project;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback onTap;
@@ -30,12 +30,14 @@ class ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Determine the color for the status indicator
-    final Color statusColor = project.isActive ? Colors.green : Colors.red;
+    final Color statusColor = project.project.isActive
+        ? Colors.green
+        : Colors.red;
 
     // Calculate the progress percentage based on dates
     final now = DateTime.now();
-    final startDate = DateTime.parse(project.startDate);
-    final endDate = DateTime.parse(project.endDate);
+    final startDate = DateTime.parse(project.project.startDate);
+    final endDate = DateTime.parse(project.project.endDate);
 
     final totalDuration = endDate.difference(startDate).inDays;
     final elapsedDuration = now.difference(startDate).inDays;
@@ -84,7 +86,7 @@ class ProjectCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        project.isActive ? 'نشط' : 'غير نشط',
+                        project.project.isActive ? 'نشط' : 'غير نشط',
                         style: TextStyle(
                           color: statusColor,
                           // fontSize: 12,
@@ -112,7 +114,7 @@ class ProjectCard extends StatelessWidget {
                       }
                     },
                     itemBuilder: (BuildContext context) => [
-                      if (project.status == "active") ...[
+                      if (project.project.status == "active") ...[
                         PopupMenuItem<String>(
                           value: 'completed',
                           child: Row(
@@ -143,7 +145,7 @@ class ProjectCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                      if (project.status == "completed") ...[
+                      if (project.project.status == "completed") ...[
                         PopupMenuItem<String>(
                           value: 'active',
                           child: Row(
@@ -171,7 +173,7 @@ class ProjectCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                      if (project.status == "pending") ...[
+                      if (project.project.status == "pending") ...[
                         PopupMenuItem<String>(
                           value: 'active',
                           child: Row(
@@ -228,7 +230,7 @@ class ProjectCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      if (project.isActive == true) ...[
+                      if (project.project.isActive == true) ...[
                         PopupMenuItem<String>(
                           value: 'false',
                           child: Row(
@@ -243,7 +245,7 @@ class ProjectCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                      if (project.isActive == false) ...[
+                      if (project.project.isActive == false) ...[
                         PopupMenuItem<String>(
                           value: 'true',
                           child: Row(
@@ -267,7 +269,7 @@ class ProjectCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                project.name,
+                project.project.name,
                 style: const TextStyle(
                   color: Colors.black87,
                   fontSize: 20,
@@ -287,9 +289,9 @@ class ProjectCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    project.status,
+                    project.project.status,
                     style: TextStyle(
-                      color: _getStatusColor(project.status),
+                      color: _getStatusColor(project.project.status),
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                     ),

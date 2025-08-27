@@ -1,15 +1,19 @@
+import 'package:cmp/cache/cache_helper.dart';
 import 'package:cmp/controller/project/cubit/project_cubit.dart';
 import 'package:cmp/controller/project_user/cubit/project_user_cubit.dart';
 import 'package:cmp/controller/user/cubit/user_cubit.dart';
 import 'package:cmp/core/api/dio_consumer.dart';
+import 'package:cmp/core/api/end_point.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/resources/styles_manager.dart';
 import 'package:cmp/presentation/screens/dashboard_page.dart';
+import 'package:cmp/presentation/screens/employee/employee_projects.dart';
 import 'package:cmp/presentation/screens/home_page.dart';
 import 'package:cmp/presentation/screens/profile_page.dart';
 import 'package:cmp/presentation/screens/projects/projects_dashbaord_page.dart';
 import 'package:cmp/presentation/screens/project_user/add_project_user_page.dart';
 import 'package:cmp/presentation/screens/project_user/project_user_page.dart';
+import 'package:cmp/presentation/screens/report/report_page.dart';
 import 'package:cmp/presentation/screens/tasks/all_projects.dart';
 import 'package:cmp/presentation/screens/users/add_users_page.dart';
 import 'package:cmp/presentation/screens/users/users_dashbord_page.dart';
@@ -27,10 +31,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class Routes {
   static const String login = '/';
   static const String usersPage = '/users';
+  static const String reportPage = '/report';
   static const String usersDashbaordPage = '/users_dashbaord';
   static const String addUsersPage = '/add_Users';
+  // static const String addRepliesPage = '/add_Replies';
   static const String editUsersPage = '/edit_Users';
   static const String projectPage = '/project';
+  static const String employeeProjectPage = '/employee_project';
   static const String projectDashbaordPage = '/project_dashbaord';
   static const String projectDetailsPage = '/project_details';
   static const String userDetailsPage = '/user_details';
@@ -71,6 +78,13 @@ class RoutesGenerator {
         );
       case Routes.addUsersPage:
         return MaterialPageRoute(builder: (_) => AddUsersPage());
+      case Routes.reportPage:
+        return MaterialPageRoute(builder: (_) => ReportPage());
+      case Routes.employeeProjectPage:
+        return MaterialPageRoute(
+          builder: (_) =>
+              EmployeeProjects(id: CacheHelper().getData(key: ApiKeys.id)),
+        );
       // case Routes.editUsersPage:
       //   return MaterialPageRoute(builder: (_) => EditUsersPage());
       case Routes.projectPage:
@@ -115,8 +129,8 @@ class RoutesGenerator {
             child: const ProjectUserPage(),
           ),
         );
-      case Routes.addProjectUserPage:
-        return MaterialPageRoute(builder: (_) => AddProjectUserPage());
+      // case Routes.addProjectUserPage:
+      //   return MaterialPageRoute(builder: (_) => AddProjectUserPage());
       // case Routes.userDetailsPage:
       //   return MaterialPageRoute(
       //     builder: (_) => UserDetailsPage(

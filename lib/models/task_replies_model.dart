@@ -1,13 +1,6 @@
 import 'package:cmp/core/api/end_point.dart';
 
 class TaskRepliesModel {
-  // "id": 72,
-  //           "note": "Quia impedit accusamus debitis ut maxime.",
-  //           "task_id": 53,
-  //           "start_date": "2025-07-15 06:55:32",
-  //           "end_date": "2025-07-15 07:01:32",
-  //           "status": "Approved"
-
   final int id;
   final String note;
   final int task_id;

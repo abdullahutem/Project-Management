@@ -1,4 +1,5 @@
 import 'package:cmp/models/login_model.dart';
+import 'package:cmp/models/single_project_model.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/repo/user_repo.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController salaryController = TextEditingController();
   String? selectedRole;
   List<UserModel> usersList = [];
+  List<UserModel> usersForSingleProjectList = [];
 
   signInUser() async {
     emit(SignInLoading());
@@ -40,31 +42,16 @@ class UserCubit extends Cubit<UserState> {
   }
 
   logoutUser() async {
-    emit(SignInLoading());
+    emit(LogoutLoading());
     final response = await userRepo.logoutUser();
-    response.fold(
-      (error) => emit(SignInFaliure(errormessage: error)),
-      (logout) => emit(LogoutSucsess(message: logout.message)),
-    );
-  }
-
-  int getUserId(String name, UserCubit cubit) {
-    final state = cubit.state;
-    if (state is UsersLoaded) {
-      final user = state.usersList.firstWhere(
-        (u) => u.name == name,
-        orElse: () => UserModel(
-          id: 0,
-          name: 'Unknown',
-          email: '',
-          phone: '',
-          role: '',
-          base_salary: 0,
-        ),
+    response.fold((error) => emit(LogoutFaliure(logouterrormessage: error)), (
+      logout,
+    ) {
+      print(
+        "=======================================${LogoutSucsess(message: logout.message)}",
       );
-      return user.id;
-    }
-    return 0;
+      emit(LogoutSucsess(message: logout.message));
+    });
   }
 
   getAllUsers() async {
@@ -93,9 +80,8 @@ class UserCubit extends Cubit<UserState> {
       id: idController.text,
       name: nameController.text,
       email: emailController.text,
-      password: passwordController.text,
       phone: phoneController.text,
-      role: roleController.text,
+      role: selectedRole.toString(),
       base_salary: salaryController.text,
     );
     response.fold((error) => emit(UsersFaliure(errormessage: error)), (
@@ -116,8 +102,6 @@ class UserCubit extends Cubit<UserState> {
       role: selectedRole.toString(),
       base_salary: salaryController.text,
     );
-    print("=================***********=====${response}");
-
     response.fold(
       (error) => emit(AddUserFaliure(errormessage: error)),
       (newUser) => emit(AddUserSucsess(newUser: newUser)),
@@ -126,6 +110,15 @@ class UserCubit extends Cubit<UserState> {
 
   void updateRole(String? role) {
     selectedRole = role!;
-    //emit(UserRoleUpdated()); // or any meaningful state
+    // emit(UserRoleUpdated()); // or any meaningful state
+  }
+
+  getSingleProjects(int id) async {
+    emit(UsersLoading());
+    final result = await userRepo.getSingleProjectsData(id);
+    result.fold((error) => emit(UsersFaliure(errormessage: error)), (project) {
+      usersForSingleProjectList = project.users;
+      emit(SingleUserProjectLoaded(project: project, users: project.users));
+    });
   }
 }

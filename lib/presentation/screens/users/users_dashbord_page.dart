@@ -127,8 +127,6 @@ class UsersDashbordPage extends StatelessWidget {
                               ),
                             );
                           },
-
-                          onTap: () {},
                         );
                       },
                     ),

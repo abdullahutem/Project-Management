@@ -1,17 +1,14 @@
 import 'package:cmp/controller/tasks/cubit/task_cubit.dart';
-import 'package:cmp/core/api/dio_consumer.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/screens/tasks/add_task_page.dart';
 import 'package:cmp/presentation/screens/tasks/edit_task_page.dart';
 import 'package:cmp/presentation/screens/tasks/task_replies_page.dart';
-import 'package:cmp/presentation/widgets/beautiful_task_card.dart';
-import 'package:cmp/repo/task_repo.dart';
-import 'package:dio/dio.dart';
+import 'package:cmp/presentation/widgets/new_task_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UserDetailsPage extends StatefulWidget {
+class UserDetailsPage extends StatelessWidget {
   final int project_id;
   final UserModel user;
 
@@ -22,35 +19,12 @@ class UserDetailsPage extends StatefulWidget {
   });
 
   @override
-  State<UserDetailsPage> createState() => _UserDetailsPageState();
-}
-
-class _UserDetailsPageState extends State<UserDetailsPage> {
-  final TaskCubit taskCubit = TaskCubit(TaskRepo(api: DioConsumer(dio: Dio())));
-  int? projectUserId;
-  Color _getRoleColor(String role) {
-    switch (role.toLowerCase()) {
-      case 'admin':
-        return Colors.blue;
-      case 'employee':
-        return Colors.green;
-      default:
-        return Colors.grey;
-    }
-  }
-
-  @override
-  void initState() {
-    print("widget.project_id=====================${widget.project_id}");
-    context.read<TaskCubit>().getUserTasksForSpecificProjet(
-      widget.project_id,
-      widget.user.id,
-    );
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    context.read<TaskCubit>().getUserTasksForSpecificProjet(
+      project_id,
+      user.id,
+    );
+
     return BlocConsumer<TaskCubit, TaskState>(
       listener: (context, state) {
         if (state is TaskDeletedSuccess) {
@@ -61,8 +35,8 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             ),
           );
           context.read<TaskCubit>().getUserTasksForSpecificProjet(
-            widget.project_id,
-            widget.user.id,
+            project_id,
+            user.id,
           );
         } else if (state is TaskUpdated) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -72,21 +46,35 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             ),
           );
           context.read<TaskCubit>().getUserTasksForSpecificProjet(
-            widget.project_id,
-            widget.user.id,
+            project_id,
+            user.id,
           );
         }
       },
       builder: (context, state) {
-        // (context) => taskCubit
-        //   ..getUserTasksForSpecificProjet(widget.project_id, widget.user.id);
+        int? projectUserId;
+        if (state is TasksUserLoaded) {
+          projectUserId = state.tasks.id;
+        }
+
         return Scaffold(
           appBar: AppBar(
             backgroundColor: ColorManager.primaryColor,
             iconTheme: const IconThemeData(color: Colors.white),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.refresh_outlined),
+                onPressed: () {
+                  context.read<TaskCubit>().getUserTasksForSpecificProjet(
+                    project_id,
+                    user.id,
+                  );
+                },
+              ),
+            ],
             title: Text(
-              widget.user.name,
-              style: TextStyle(
+              user.name,
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 22,
                 fontWeight: FontWeight.w500,
@@ -96,105 +84,16 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             elevation: 0,
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // User Profile Header
-                Center(
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundColor: ColorManager.primaryColor.withOpacity(
-                          0.8,
-                        ),
-                        child: Text(
-                          widget.user.name[0],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        widget.user.name,
-                        style: const TextStyle(
-                          color: Colors.black87,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Chip(
-                        label: Text(
-                          widget.user.role,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        backgroundColor: _getRoleColor(widget.user.role),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 4,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 25),
-
-                // User Details Card
-                Card(
-                  elevation: 4.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'تفاصيل الموظف',
-                          style: const TextStyle(
-                            color: ColorManager.primaryColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const Divider(height: 20, thickness: 1),
-                        _buildDetailRow(
-                          Icons.email,
-                          'البريد الإلكتروني:',
-                          widget.user.email,
-                        ),
-                        _buildDetailRow(
-                          Icons.phone,
-                          'رقم الهاتف:',
-                          widget.user.phone,
-                        ),
-                        _buildDetailRow(
-                          Icons.account_balance_wallet,
-                          'الراتب الأساسي:',
-                          '${widget.user.base_salary.toStringAsFixed(2)} ر.س',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 25),
-
-                // Assigned Tasks Section
-                Padding(
-                  padding: const EdgeInsets.only(right: 5),
+                SizedBox(height: 10),
+                const Padding(
+                  padding: EdgeInsets.only(right: 5),
                   child: Text(
-                    'المهام المعينة',
-                    style: const TextStyle(
+                    '  المهام المعينة',
+                    style: TextStyle(
                       color: ColorManager.primaryColor,
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
@@ -205,7 +104,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 BlocBuilder<TaskCubit, TaskState>(
                   builder: (context, state) {
                     if (state is TaskLoading) {
-                      return CircularProgressIndicator();
+                      return const Center(child: CircularProgressIndicator());
                     } else if (state is TaskError) {
                       return Center(
                         child: Padding(
@@ -222,14 +121,13 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                       );
                     } else if (state is TasksUserLoaded) {
                       final assignedTasks = state.tasks.tasks;
-                      projectUserId = state.tasks.id;
                       if (assignedTasks.isEmpty) {
-                        return Center(
+                        return const Center(
                           child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 20.0),
                             child: Text(
                               'لا توجد مهام معينة لهذا الموظف.',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -244,27 +142,26 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                           itemCount: assignedTasks.length,
                           itemBuilder: (context, index) {
                             final task = assignedTasks[index];
-
-                            return BeautifulTaskCard(
-                              task: task,
+                            return NewTaskCard(
+                              taskModel: task,
                               changeToActive: () {
                                 context.read<TaskCubit>().updateTaskStatus(
                                   task.id.toString(),
-                                  'active',
+                                  'Active',
                                   task.is_active,
                                 );
                               },
                               changeToComplete: () {
                                 context.read<TaskCubit>().updateTaskStatus(
                                   task.id.toString(),
-                                  'completed',
+                                  'Completted',
                                   task.is_active,
                                 );
                               },
                               changeToPending: () {
                                 context.read<TaskCubit>().updateTaskStatus(
                                   task.id.toString(),
-                                  'pending',
+                                  'Pending',
                                   task.is_active,
                                 );
                               },
@@ -283,7 +180,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                 );
                               },
                               onEdit: () async {
-                                final result = await Navigator.push(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => EditTaskPage(
@@ -296,14 +193,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                     ),
                                   ),
                                 );
-                                if (result == true) {
-                                  context
-                                      .read<TaskCubit>()
-                                      .getUserTasksForSpecificProjet(
-                                        widget.project_id,
-                                        widget.user.id,
-                                      );
-                                }
+                                // if (result == true) {
+                                //   context
+                                //       .read<TaskCubit>()
+                                //       .getUserTasksForSpecificProjet(
+                                //         project_id,
+                                //         user.id,
+                                //       );
+                                // }
                               },
                               onDelete: () {
                                 showDialog(
@@ -341,21 +238,19 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                 );
                               },
                               onTap: () async {
-                                final result = await await Navigator.push(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) =>
                                         TaskRepliesPage(taskId: task.id),
                                   ),
                                 );
-                                if (result == true) {
-                                  context
-                                      .read<TaskCubit>()
-                                      .getUserTasksForSpecificProjet(
-                                        widget.project_id,
-                                        widget.user.id,
-                                      );
-                                }
+                                context
+                                    .read<TaskCubit>()
+                                    .getUserTasksForSpecificProjet(
+                                      project_id,
+                                      user.id,
+                                    );
                               },
                             );
                           },
@@ -365,20 +260,22 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     return const SizedBox.shrink();
                   },
                 ),
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
               ],
             ),
           ),
           floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      AddTaskPage(projectUserId: projectUserId!),
-                ),
-              );
-            },
+            onPressed: projectUserId == null
+                ? null // Disable the button if projectUserId is not yet loaded
+                : () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AddTaskPage(projectUserId: projectUserId!),
+                      ),
+                    );
+                  },
             icon: const Icon(Icons.task, color: Colors.white),
             label: const Text(
               'أضف مهمة',
@@ -393,39 +290,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               FloatingActionButtonLocation.centerFloat,
         );
       },
-    );
-  }
-
-  Widget _buildDetailRow(IconData icon, String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: ColorManager.primaryColor, size: 24),
-          const SizedBox(width: 12),
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.black87,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-              textAlign: TextAlign.end,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

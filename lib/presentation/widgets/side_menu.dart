@@ -1,5 +1,4 @@
 import 'package:cmp/cache/cache_helper.dart';
-
 import 'package:cmp/core/api/end_point.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
@@ -8,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({Key? key}) : super(key: key);
+  final String? userRole = CacheHelper().getDataString(key: ApiKeys.role);
+  SideMenu({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,62 +28,72 @@ class SideMenu extends StatelessWidget {
               ),
             ),
           ),
-          DrawerListTile(
-            title: "الرئيسية",
-            svgSrc: "assets/icons/menu_dashboard.svg",
-            press: () {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                Routes.homePage,
-                (route) => false,
-              );
-            },
-          ),
-          DrawerListTile(
-            title: "لوحة التحكم",
-            svgSrc: "assets/icons/menu_dashboard.svg",
-            press: () {
-              Navigator.pushNamed(context, Routes.dashboardPage);
-            },
-          ),
+          if (userRole == "admin") ...[
+            DrawerListTile(
+              title: "الرئيسية",
+              svgSrc: "assets/icons/menu_dashboard.svg",
+              press: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.homePage,
+                  (route) => false,
+                );
+              },
+            ),
+            DrawerListTile(
+              title: "لوحة التحكم",
+              svgSrc: "assets/icons/menu_dashboard.svg",
+              press: () {
+                Navigator.pushNamed(context, Routes.dashboardPage);
+              },
+            ),
 
+            DrawerListTile(
+              title: "الموظفين",
+              svgSrc: "assets/icons/menu_profile.svg",
+              press: () {
+                Navigator.pushNamed(context, Routes.usersPage);
+              },
+            ),
+            DrawerListTile(
+              title: "المشاريع",
+              svgSrc: "assets/icons/menu_profile.svg",
+              press: () {
+                Navigator.pushNamed(context, Routes.projectPage);
+              },
+            ),
+
+            DrawerListTile(
+              title: "التقارير",
+              svgSrc: "assets/icons/menu_profile.svg",
+              press: () {
+                Navigator.pushNamed(context, Routes.reportPage);
+              },
+            ),
+          ],
+          if (userRole == "employee") ...[
+            DrawerListTile(
+              title: "الرئيسية",
+              svgSrc: "assets/icons/menu_dashboard.svg",
+              press: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  Routes.homePage,
+                  (route) => false,
+                );
+              },
+            ),
+            DrawerListTile(
+              title: "مشاريعي",
+              svgSrc: "assets/icons/menu_profile.svg",
+              press: () {
+                Navigator.pushNamed(context, Routes.employeeProjectPage);
+              },
+            ),
+          ],
           DrawerListTile(
-            title: "الموظفين",
+            title: "الملف الشخصي",
             svgSrc: "assets/icons/menu_profile.svg",
-            press: () {
-              Navigator.pushNamed(context, Routes.usersPage);
-            },
-          ),
-          DrawerListTile(
-            title: "المشاريع",
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {
-              Navigator.pushNamed(context, Routes.projectPage);
-            },
-          ),
-          DrawerListTile(
-            title: "إسناد المشاريع",
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {
-              Navigator.pushNamed(context, Routes.projectUserPage);
-            },
-          ),
-          DrawerListTile(
-            title: "المهام",
-            svgSrc: "assets/icons/menu_task.svg",
-            press: () {
-              Navigator.pushNamed(context, Routes.allProjects);
-            },
-          ),
-
-          DrawerListTile(
-            title: "التقارير",
-            svgSrc: "assets/icons/menu_tran.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "ملفي",
-            svgSrc: "assets/icons/menu_tran.svg",
             press: () {
               Navigator.pushNamed(context, Routes.profilePage);
             },

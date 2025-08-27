@@ -91,41 +91,66 @@ class _EditProjectPageState extends State<EditProjectPage> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'تاريخ البدء',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                    "تاريخ البدء",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (picked != null) {
+                        cubit.updateStartDate(picked);
+                      }
+                    },
+                    child: AbsorbPointer(
+                      child: customTextField(
+                        cubit.startDateController,
+                        'تاريخ البدء',
+                        icon: Icons.date_range,
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'الرجاء إدخال تاريخ البدء'
+                            : null,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  customTextField(
-                    cubit.startDateController,
-                    'تاريخ البدء',
-                    icon: Icons.date_range,
-                    validator: (v) => v == null || v.isEmpty
-                        ? 'الرجاء إدخال تاريخ البدء'
-                        : null,
-                  ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 16),
+
                   const Text(
-                    'تاريخ الانتهاء',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                    "تاريخ الانتهاء",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  // END DATE PICKER
+                  GestureDetector(
+                    onTap: () async {
+                      DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (picked != null) {
+                        cubit.updateEndDate(picked);
+                      }
+                    },
+                    child: AbsorbPointer(
+                      child: customTextField(
+                        cubit.endDateController,
+                        'تاريخ الانتهاء',
+                        icon: Icons.event,
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'الرجاء إدخال تاريخ الانتهاء'
+                            : null,
+                      ),
                     ),
                   ),
+
                   const SizedBox(height: 8),
-                  customTextField(
-                    cubit.endDateController,
-                    'تاريخ الانتهاء',
-                    icon: Icons.event,
-                    validator: (v) => v == null || v.isEmpty
-                        ? 'الرجاء إدخال تاريخ الانتهاء'
-                        : null,
-                  ),
-                  const SizedBox(height: 8),
+
                   const Text(
                     "حالة المشروع",
                     style: const TextStyle(

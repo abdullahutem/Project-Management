@@ -38,23 +38,20 @@ class _EditUsersPageState extends State<EditUsersPage> {
     userCubit.emailController.text = widget.email;
     userCubit.phoneController.text = widget.phone;
     userCubit.salaryController.text = widget.salary;
-    userCubit.roleController.text = widget.role;
     userCubit.selectedRole = widget.role;
   }
 
-  late UserCubit userCubit;
-  @override
-  void dispose() {
-    // Clear without using context
-    userCubit.idController.clear();
-    userCubit.nameController.clear();
-    userCubit.emailController.clear();
-    userCubit.phoneController.clear();
-    userCubit.salaryController.clear();
-    userCubit.roleController.clear();
-
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   final cubit = context.read<UserCubit>();
+  //   cubit.idController.clear();
+  //   cubit.nameController.clear();
+  //   cubit.emailController.clear();
+  //   cubit.phoneController.clear();
+  //   cubit.salaryController.clear();
+  //   cubit.roleController.clear();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +71,14 @@ class _EditUsersPageState extends State<EditUsersPage> {
         final cubit = context.read<UserCubit>();
 
         return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              print("widget.role============${widget.role}");
+              print(
+                "cubit.roleController============${cubit.roleController.text}",
+              );
+            },
+          ),
           appBar: AppBar(
             title: const Text(
               'تعديل الموظف',

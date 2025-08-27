@@ -3,6 +3,7 @@ import 'package:cmp/models/user_model.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:cmp/presentation/screens/users/edit_users_page.dart';
 import 'package:cmp/presentation/screens/users/user_details_with_project_page.dart';
+import 'package:cmp/presentation/widgets/new_user_card.dart';
 import 'package:cmp/presentation/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
@@ -38,7 +39,6 @@ class UsersPage extends StatelessWidget {
             title: const Text(
               'الموظفين',
               style: TextStyle(
-                fontFamily: "EXPOARABIC",
                 color: Colors.white,
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -58,11 +58,7 @@ class UsersPage extends StatelessWidget {
                   return const Center(
                     child: Text(
                       'لا توجد بيانات',
-                      style: TextStyle(
-                        fontFamily: "EXPOARABIC",
-                        fontSize: 18,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
                     ),
                   );
                 } else {
@@ -73,8 +69,8 @@ class UsersPage extends StatelessWidget {
                       // In UsersPage, inside ListView.builder's itemBuilder:
                       itemBuilder: (context, index) {
                         final user = employees[index];
-                        return UserCard(
-                          user: user,
+                        return NewUserCard(
+                          userModel: user,
                           onEdit: () async {
                             // This is your existing edit logic
                             final result = await Navigator.push(
@@ -128,8 +124,6 @@ class UsersPage extends StatelessWidget {
                               ),
                             );
                           },
-
-                          // Add an onTap for the whole card to navigate to details
                           onTap: () {
                             Navigator.push(
                               context,
@@ -149,7 +143,6 @@ class UsersPage extends StatelessWidget {
                   child: Text(
                     'حدث خطأ: ${state.errormessage}',
                     style: const TextStyle(
-                      fontFamily: "EXPOARABIC",
                       color: Colors.redAccent,
                       fontSize: 16,
                     ),
@@ -173,7 +166,7 @@ class UsersPage extends StatelessWidget {
             icon: const Icon(Icons.person_add, color: Colors.white),
             label: const Text(
               'أضف موظف',
-              style: TextStyle(fontFamily: "EXPOARABIC", color: Colors.white),
+              style: TextStyle(color: Colors.white),
             ),
             backgroundColor: ColorManager.primaryColor,
             shape: RoundedRectangleBorder(

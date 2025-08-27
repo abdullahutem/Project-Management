@@ -71,7 +71,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
 
                   const Text(
                     "حالة المهمة",
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

@@ -43,6 +43,7 @@ dependencies:
   dio: ^5.8.0+1
   shared_preferences: ^2.5.3
   dartz: ^0.10.1
+  awesome_dialog: ^3.2.1
 
 dev_dependencies:
   flutter_test:
@@ -70,7 +71,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - assets/screenshot/
+    - assets/svgs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

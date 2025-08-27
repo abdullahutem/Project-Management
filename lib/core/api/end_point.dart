@@ -4,8 +4,11 @@ class EndPoint {
   static String logout = "logout";
   static String users = "users";
   static String projects = "projects";
+  static String financial_report = "financial-report";
   static String task = "tasks";
+  static String task_replies = "task-replies";
   static String project_users = "project-users";
+  static String stats = "stats";
   static String getUserDataEndPoint(int id) {
     return "users/$id";
   }
@@ -44,7 +47,7 @@ class EndPoint {
     return "tasks/$id";
   }
 
-  static String updateTaskRepliesEndPoint(String id) {
+  static String updateTaskRepliesEndPoint(int id) {
     return "task-replies/$id";
   }
 
@@ -73,7 +76,17 @@ class ApiKeys {
   static String project_user_id = "project_user_id";
   static String created_by = "created_by";
   static String updated_by = "updated_by";
+  static String replies_count = "replies_count";
+  static String current_cost = "current_cost";
   static String project_name = "project_name";
   static String user_name = "user_name";
   static String note = "note";
+  static String total_hours = "total_hours";
+  static String total_cost = "total_cost";
+  static String entries_count = "entries_count";
+  static String projects_count = "projects_count";
+  static String task_pending_counts = "task_pending_counts";
+  static String task_active_counts = "task_active_counts";
+  static String task_completed_counts = "task_completed_counts";
+  static String project_summary = "project_summary";
 }

@@ -1,7 +1,8 @@
 import 'package:cmp/controller/tasks/cubit/task_cubit.dart';
 import 'package:cmp/core/api/dio_consumer.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
-import 'package:cmp/presentation/widgets/task_replies_list.dart';
+import 'package:cmp/presentation/widgets/task_details_card.dart';
+import 'package:cmp/presentation/widgets/task_replies_card.dart';
 import 'package:cmp/repo/task_repo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,6 @@ class _TaskRepliesPageState extends State<TaskRepliesPage> {
         }
       },
       builder: (context, state) {
-        // (context) => taskCubit..getSingeleTask(widget.taskId);
         return Scaffold(
           appBar: AppBar(
             backgroundColor: ColorManager.primaryColor,
@@ -72,140 +72,99 @@ class _TaskRepliesPageState extends State<TaskRepliesPage> {
                 );
               } else if (state is SingleTaskLoaded) {
                 final singleTask = state.task;
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Task Details Card
-                      Card(
-                        elevation: 4.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildDetailRow(
-                                'Task Title',
-                                singleTask.task.task,
+                return Column(
+                  children: [
+                    // Fixed at top
+                    TaskDetailsCard(singleTask: singleTask),
+                    const SizedBox(height: 15),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView(
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  'عدد الردود: ',
+                                  style: TextStyle(
+                                    color: ColorManager.primaryColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Text(
+                                  singleTask.replies_count.toString(),
+                                  style: const TextStyle(
+                                    color: ColorManager.primaryColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Divider(height: 20, thickness: 1),
+                            if (singleTask.replies.isNotEmpty) ...[
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: singleTask.replies.length,
+                                itemBuilder: (context, index) {
+                                  return TaskRepliesCard(
+                                    replies: singleTask.replies,
+                                    changeToRejected: () {
+                                      context
+                                          .read<TaskCubit>()
+                                          .updateRepliesTaskStatus(
+                                            singleTask.replies[index].id,
+                                            'Rejected',
+                                          );
+                                    },
+                                    changeToApproved: () {
+                                      context
+                                          .read<TaskCubit>()
+                                          .updateRepliesTaskStatus(
+                                            singleTask.replies[index].id,
+                                            'Approved',
+                                          );
+                                    },
+                                    changeToSubmitted: () {
+                                      context
+                                          .read<TaskCubit>()
+                                          .updateRepliesTaskStatus(
+                                            singleTask.replies[index].id,
+                                            'Submitted',
+                                          );
+                                    },
+                                  );
+                                },
                               ),
-                              const Divider(height: 20, thickness: 1),
-                              _buildDetailRow(
-                                'Project',
-                                singleTask.project_name,
+                            ] else if (singleTask.replies.isEmpty)
+                              const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                                  child: Text(
+                                    'No replies yet.',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              _buildDetailRow(
-                                'Assigned To',
-                                singleTask.user_name,
-                              ),
-                              _buildDetailRow('Status', singleTask.task.status),
-                              _buildDetailRow('Cost', '${singleTask.cost} ر.س'),
-                            ],
-                          ),
+                          ],
                         ),
                       ),
-
-                      const SizedBox(height: 25),
-                      // Task Replies Section
-                      Row(
-                        children: [
-                          Text(
-                            'عدد الردود: ',
-                            style: const TextStyle(
-                              color: ColorManager.primaryColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          Text(
-                            singleTask.replies_count.toString(),
-                            style: const TextStyle(
-                              color: ColorManager.primaryColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Divider(height: 20, thickness: 1),
-                      if (singleTask.replies.isNotEmpty)
-                        TaskRepliesList(
-                          replies: singleTask.replies,
-                          changeToRejected: (index) {
-                            context.read<TaskCubit>().updateRepliesTaskStatus(
-                              singleTask.replies[index].id.toString(),
-                              'Rejected',
-                            );
-                          },
-                          changeToApproved: (index) {
-                            context.read<TaskCubit>().updateRepliesTaskStatus(
-                              singleTask.replies[index].id.toString(),
-                              'Approved',
-                            );
-                          },
-                          changeToSubmitted: (index) {
-                            context.read<TaskCubit>().updateRepliesTaskStatus(
-                              singleTask.replies[index].id.toString(),
-                              'Submitted',
-                            );
-                          },
-                        )
-                      else
-                        const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20.0),
-                            child: Text(
-                              'No replies yet.',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               }
+
               return const SizedBox.shrink();
             },
           ),
         );
       },
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.black87,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(
-                color: Colors.black54,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-              textAlign: TextAlign.end,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

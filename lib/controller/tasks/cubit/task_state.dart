@@ -9,6 +9,8 @@ class TaskLoading extends TaskState {}
 
 class TaskIsActiveChanged extends TaskState {}
 
+class TaskRepliesDateUpdated extends TaskState {}
+
 class AddTaskLoading extends TaskState {}
 
 class TaskDeletedSuccess extends TaskState {}
@@ -23,6 +25,11 @@ class AddTaskSuccess extends TaskState {
   final TaskModel tasks;
 
   AddTaskSuccess({required this.tasks});
+}
+
+class AddRepliesTaskSuccess extends TaskState {
+  final TaskRepliesModel replies;
+  AddRepliesTaskSuccess({required this.replies});
 }
 
 class TasksUserLoaded extends TaskState {

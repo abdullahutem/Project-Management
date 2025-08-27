@@ -1,8 +1,10 @@
 import 'package:cmp/cache/cache_helper.dart';
+import 'package:cmp/controller/user/cubit/user_cubit.dart';
 import 'package:cmp/core/api/end_point.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -27,7 +29,6 @@ class ProfilePage extends StatelessWidget {
             color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w400,
-            fontFamily: "EXPOARABIC",
           ),
         ),
         centerTitle: true,
@@ -63,7 +64,6 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     userName!,
                     style: const TextStyle(
-                      fontFamily: "EXPOARABIC",
                       fontSize: 26.0,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -74,7 +74,6 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     userRole!,
                     style: const TextStyle(
-                      fontFamily: "EXPOARABIC",
                       fontSize: 18.0,
                       color: Colors.white70,
                     ),
@@ -106,7 +105,6 @@ class ProfilePage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          fontFamily: "EXPOARABIC",
                         ),
                       ),
                       subtitle: Text(
@@ -114,7 +112,6 @@ class ProfilePage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          fontFamily: "EXPOARABIC",
                         ),
                       ),
                     ),
@@ -129,7 +126,6 @@ class ProfilePage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          fontFamily: "EXPOARABIC",
                         ),
                       ),
                       subtitle: Text(
@@ -137,7 +133,6 @@ class ProfilePage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          fontFamily: "EXPOARABIC",
                         ),
                       ),
                     ),
@@ -157,6 +152,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
+                  context.read<UserCubit>().logoutUser();
                   logoutUser(context);
                 },
                 icon: const Icon(
@@ -170,7 +166,6 @@ class ProfilePage extends StatelessWidget {
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
-                    fontFamily: "EXPOARABIC",
                   ),
                 ),
               ),

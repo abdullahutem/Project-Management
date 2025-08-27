@@ -16,7 +16,7 @@ class AddProjectPage extends StatelessWidget {
       listener: (context, state) {
         if (state is AddProjectSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("تم إضافة المشروع بنجاح")),
+            const SnackBar(content: Text("تم إضافة الموظف للمشروع بنجاح")),
           );
           Navigator.pop(context, true);
         } else if (state is AddProjectFailure) {
@@ -30,7 +30,7 @@ class AddProjectPage extends StatelessWidget {
           appBar: AppBar(
             title: const Text(
               'إضافة مشروع',
-              style: TextStyle(color: Colors.white, fontFamily: "EXPOARABIC"),
+              style: TextStyle(color: Colors.white),
             ),
             backgroundColor: ColorManager.primaryColor,
             iconTheme: const IconThemeData(color: Colors.white),
@@ -43,11 +43,10 @@ class AddProjectPage extends StatelessWidget {
                 children: [
                   const Text(
                     "اسم المشروع",
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      fontFamily: "EXPOARABIC",
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -62,11 +61,10 @@ class AddProjectPage extends StatelessWidget {
 
                   const Text(
                     "تاريخ البدء",
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      fontFamily: "EXPOARABIC",
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -98,11 +96,10 @@ class AddProjectPage extends StatelessWidget {
 
                   const Text(
                     "تاريخ الانتهاء",
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      fontFamily: "EXPOARABIC",
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -134,11 +131,10 @@ class AddProjectPage extends StatelessWidget {
 
                   const Text(
                     "حالة المشروع",
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      fontFamily: "EXPOARABIC",
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -152,11 +148,10 @@ class AddProjectPage extends StatelessWidget {
                         value: 'pending',
                         child: Text(
                           'قيد الانتظار',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            fontFamily: "EXPOARABIC",
                           ),
                         ),
                       ),
@@ -164,11 +159,10 @@ class AddProjectPage extends StatelessWidget {
                         value: 'completed',
                         child: Text(
                           'مكتمل',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            fontFamily: "EXPOARABIC",
                           ),
                         ),
                       ),
@@ -181,11 +175,10 @@ class AddProjectPage extends StatelessWidget {
                       return SwitchListTile(
                         title: const Text(
                           'هل المشروع مفعل؟',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            fontFamily: "EXPOARABIC",
                           ),
                         ),
                         value: cubit.isUpdateValue,
@@ -208,17 +201,16 @@ class AddProjectPage extends StatelessWidget {
                     onPressed: () {
                       if (cubit.formKey.currentState!.validate()) {
                         cubit.addNewProject();
-                        Navigator.pop(context);
+                        // Navigator.pop(context,true);
                       }
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
                     label: const Text(
                       'إضافة المشروع',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        fontFamily: "EXPOARABIC",
                       ),
                     ),
                   ),

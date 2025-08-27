@@ -5,14 +5,8 @@ class ProjectModel {
   final String endDate;
   final String status;
   final bool isActive;
-  final int createdBy;
-  final int updatedBy;
-  // "id": 1,
-  //           "name": "Stehr LLC",
-  //           "start_date": "1991-06-04",
-  //           "end_date": "2023-08-19",
-  //           "status": "pending",
-  //           "is_active": 1
+  final int? createdBy;
+  final int? updatedBy;
 
   ProjectModel({
     required this.id,

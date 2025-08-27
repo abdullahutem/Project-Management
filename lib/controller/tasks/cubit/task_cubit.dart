@@ -5,6 +5,7 @@ import 'package:cmp/models/task_model.dart';
 import 'package:cmp/models/task_replies_model.dart';
 import 'package:cmp/repo/task_repo.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 part 'task_state.dart';
@@ -18,6 +19,8 @@ class TaskCubit extends Cubit<TaskState> {
   TextEditingController statusController = TextEditingController();
   TextEditingController projectUserIdController = TextEditingController();
   TextEditingController idController = TextEditingController();
+  TextEditingController startDateController = TextEditingController();
+  TextEditingController endDateController = TextEditingController();
   bool isUpdateValue = true;
   bool? isActive;
   void updateIsActive(bool value) {
@@ -32,6 +35,18 @@ class TaskCubit extends Cubit<TaskState> {
   void updateValue(bool value) {
     isUpdateValue = value;
     emit(TaskIsActiveChanged());
+  }
+
+  void updateStartDate(DateTime date) {
+    final formatted = DateFormat('yyyy-MM-dd HH:mm').format(date);
+    startDateController.text = formatted;
+    emit(TaskRepliesDateUpdated());
+  }
+
+  void updateEndDate(DateTime date) {
+    final formatted = DateFormat('yyyy-MM-dd HH:mm').format(date);
+    endDateController.text = formatted;
+    emit(TaskRepliesDateUpdated());
   }
 
   void resetTaskForm() {
@@ -121,14 +136,30 @@ class TaskCubit extends Cubit<TaskState> {
     });
   }
 
-  updateRepliesTaskStatus(String id, String status) async {
+  updateRepliesTaskStatus(int id, String status) async {
     emit(TaskLoading());
     final response = await taskRepo.updateTaskRepliesStatus(
       id: id,
       status: status,
     );
-    response.fold((error) => emit(TaskError(error)), (message) {
-      emit(TaskRepliesUpdated(task: message));
-    });
+    response.fold(
+      (error) => emit(TaskError(error)),
+      (message) => emit(TaskRepliesUpdated(task: message)),
+    );
+  }
+
+  addTaskReplies() async {
+    emit(AddTaskLoading());
+    final response = await taskRepo.addTaskReplies(
+      note: titleController.text,
+      task_id: idController.text,
+      status: "Submitted",
+      start_date: startDateController.text,
+      end_date: endDateController.text,
+    );
+    response.fold(
+      (error) => emit(TaskError(error)),
+      (newTask) => emit(AddRepliesTaskSuccess(replies: newTask)),
+    );
   }
 }

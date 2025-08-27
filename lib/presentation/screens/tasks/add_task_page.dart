@@ -17,7 +17,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   void initState() {
     final taskCubit = context.read<TaskCubit>();
     taskCubit.projectUserIdController.text = widget.projectUserId.toString();
-    taskCubit.statusController.text = "completed";
+    taskCubit.statusController.text = "Completed";
     super.initState();
   }
 
@@ -69,15 +69,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   const SizedBox(height: 8),
                   customDropdownField(
                     value: cubit.statusController.text.isEmpty
-                        ? "pending"
+                        ? "Pending"
                         : cubit.statusController.text,
                     icon: Icons.info,
                     items: const [
                       DropdownMenuItem(
-                        value: 'pending',
+                        value: 'Pending',
                         child: Text(
                           'قيد الانتظار',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -85,7 +85,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         ),
                       ),
                       DropdownMenuItem(
-                        value: 'completed',
+                        value: 'Completed',
                         child: Text(
                           'مكتمل',
                           style: const TextStyle(

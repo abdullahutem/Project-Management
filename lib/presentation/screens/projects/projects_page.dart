@@ -1,10 +1,10 @@
 import 'package:cmp/controller/project/cubit/project_cubit.dart';
-import 'package:cmp/models/project_model.dart';
+import 'package:cmp/models/projects_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:cmp/presentation/screens/projects/edit_project_page.dart';
 import 'package:cmp/presentation/screens/projects/project_details_page.dart';
-import 'package:cmp/presentation/widgets/project_card.dart';
+import 'package:cmp/presentation/widgets/new_project_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,16 +29,18 @@ class ProjectsPage extends StatelessWidget {
               backgroundColor: Colors.green,
             ),
           );
-        } else if (state is SingleProjectLoaded) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProjectDetailsPage(project: state.project),
-            ),
-          ).then((value) {
-            context.read<ProjectCubit>().getAllProjects();
-          });
-        } else if (state is ProjectUpdatedSuccess) {
+        }
+        // else if (state is SingleProjectLoaded) {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => ProjectDetailsPage(project: state.project),
+        //     ),
+        //   ).then((value) {
+        //     context.read<ProjectCubit>().getAllProjects();
+        //   });
+        // }
+        else if (state is ProjectUpdatedSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("تم تحديث المهمة"),
@@ -51,7 +53,7 @@ class ProjectsPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.white),
+            iconTheme: const IconThemeData(color: Colors.white),
             title: const Text(
               "المشاريع",
               style: TextStyle(
@@ -69,7 +71,7 @@ class ProjectsPage extends StatelessWidget {
               if (state is ProjectLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is ProjectLoaded) {
-                final List<ProjectModel> projects = state.projects;
+                final List<ProjectsModel> projects = state.projects;
                 if (projects.isEmpty) {
                   return const Center(
                     child: Text(
@@ -85,20 +87,19 @@ class ProjectsPage extends StatelessWidget {
                       // In ProjectsPage, inside ListView.builder's itemBuilder:
                       itemBuilder: (context, index) {
                         final project = projects[index];
-                        return ProjectCard(
-                          project: project,
+                        return NewProjectCard(
+                          projectModel: project,
                           onEdit: () async {
-                            // This is your existing edit logic
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => EditProjectPage(
-                                  id: project.id,
-                                  name: project.name,
-                                  startDate: project.startDate,
-                                  endDate: project.endDate,
-                                  status: project.status,
-                                  isActive: project.isActive,
+                                  id: project.project.id,
+                                  name: project.project.name,
+                                  startDate: project.project.startDate,
+                                  endDate: project.project.endDate,
+                                  status: project.project.status,
+                                  isActive: project.project.isActive,
                                 ),
                               ),
                             );
@@ -122,7 +123,9 @@ class ProjectsPage extends StatelessWidget {
                                       Navigator.of(ctx).pop();
                                       context
                                           .read<ProjectCubit>()
-                                          .deleteSingleProject(project.id);
+                                          .deleteSingleProject(
+                                            project.project.id,
+                                          );
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Theme.of(
@@ -139,42 +142,51 @@ class ProjectsPage extends StatelessWidget {
                             );
                           },
                           onTap: () {
-                            context.read<ProjectCubit>().getSingleProjects(
-                              project.id,
+                            // context.read<ProjectCubit>().getSingleProjects(
+                            //   project.project.id,
+                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProjectDetailsPage(
+                                  project_id: project.project.id,
+                                  project_name: project.project.name,
+                                ),
+                              ),
                             );
                           },
                           changeToActive: () {
                             context.read<ProjectCubit>().updateTaskStatus(
-                              project.id,
+                              project.project.id,
                               'active',
-                              project.isActive,
+                              project.project.isActive,
                             );
                           },
                           changeToComplete: () {
                             context.read<ProjectCubit>().updateTaskStatus(
-                              project.id,
+                              project.project.id,
                               'completed',
-                              project.isActive,
+                              project.project.isActive,
                             );
                           },
                           changeToPending: () {
                             context.read<ProjectCubit>().updateTaskStatus(
-                              project.id,
+                              project.project.id,
                               'pending',
-                              project.isActive,
+                              project.project.isActive,
                             );
                           },
                           changeToTrue: () {
                             context.read<ProjectCubit>().updateTaskStatus(
-                              project.id,
-                              project.status,
+                              project.project.id,
+                              project.project.status,
                               true,
                             );
                           },
                           changeToFalse: () {
                             context.read<ProjectCubit>().updateTaskStatus(
-                              project.id,
-                              project.status,
+                              project.project.id,
+                              project.project.status,
                               false,
                             );
                           },

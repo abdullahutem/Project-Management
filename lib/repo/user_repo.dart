@@ -3,6 +3,7 @@ import 'package:cmp/core/api/api_consumer.dart';
 import 'package:cmp/core/api/end_point.dart';
 import 'package:cmp/core/errors/exceptions.dart';
 import 'package:cmp/models/logout_model.dart';
+import 'package:cmp/models/single_project_model.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/models/login_model.dart';
 import 'package:dartz/dartz.dart';
@@ -22,6 +23,7 @@ class UserRepo {
         data: {ApiKeys.email: signInEmail, ApiKeys.password: signInPassword},
       );
       final loginModel = LoginModel.fromJson(response);
+      await CacheHelper().saveData(key: ApiKeys.id, value: loginModel.id);
       await CacheHelper().saveData(key: ApiKeys.token, value: loginModel.token);
       await CacheHelper().saveData(key: ApiKeys.role, value: loginModel.role);
       await CacheHelper().saveData(key: ApiKeys.name, value: loginModel.name);
@@ -113,8 +115,6 @@ class UserRepo {
         },
       );
       final userModel = UserModel.fromJson(response);
-      print("=================***********=====${userModel.id}");
-      print("=================***********=====${userModel}");
       return Right(userModel);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
@@ -125,7 +125,6 @@ class UserRepo {
     required String id,
     required String name,
     required String email,
-    required String password,
     required String phone,
     required String role,
     required String base_salary,
@@ -136,7 +135,6 @@ class UserRepo {
         data: {
           ApiKeys.name: name,
           ApiKeys.email: email,
-          ApiKeys.password: password,
           ApiKeys.phone: phone,
           ApiKeys.role: role,
           ApiKeys.base_salary: base_salary,
@@ -144,6 +142,20 @@ class UserRepo {
       );
       final userModel = UserModel.fromJson(response);
       return Right(userModel);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
+
+  Future<Either<String, SingleProjectModel>> getSingleProjectsData(
+    int id,
+  ) async {
+    try {
+      final response = await api.get(EndPoint.getSingleProjectDataEndPoint(id));
+      final SingleProjectModel singleProject = SingleProjectModel.fromJson(
+        response,
+      );
+      return Right(singleProject);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
     }
