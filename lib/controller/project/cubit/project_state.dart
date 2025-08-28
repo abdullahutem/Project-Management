@@ -37,7 +37,7 @@ final class ProjectUpdatedSuccess extends ProjectState {
 }
 
 final class AddProjectSuccess extends ProjectState {
-  final ProjectModel newProject;
+  final ProjectsModel newProject;
 
   AddProjectSuccess({required this.newProject});
 }

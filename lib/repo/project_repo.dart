@@ -169,7 +169,7 @@ class ProjectRepo {
     }
   }
 
-  Future<Either<String, ProjectModel>> addNewProject({
+  Future<Either<String, ProjectsModel>> addNewProject({
     required String name,
     required String startDate,
     required String endDate,
@@ -187,7 +187,7 @@ class ProjectRepo {
           ApiKeys.is_active: isActive,
         },
       );
-      final projectModel = ProjectModel.fromJson(response);
+      final projectModel = ProjectsModel.fromJson(response['data']);
       return Right(projectModel);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
@@ -208,7 +208,8 @@ class ProjectRepo {
     }
   }
 
-  Future<Either<String, ProjectModel>> updateProjectStatus({
+  //dd
+  Future<Either<String, ProjectsModel>> updateProjectStatus({
     required int id,
     required String status,
     required bool is_active,
@@ -219,7 +220,7 @@ class ProjectRepo {
         data: {ApiKeys.status: status, ApiKeys.is_active: is_active},
       );
 
-      final taskModel = ProjectModel.fromJson(response);
+      final taskModel = ProjectsModel.fromJson(response['data']);
       return Right(taskModel);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);

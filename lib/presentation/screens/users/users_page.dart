@@ -1,5 +1,4 @@
 import 'package:cmp/controller/user/cubit/user_cubit.dart';
-import 'package:cmp/models/user_model.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:cmp/presentation/screens/users/edit_users_page.dart';
 import 'package:cmp/presentation/screens/users/user_details_with_project_page.dart';

@@ -56,7 +56,6 @@ class UserRepo {
       final List<UserModel> users = userListJson
           .map((userJson) => UserModel.fromJson({'data': userJson}))
           .toList();
-
       return Right(users);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
@@ -182,7 +181,7 @@ class UserRepo {
     try {
       final response = await api.get(EndPoint.getSingleProjectDataEndPoint(id));
       final SingleProjectModel singleProject = SingleProjectModel.fromJson(
-        response,
+        response['data'],
       );
       return Right(singleProject);
     } on ServerException catch (e) {

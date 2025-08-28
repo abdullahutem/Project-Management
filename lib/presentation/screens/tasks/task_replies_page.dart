@@ -1,20 +1,38 @@
+import 'package:cmp/core/api/dio_consumer.dart';
+import 'package:cmp/repo/task_repo.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart'; // Create this widget below
+
 import 'package:cmp/controller/tasks/cubit/task_cubit.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/widgets/task_details_card.dart';
 import 'package:cmp/presentation/widgets/task_replies_card.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // Create this widget below
 
-class TaskRepliesPage extends StatefulWidget {
+class TaskRepliesPage extends StatelessWidget {
   final int taskId;
-
-  const TaskRepliesPage({super.key, required this.taskId});
+  const TaskRepliesPage({Key? key, required this.taskId}) : super(key: key);
 
   @override
-  State<TaskRepliesPage> createState() => _TaskRepliesPageState();
+  Widget build(BuildContext context) {
+    final TaskRepo repo = TaskRepo(api: DioConsumer(dio: Dio()));
+    return BlocProvider(
+      create: (_) => TaskCubit(repo)..getSingeleTask(taskId),
+      child: TaskRepliesPageView(taskId: taskId),
+    );
+  }
 }
 
-class _TaskRepliesPageState extends State<TaskRepliesPage> {
+class TaskRepliesPageView extends StatefulWidget {
+  final int taskId;
+
+  const TaskRepliesPageView({super.key, required this.taskId});
+
+  @override
+  State<TaskRepliesPageView> createState() => _TaskRepliesPageStateView();
+}
+
+class _TaskRepliesPageStateView extends State<TaskRepliesPageView> {
   @override
   void initState() {
     super.initState();
@@ -107,6 +125,7 @@ class _TaskRepliesPageState extends State<TaskRepliesPage> {
                             physics: const AlwaysScrollableScrollPhysics(),
                             itemCount: singleTask.replies.length,
                             itemBuilder: (context, index) {
+                              final singleask = singleTask.replies[index];
                               print(
                                 "======singleTask.replies.length.         ${singleTask.replies.length}",
                               );
@@ -116,7 +135,7 @@ class _TaskRepliesPageState extends State<TaskRepliesPage> {
                                   context
                                       .read<TaskCubit>()
                                       .updateRepliesTaskStatus(
-                                        singleTask.replies[index].id,
+                                        singleask.id,
                                         'Rejected',
                                       );
                                 },
@@ -124,7 +143,7 @@ class _TaskRepliesPageState extends State<TaskRepliesPage> {
                                   context
                                       .read<TaskCubit>()
                                       .updateRepliesTaskStatus(
-                                        singleTask.replies[index].id,
+                                        singleask.id,
                                         'Approved',
                                       );
                                 },
@@ -132,7 +151,7 @@ class _TaskRepliesPageState extends State<TaskRepliesPage> {
                                   context
                                       .read<TaskCubit>()
                                       .updateRepliesTaskStatus(
-                                        singleTask.replies[index].id,
+                                        singleask.id,
                                         'Submitted',
                                       );
                                 },

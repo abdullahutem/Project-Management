@@ -24,7 +24,7 @@ class _AddProjectUserPageState extends State<AddProjectUserPage> {
   void initState() {
     final userCubit = context.read<UserCubit>();
     final cubit = context.read<ProjectUserCubit>();
-    userCubit.getAllUsers();
+    userCubit.getAllUserNames();
     cubit.selectedProjectId = widget.projectid.toString();
     super.initState();
   }

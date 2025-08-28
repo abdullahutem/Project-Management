@@ -99,6 +99,7 @@ class ProjectCubit extends Cubit<ProjectState> {
     });
   }
 
+  //dasd
   getSingleProjects(int id) async {
     emit(ProjectLoading());
     final result = await projectRepo.getSingleProjectsData(id);

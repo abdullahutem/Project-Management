@@ -1,14 +1,18 @@
+import 'package:cmp/core/api/dio_consumer.dart';
 import 'package:cmp/presentation/screens/project_user/add_project_user_page.dart';
 import 'package:cmp/presentation/widgets/user_card_no_edit.dart';
+import 'package:cmp/repo/project_repo.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cmp/controller/project/cubit/project_cubit.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/screens/users/user_details_page.dart';
 
-class ProjectDetailsPage extends StatefulWidget {
+class ProjectDetailsPage extends StatelessWidget {
   final int project_id;
   final String project_name;
+
   const ProjectDetailsPage({
     Key? key,
     required this.project_id,
@@ -16,10 +20,32 @@ class ProjectDetailsPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ProjectDetailsPage> createState() => _ProjectDetailsPageState();
+  Widget build(BuildContext context) {
+    final ProjectRepo repo = ProjectRepo(api: DioConsumer(dio: Dio()));
+    return BlocProvider(
+      create: (_) => ProjectCubit(repo)..getSingleProjects(project_id),
+      child: ProjectDetailsView(
+        project_id: project_id,
+        project_name: project_name,
+      ),
+    );
+  }
 }
 
-class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
+class ProjectDetailsView extends StatefulWidget {
+  final int project_id;
+  final String project_name;
+  const ProjectDetailsView({
+    Key? key,
+    required this.project_id,
+    required this.project_name,
+  }) : super(key: key);
+
+  @override
+  State<ProjectDetailsView> createState() => _ProjectDetailsViewState();
+}
+
+class _ProjectDetailsViewState extends State<ProjectDetailsView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
