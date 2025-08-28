@@ -37,7 +37,6 @@ class UsersDashbordPage extends StatelessWidget {
             title: const Text(
               'الموظفين',
               style: TextStyle(
-                fontFamily: "EXPOARABIC",
                 color: Colors.white,
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -57,11 +56,7 @@ class UsersDashbordPage extends StatelessWidget {
                   return const Center(
                     child: Text(
                       'لا توجد بيانات',
-                      style: TextStyle(
-                        fontFamily: "EXPOARABIC",
-                        fontSize: 18,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
                     ),
                   );
                 } else {
@@ -137,7 +132,6 @@ class UsersDashbordPage extends StatelessWidget {
                   child: Text(
                     'حدث خطأ: ${state.errormessage}',
                     style: const TextStyle(
-                      fontFamily: "EXPOARABIC",
                       color: Colors.redAccent,
                       fontSize: 16,
                     ),
@@ -161,7 +155,7 @@ class UsersDashbordPage extends StatelessWidget {
             icon: const Icon(Icons.person_add, color: Colors.white),
             label: const Text(
               'أضف موظف',
-              style: TextStyle(fontFamily: "EXPOARABIC", color: Colors.white),
+              style: TextStyle(color: Colors.white),
             ),
             backgroundColor: ColorManager.primaryColor,
             shape: RoundedRectangleBorder(

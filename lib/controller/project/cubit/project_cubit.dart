@@ -23,6 +23,43 @@ class ProjectCubit extends Cubit<ProjectState> {
   final formKey = GlobalKey<FormState>();
   List<ProjectModel> projectList = [];
   List<ProjectsModel> projectsList = [];
+  int currentPage = 1;
+  int lastPage = 1;
+  bool isLoadingMore = false;
+
+  Future<void> getFirstPageProjects() async {
+    emit(ProjectLoading());
+    currentPage = 1;
+    final response = await projectRepo.getProjectsDataPaginated(currentPage);
+    response.fold((error) => emit(ProjectError(error)), (paginated) {
+      projectsList = paginated.projects;
+      currentPage = paginated.currentPage;
+      lastPage = paginated.lastPage;
+      emit(ProjectLoaded(projectsList));
+    });
+  }
+
+  Future<void> loadMoreProjects() async {
+    if (isLoadingMore || currentPage >= lastPage) return;
+
+    isLoadingMore = true;
+    final response = await projectRepo.getProjectsDataPaginated(
+      currentPage + 1,
+    );
+    response.fold(
+      (error) {
+        emit(ProjectError(error));
+        isLoadingMore = false;
+      },
+      (paginated) {
+        projectsList.addAll(paginated.projects);
+        currentPage = paginated.currentPage;
+        lastPage = paginated.lastPage;
+        emit(ProjectLoaded(projectsList));
+        isLoadingMore = false;
+      },
+    );
+  }
 
   void updateStartDate(DateTime date) {
     startDateController.text = date.toIso8601String().split('T').first;
@@ -47,6 +84,15 @@ class ProjectCubit extends Cubit<ProjectState> {
   getAllProjects() async {
     emit(ProjectLoading());
     final result = await projectRepo.getProjectsData();
+    result.fold((error) => emit(ProjectError(error)), (projects) {
+      projectsList = projects;
+      emit(ProjectLoaded(projects));
+    });
+  }
+
+  getAllProjectsNames() async {
+    emit(ProjectLoading());
+    final result = await projectRepo.getAllProjectsNamesData();
     result.fold((error) => emit(ProjectError(error)), (projects) {
       projectsList = projects;
       emit(ProjectLoaded(projects));

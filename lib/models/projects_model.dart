@@ -48,4 +48,22 @@ class ProjectsModel {
       completionPercentage: (json["completionPercentage"] ?? 0).toDouble(),
     );
   }
+  factory ProjectsModel.fromJsonWithData(Map<String, dynamic> json) {
+    return ProjectsModel(
+      project: ProjectModel.fromJsonNoData(json["data"]['project']),
+      usersCount: json["data"]["users_count"] ?? 0,
+      taskPendingCounts: json["data"]["task_pending_counts"] ?? 0,
+      taskActiveCounts: json["data"]["task_active_counts"] ?? 0,
+      taskCompletedCounts: json["data"]["task_completed_counts"] ?? 0,
+      minHours: json["data"]["min_hours"] ?? 0,
+      maxHours: json["data"]["max_hours"] ?? 0,
+      currentHours: (json["data"]["current_hours"] ?? 0).toDouble(),
+      minCost: (json["data"]["min_cost"] ?? 0).toDouble(),
+      maxCost: (json["data"]["max_cost"] ?? 0).toDouble(),
+      currentCost: (json["data"]["current_cost"] ?? 0).toDouble(),
+      currentMonthCost: (json["data"]["current_month_cost"] ?? 0).toDouble(),
+      completionPercentage: (json["data"]["completionPercentage"] ?? 0)
+          .toDouble(),
+    );
+  }
 }

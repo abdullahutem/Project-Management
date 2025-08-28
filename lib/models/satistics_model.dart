@@ -1,8 +1,4 @@
 class SatisticsModel {
-  // "projects_count": 30,
-  //       "users_count": 20,
-  //       "tasks_count": 100
-
   final int projects_count;
   final int users_count;
   final int tasks_count;

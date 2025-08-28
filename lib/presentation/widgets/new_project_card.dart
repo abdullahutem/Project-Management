@@ -34,12 +34,12 @@ class NewProjectCard extends StatelessWidget {
         : Colors.red;
 
     Color _getStatusColor(String status) {
-      switch (status.toLowerCase()) {
-        case 'active':
+      switch (status) {
+        case 'Active':
           return Colors.blue;
-        case 'completed':
+        case 'Completed':
           return Colors.green;
-        case 'pending':
+        case 'Pending':
           return Colors.orange;
         default:
           return Colors.grey;
@@ -224,11 +224,11 @@ class NewProjectCard extends StatelessWidget {
               onEdit();
             } else if (value == 'delete') {
               onDelete();
-            } else if (value == 'active') {
+            } else if (value == 'Active') {
               changeToActive();
-            } else if (value == 'completed') {
+            } else if (value == 'Completed') {
               changeToComplete();
-            } else if (value == 'pending') {
+            } else if (value == 'Pending') {
               changeToPending();
             } else if (value == 'true') {
               changeToTrue();
@@ -237,9 +237,9 @@ class NewProjectCard extends StatelessWidget {
             }
           },
           itemBuilder: (BuildContext context) => [
-            if (projectModel.project.status == "active") ...[
+            if (projectModel.project.status == "Active") ...[
               PopupMenuItem<String>(
-                value: 'completed',
+                value: 'Completed',
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -249,7 +249,7 @@ class NewProjectCard extends StatelessWidget {
                 ),
               ),
               PopupMenuItem<String>(
-                value: 'pending',
+                value: 'Pending',
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -259,9 +259,9 @@ class NewProjectCard extends StatelessWidget {
                 ),
               ),
             ],
-            if (projectModel.project.status == "completed") ...[
+            if (projectModel.project.status == "Completed") ...[
               PopupMenuItem<String>(
-                value: 'active',
+                value: 'Active',
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -271,7 +271,7 @@ class NewProjectCard extends StatelessWidget {
                 ),
               ),
               PopupMenuItem<String>(
-                value: 'pending',
+                value: 'Pending',
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -281,9 +281,9 @@ class NewProjectCard extends StatelessWidget {
                 ),
               ),
             ],
-            if (projectModel.project.status == "pending") ...[
+            if (projectModel.project.status == "Pending") ...[
               PopupMenuItem<String>(
-                value: 'active',
+                value: 'Active',
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
@@ -293,7 +293,7 @@ class NewProjectCard extends StatelessWidget {
                 ),
               ),
               PopupMenuItem<String>(
-                value: 'completed',
+                value: 'Completed',
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [

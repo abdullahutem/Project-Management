@@ -8,8 +8,34 @@ import 'package:cmp/presentation/widgets/new_project_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProjectsPage extends StatelessWidget {
+class ProjectsPage extends StatefulWidget {
   const ProjectsPage({super.key});
+
+  @override
+  State<ProjectsPage> createState() => _ProjectsPageState();
+}
+
+class _ProjectsPageState extends State<ProjectsPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProjectCubit>().getFirstPageProjects();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 20) {
+        context.read<ProjectCubit>().loadMoreProjects();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +73,7 @@ class ProjectsPage extends StatelessWidget {
               backgroundColor: Colors.green,
             ),
           );
-          context.read<ProjectCubit>().getAllProjects();
+          context.read<ProjectCubit>().getFirstPageProjects();
         }
       },
       builder: (context, state) {
@@ -83,6 +109,7 @@ class ProjectsPage extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
+                      controller: _scrollController,
                       itemCount: projects.length,
                       // In ProjectsPage, inside ListView.builder's itemBuilder:
                       itemBuilder: (context, index) {
@@ -104,7 +131,9 @@ class ProjectsPage extends StatelessWidget {
                               ),
                             );
                             if (result == true) {
-                              context.read<ProjectCubit>().getAllProjects();
+                              context
+                                  .read<ProjectCubit>()
+                                  .getFirstPageProjects();
                             }
                           },
                           onDelete: () {
@@ -141,10 +170,7 @@ class ProjectsPage extends StatelessWidget {
                               ),
                             );
                           },
-                          onTap: () {
-                            // context.read<ProjectCubit>().getSingleProjects(
-                            //   project.project.id,
-                            // );
+                          onTap: () async {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -158,21 +184,21 @@ class ProjectsPage extends StatelessWidget {
                           changeToActive: () {
                             context.read<ProjectCubit>().updateTaskStatus(
                               project.project.id,
-                              'active',
+                              'Active',
                               project.project.isActive,
                             );
                           },
                           changeToComplete: () {
                             context.read<ProjectCubit>().updateTaskStatus(
                               project.project.id,
-                              'completed',
+                              'Completed',
                               project.project.isActive,
                             );
                           },
                           changeToPending: () {
                             context.read<ProjectCubit>().updateTaskStatus(
                               project.project.id,
-                              'pending',
+                              'Pending',
                               project.project.isActive,
                             );
                           },

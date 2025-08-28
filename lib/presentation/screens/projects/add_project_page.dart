@@ -140,12 +140,12 @@ class AddProjectPage extends StatelessWidget {
                   const SizedBox(height: 8),
                   customDropdownField(
                     value: cubit.statusController.text.isEmpty
-                        ? "pending"
+                        ? "Pending"
                         : cubit.statusController.text,
                     icon: Icons.info,
                     items: const [
                       DropdownMenuItem(
-                        value: 'pending',
+                        value: 'Pending',
                         child: Text(
                           'قيد الانتظار',
                           style: TextStyle(
@@ -156,7 +156,7 @@ class AddProjectPage extends StatelessWidget {
                         ),
                       ),
                       DropdownMenuItem(
-                        value: 'completed',
+                        value: 'Completed',
                         child: Text(
                           'مكتمل',
                           style: TextStyle(
@@ -201,7 +201,7 @@ class AddProjectPage extends StatelessWidget {
                     onPressed: () {
                       if (cubit.formKey.currentState!.validate()) {
                         cubit.addNewProject();
-                        // Navigator.pop(context,true);
+                        Navigator.pop(context, true);
                       }
                     },
                     icon: const Icon(Icons.save, color: Colors.white),

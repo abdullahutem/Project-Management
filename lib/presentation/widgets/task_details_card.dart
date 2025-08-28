@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 
 class TaskDetailsCard extends StatelessWidget {
-  // class  extends StatelessWidget {
-  //   final  ;
   final SingleTaskModel singleTask;
 
   const TaskDetailsCard({Key? key, required this.singleTask}) : super(key: key);

@@ -2,6 +2,8 @@ import 'package:cmp/controller/project/cubit/project_cubit.dart';
 import 'package:cmp/core/api/dio_consumer.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
+import 'package:cmp/presentation/screens/project_user/add_project_user_page.dart';
+import 'package:cmp/presentation/screens/project_user/add_project_user_page_for_user.dart';
 import 'package:cmp/presentation/screens/users/user_details_page.dart';
 import 'package:cmp/presentation/widgets/employee_project_card.dart';
 import 'package:cmp/repo/project_repo.dart';
@@ -47,6 +49,34 @@ class _UserDetailsWithProjectPageState
           centerTitle: true,
           elevation: 0,
         ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () async {
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddProjectUserPageForUser(
+                  userid: widget.user.id,
+                  userName: widget.user.name,
+                ),
+              ),
+            );
+            if (result == true) {
+              context.read<ProjectCubit>().getPrjectsForSpecificUser(
+                widget.user.id,
+              );
+            }
+          },
+          icon: const Icon(Icons.person_add, color: Colors.white),
+          label: const Text(
+            'أضف موظف للمشروع',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: ColorManager.primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(8.0),
           child: Column(

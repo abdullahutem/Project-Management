@@ -122,7 +122,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorManager.primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 16,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -138,7 +141,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
                     label: const Text(
-                      'إضافة المشروع',
+                      'إضافة المهمة',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,

@@ -3,6 +3,7 @@ import 'package:cmp/core/api/api_consumer.dart';
 import 'package:cmp/core/api/end_point.dart';
 import 'package:cmp/core/errors/exceptions.dart';
 import 'package:cmp/models/logout_model.dart';
+import 'package:cmp/models/paginated_users.dart';
 import 'package:cmp/models/single_project_model.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/models/login_model.dart';
@@ -51,11 +52,7 @@ class UserRepo {
   Future<Either<String, List<UserModel>>> getUsersData() async {
     try {
       final response = await api.get(EndPoint.users);
-
-      // Extract the list of user maps from the "data" key
       final List<dynamic> userListJson = response['data'];
-
-      // Convert each map to a UserModel instance
       final List<UserModel> users = userListJson
           .map((userJson) => UserModel.fromJson({'data': userJson}))
           .toList();
@@ -66,23 +63,55 @@ class UserRepo {
     }
   }
 
-  // Future<Either<String, UserModel>> getSingleUserData(int id) async {
-  //   try {
-  //     final response = await api.get(EndPoint.getUserDataEndPoint(id));
-  //     return Right(UserModel.fromJson(response));
-  //   } on ServerException catch (e) {
-  //     return Left(e.errorModel.message);
-  //   }
-  // }
+  Future<Either<String, PaginatedUsers>> getUsersDataPaginated(int page) async {
+    try {
+      final response = await api.get("${EndPoint.users}?page=$page");
 
-  // Future<Either<String, UserModel>> deleteSingleUserData(int id) async {
-  //   try {
-  //     final response = await api.delete(EndPoint.getUserDataEndPoint(id));
-  //     return Right(UserModel.fromJson(response));
-  //   } on ServerException catch (e) {
-  //     return Left(e.errorModel.message);
-  //   }
-  // }
+      final List<dynamic> userListJson = response['data'];
+      final List<UserModel> users = userListJson
+          .map((userJson) => UserModel.fromJson({'data': userJson}))
+          .toList();
+
+      final meta = response['meta'];
+
+      return Right(
+        PaginatedUsers(
+          users: users,
+          currentPage: meta['current_page'],
+          lastPage: meta['last_page'],
+        ),
+      );
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
+
+  Future<Either<String, List<UserModel>>> getAllUsersNamesData() async {
+    try {
+      int currentPage = 1;
+      int lastPage = 1;
+      List<UserModel> allUsers = [];
+
+      do {
+        final response = await api.get("${EndPoint.users}?page=$currentPage");
+
+        final List<dynamic> projectListJson = response['data'];
+        final List<UserModel> users = projectListJson
+            .map((projectJson) => UserModel.fromJsonNoData(projectJson))
+            .toList();
+
+        allUsers.addAll(users);
+
+        // update pagination info
+        lastPage = response['meta']['last_page'];
+        currentPage++;
+      } while (currentPage <= lastPage);
+
+      return Right(allUsers);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
 
   Future<Either<String, dynamic>> deleteSingleUserData(int id) async {
     try {

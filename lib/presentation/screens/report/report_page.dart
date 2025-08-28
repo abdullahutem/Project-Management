@@ -25,8 +25,8 @@ class _ReportPageState extends State<ReportPage> {
     final userCubit = context.read<UserCubit>();
     final projectCubit = context.read<ProjectCubit>();
     context.read<FinancialReportCubit>().getFinancialReportAdvance();
-    userCubit.getAllUsers();
-    projectCubit.getAllProjects();
+    userCubit.getAllUserNames();
+    projectCubit.getAllProjectsNames();
     super.initState();
   }
 

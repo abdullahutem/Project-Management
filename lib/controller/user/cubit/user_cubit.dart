@@ -29,6 +29,45 @@ class UserCubit extends Cubit<UserState> {
   List<UserModel> usersList = [];
   List<UserModel> usersForSingleProjectList = [];
 
+  int currentPage = 1;
+  int lastPage = 1;
+  bool isLoadingMore = false;
+  List<UserModel> usersListPaginated = [];
+
+  Future<void> getFirstPageUsers() async {
+    emit(UsersLoading());
+    currentPage = 1;
+    final response = await userRepo.getUsersDataPaginated(currentPage);
+    response.fold((error) => emit(UsersFaliure(errormessage: error)), (
+      paginated,
+    ) {
+      usersList = paginated.users;
+      currentPage = paginated.currentPage;
+      lastPage = paginated.lastPage;
+      emit(UsersLoaded(usersList: usersList));
+    });
+  }
+
+  Future<void> loadMoreUsers() async {
+    if (isLoadingMore || currentPage >= lastPage) return;
+
+    isLoadingMore = true;
+    final response = await userRepo.getUsersDataPaginated(currentPage + 1);
+    response.fold(
+      (error) {
+        emit(UsersFaliure(errormessage: error));
+        isLoadingMore = false;
+      },
+      (paginated) {
+        usersList.addAll(paginated.users);
+        currentPage = paginated.currentPage;
+        lastPage = paginated.lastPage;
+        emit(UsersLoaded(usersList: usersList));
+        isLoadingMore = false;
+      },
+    );
+  }
+
   signInUser() async {
     emit(SignInLoading());
     final response = await userRepo.signInUser(
@@ -57,6 +96,15 @@ class UserCubit extends Cubit<UserState> {
   getAllUsers() async {
     emit(UsersLoading());
     final response = await userRepo.getUsersData();
+    response.fold((error) => emit(UsersFaliure(errormessage: error)), (users) {
+      usersList = users;
+      emit(UsersLoaded(usersList: users));
+    });
+  }
+
+  getAllUserNames() async {
+    emit(UsersLoading());
+    final response = await userRepo.getAllUsersNamesData();
     response.fold((error) => emit(UsersFaliure(errormessage: error)), (users) {
       usersList = users;
       emit(UsersLoaded(usersList: users));

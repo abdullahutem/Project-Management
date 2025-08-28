@@ -87,15 +87,17 @@ class RoutesGenerator {
         );
       // case Routes.editUsersPage:
       //   return MaterialPageRoute(builder: (_) => EditUsersPage());
+      // case Routes.projectPage:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider(
+      //       create: (context) =>
+      //           ProjectCubit(ProjectRepo(api: DioConsumer(dio: Dio())))
+      //             ..getAllProjects(),
+      //       child: const ProjectsPage(),
+      //     ),
+      //   );
       case Routes.projectPage:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) =>
-                ProjectCubit(ProjectRepo(api: DioConsumer(dio: Dio())))
-                  ..getAllProjects(),
-            child: const ProjectsPage(),
-          ),
-        );
+        return MaterialPageRoute(builder: (_) => ProjectsPage());
       case Routes.projectDashbaordPage:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(

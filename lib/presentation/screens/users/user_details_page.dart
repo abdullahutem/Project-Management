@@ -238,19 +238,21 @@ class UserDetailsPage extends StatelessWidget {
                                 );
                               },
                               onTap: () async {
-                                Navigator.push(
+                                final result = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) =>
                                         TaskRepliesPage(taskId: task.id),
                                   ),
                                 );
-                                context
-                                    .read<TaskCubit>()
-                                    .getUserTasksForSpecificProjet(
-                                      project_id,
-                                      user.id,
-                                    );
+                                if (result == true) {
+                                  context
+                                      .read<TaskCubit>()
+                                      .getUserTasksForSpecificProjet(
+                                        project_id,
+                                        user.id,
+                                      );
+                                }
                               },
                             );
                           },

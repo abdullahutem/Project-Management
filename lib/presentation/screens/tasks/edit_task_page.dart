@@ -80,12 +80,12 @@ class _EditTaskPageState extends State<EditTaskPage> {
                   const SizedBox(height: 8),
                   customDropdownField(
                     value: cubit.statusController.text.isEmpty
-                        ? "pending"
+                        ? "Pending"
                         : cubit.statusController.text,
                     icon: Icons.info,
                     items: const [
                       DropdownMenuItem(
-                        value: 'pending',
+                        value: 'Pending',
                         child: Text(
                           'قيد الانتظار',
                           style: const TextStyle(
@@ -96,7 +96,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                         ),
                       ),
                       DropdownMenuItem(
-                        value: 'completed',
+                        value: 'Completed',
                         child: Text(
                           'مكتمل',
                           style: const TextStyle(
@@ -107,7 +107,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                         ),
                       ),
                       DropdownMenuItem(
-                        value: 'active',
+                        value: 'Active',
                         child: Text(
                           'مفعل',
                           style: TextStyle(
@@ -120,44 +120,17 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     ],
                     onChanged: (val) => cubit.statusController.text = val ?? '',
                   ),
-
                   const SizedBox(height: 8),
-
-                  // SwitchListTile(
-                  //   title: const Text("نشط"),
-                  //   value: cubit.isActive!,
-                  //   onChanged: (val) {
-                  //     setState(() {
-                  //       cubit.isActive = val;
-                  //     });
-                  //   },
-                  // ),
-                  // SwitchListTile(
-                  //   title: const Text(
-                  //     'هل المهمة مفعلة؟',
-                  //     style: TextStyle(
-                  //       color: Colors.black,
-                  //       fontSize: 16,
-                  //       fontWeight: FontWeight.w500,
-                  //     ),
-                  //   ),
-                  //   value: cubit.isActive!,
-                  //   onChanged: cubit.updateIsActive,
-                  //   activeColor: ColorManager.primaryColor,
-                  //   secondary: const Icon(Icons.check_circle),
-                  // ),
-                  // const SizedBox(height: 20),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorManager.primaryColor,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         cubit.updateSingleTask();
                         if (mounted) {
-                          Navigator.pop(context, true);
+                          Navigator.pop(context);
                         }
                       }
                     },
