@@ -10,19 +10,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserDetailsPage extends StatelessWidget {
   final int project_id;
-  final UserModel user;
+  final int user_id;
+  final String user_name;
 
   const UserDetailsPage({
     super.key,
-    required this.user,
     required this.project_id,
+    required this.user_id,
+    required this.user_name,
   });
 
   @override
   Widget build(BuildContext context) {
     context.read<TaskCubit>().getUserTasksForSpecificProjet(
       project_id,
-      user.id,
+      user_id,
     );
 
     return BlocConsumer<TaskCubit, TaskState>(
@@ -36,7 +38,7 @@ class UserDetailsPage extends StatelessWidget {
           );
           context.read<TaskCubit>().getUserTasksForSpecificProjet(
             project_id,
-            user.id,
+            user_id,
           );
         } else if (state is TaskUpdated) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -47,7 +49,7 @@ class UserDetailsPage extends StatelessWidget {
           );
           context.read<TaskCubit>().getUserTasksForSpecificProjet(
             project_id,
-            user.id,
+            user_id,
           );
         }
       },
@@ -67,13 +69,13 @@ class UserDetailsPage extends StatelessWidget {
                 onPressed: () {
                   context.read<TaskCubit>().getUserTasksForSpecificProjet(
                     project_id,
-                    user.id,
+                    user_id,
                   );
                 },
               ),
             ],
             title: Text(
-              user.name,
+              user_name,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 22,
@@ -250,7 +252,7 @@ class UserDetailsPage extends StatelessWidget {
                                       .read<TaskCubit>()
                                       .getUserTasksForSpecificProjet(
                                         project_id,
-                                        user.id,
+                                        user_id,
                                       );
                                 }
                               },

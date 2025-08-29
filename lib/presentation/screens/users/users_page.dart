@@ -163,8 +163,10 @@ class _UsersPageState extends State<UsersPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  UserDetailsWithProjectPage(user: user),
+                              builder: (context) => UserDetailsWithProjectPage(
+                                user_id: user.id,
+                                user_name: user.name,
+                              ),
                             ),
                           );
                         },

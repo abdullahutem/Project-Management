@@ -74,7 +74,7 @@ class _EmployeeProjectsState extends State<EmployeeProjects> {
                       ),
                     );
                   } else if (state is ProjectsUserLoaded) {
-                    final projects = state.project.projects;
+                    final projects = state.project;
                     if (projects.isEmpty) {
                       return Center(
                         child: Padding(

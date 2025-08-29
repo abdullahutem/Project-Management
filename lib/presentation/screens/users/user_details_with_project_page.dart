@@ -1,6 +1,5 @@
 import 'package:cmp/controller/project/cubit/project_cubit.dart';
 import 'package:cmp/core/api/dio_consumer.dart';
-import 'package:cmp/models/user_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/screens/project_user/add_project_user_page_for_user.dart';
 import 'package:cmp/presentation/screens/users/user_details_page.dart';
@@ -11,8 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserDetailsWithProjectPage extends StatefulWidget {
-  final UserModel user;
-  const UserDetailsWithProjectPage({super.key, required this.user});
+  final int user_id;
+  final String user_name;
+  const UserDetailsWithProjectPage({
+    super.key,
+    required this.user_id,
+    required this.user_name,
+  });
 
   @override
   State<UserDetailsWithProjectPage> createState() =>
@@ -23,7 +27,7 @@ class _UserDetailsWithProjectPageState
     extends State<UserDetailsWithProjectPage> {
   @override
   void initState() {
-    context.read<ProjectCubit>().getPrjectsForSpecificUser(widget.user.id);
+    context.read<ProjectCubit>().getPrjectsForSpecificUser(widget.user_id);
     super.initState();
   }
 
@@ -32,13 +36,13 @@ class _UserDetailsWithProjectPageState
     return BlocProvider(
       create: (context) =>
           ProjectCubit(ProjectRepo(api: DioConsumer(dio: Dio())))
-            ..getPrjectsForSpecificUser(widget.user.id),
+            ..getPrjectsForSpecificUser(widget.user_id),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorManager.primaryColor,
           iconTheme: const IconThemeData(color: Colors.white),
           title: Text(
-            widget.user.name,
+            widget.user_name,
             style: TextStyle(
               color: Colors.white,
               fontSize: 22,
@@ -54,14 +58,14 @@ class _UserDetailsWithProjectPageState
               context,
               MaterialPageRoute(
                 builder: (context) => AddProjectUserPageForUser(
-                  userid: widget.user.id,
-                  userName: widget.user.name,
+                  userid: widget.user_id,
+                  userName: widget.user_name,
                 ),
               ),
             );
             if (result == true) {
               context.read<ProjectCubit>().getPrjectsForSpecificUser(
-                widget.user.id,
+                widget.user_id,
               );
             }
           },
@@ -112,8 +116,8 @@ class _UserDetailsWithProjectPageState
                       ),
                     );
                   } else if (state is ProjectsUserLoaded) {
-                    final projects = state.project.projects;
-                    if (projects.isEmpty) {
+                    final theprojects = state.project;
+                    if (theprojects.isEmpty) {
                       return Center(
                         child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 20.0),
@@ -131,9 +135,9 @@ class _UserDetailsWithProjectPageState
                       return ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: projects.length,
+                        itemCount: theprojects.length,
                         itemBuilder: (context, index) {
-                          final project = projects[index];
+                          final project = theprojects[index];
                           return EmployeeProjectCard(
                             projectModel: project,
                             onTap: () {
@@ -141,8 +145,9 @@ class _UserDetailsWithProjectPageState
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => UserDetailsPage(
-                                    user: widget.user,
                                     project_id: project.project.id,
+                                    user_id: widget.user_id,
+                                    user_name: widget.user_name,
                                   ),
                                 ),
                               );

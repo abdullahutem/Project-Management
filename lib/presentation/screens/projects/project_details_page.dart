@@ -143,8 +143,9 @@ class _ProjectDetailsViewState extends State<ProjectDetailsView> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => UserDetailsPage(
-                                    user: user,
                                     project_id: project.projectModel.id,
+                                    user_id: user.id,
+                                    user_name: user.name,
                                   ),
                                 ),
                               );

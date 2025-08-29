@@ -18,7 +18,7 @@ class SingleProjectLoaded extends ProjectState {
 }
 
 class ProjectsUserLoaded extends ProjectState {
-  final ProjectsOfUserModel project;
+  final List<ProjectsModel> project;
 
   ProjectsUserLoaded({required this.project});
 }
