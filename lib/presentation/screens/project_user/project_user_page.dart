@@ -90,12 +90,12 @@ class ProjectUserPage extends StatelessWidget {
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
-                                      Navigator.of(ctx).pop();
-                                      context
-                                          .read<ProjectUserCubit>()
-                                          .deleteSingleProjectUser(
-                                            projectUser.id,
-                                          );
+                                      // Navigator.of(ctx).pop();
+                                      // context
+                                      //     .read<ProjectUserCubit>()
+                                      //     .deleteSingleProjectUser(
+                                      //       projectUser.id,
+                                      //     );
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.red,

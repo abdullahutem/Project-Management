@@ -149,6 +149,54 @@ class _ProjectDetailsViewState extends State<ProjectDetailsView> {
                                 ),
                               );
                             },
+                            onEdit: () {},
+                            onDelete: () {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: const Text("حذف"),
+                                  content: const Text(
+                                    "هل تريد حقا حذف المستخدم من المشروع؟",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(ctx).pop(),
+                                      child: const Text("إلغاء"),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(ctx).pop();
+                                        context
+                                            .read<ProjectCubit>()
+                                            .deleteSingleProjectUser(
+                                              project.projectModel.id,
+                                              user.id,
+                                            );
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              "تم حذف المشروع بنجاح",
+                                            ),
+                                            backgroundColor: Colors.green,
+                                          ),
+                                        );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.error,
+                                        foregroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.onError,
+                                      ),
+                                      child: const Text("حذف"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           );
                         },
                       ),

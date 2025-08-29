@@ -5,9 +5,16 @@ import 'package:cmp/presentation/resources/color_manager.dart';
 class UserCardNoEdit extends StatelessWidget {
   final UserModel userModel;
   final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
-  const UserCardNoEdit({Key? key, required this.userModel, required this.onTap})
-    : super(key: key);
+  const UserCardNoEdit({
+    Key? key,
+    required this.userModel,
+    required this.onTap,
+    required this.onEdit,
+    required this.onDelete,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +182,37 @@ class UserCardNoEdit extends StatelessWidget {
             ),
             overflow: TextOverflow.ellipsis,
           ),
+        ),
+        PopupMenuButton<String>(
+          onSelected: (value) {
+            if (value == 'edit') {
+              onEdit();
+            } else if (value == 'delete') {
+              onDelete();
+            }
+          },
+          itemBuilder: (BuildContext context) => [
+            PopupMenuItem<String>(
+              value: 'edit',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text('تعديل', style: TextStyle(color: Colors.black)),
+                  Icon(Icons.edit_outlined, color: Colors.blue),
+                ],
+              ),
+            ),
+            PopupMenuItem<String>(
+              value: 'delete',
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text('حذف', style: TextStyle(color: Colors.black)),
+                  Icon(Icons.delete_outline, color: Colors.red),
+                ],
+              ),
+            ),
+          ],
         ),
       ],
     );

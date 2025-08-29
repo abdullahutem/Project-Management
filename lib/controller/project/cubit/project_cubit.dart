@@ -168,4 +168,16 @@ class ProjectCubit extends Cubit<ProjectState> {
       emit(ProjectUpdatedSuccess(projectModel: message));
     });
   }
+
+  void deleteSingleProjectUser(int project_id, int user_id) async {
+    emit(ProjectLoading());
+    final response = await projectRepo.deleteSingleProjectUser(
+      project_id,
+      user_id,
+    );
+    response.fold((error) => emit(ProjectError(error)), (message) {
+      emit(ProjectDeletedSuccess());
+      getSingleProjects(project_id);
+    });
+  }
 }

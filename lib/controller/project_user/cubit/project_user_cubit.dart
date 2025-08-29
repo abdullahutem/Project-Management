@@ -52,9 +52,12 @@ class ProjectUserCubit extends Cubit<ProjectUserState> {
     );
   }
 
-  void deleteSingleProjectUser(int id) async {
+  void deleteSingleProjectUser(int project_id, int user_id) async {
     emit(ProjectUserLoading());
-    final response = await repository.deleteSingleProjectUser(id);
+    final response = await repository.deleteSingleProjectUser(
+      project_id,
+      user_id,
+    );
     response.fold((error) => emit(ProjectUserError(message: error)), (message) {
       emit(ProjectUserDeletedSuccess());
       getAllProjectUsers(); // Refresh list

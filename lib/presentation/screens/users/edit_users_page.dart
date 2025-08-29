@@ -41,18 +41,6 @@ class _EditUsersPageState extends State<EditUsersPage> {
     userCubit.selectedRole = widget.role;
   }
 
-  // @override
-  // void dispose() {
-  //   final cubit = context.read<UserCubit>();
-  //   cubit.idController.clear();
-  //   cubit.nameController.clear();
-  //   cubit.emailController.clear();
-  //   cubit.phoneController.clear();
-  //   cubit.salaryController.clear();
-  //   cubit.roleController.clear();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
@@ -71,14 +59,6 @@ class _EditUsersPageState extends State<EditUsersPage> {
         final cubit = context.read<UserCubit>();
 
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              print("widget.role============${widget.role}");
-              print(
-                "cubit.roleController============${cubit.roleController.text}",
-              );
-            },
-          ),
           appBar: AppBar(
             title: const Text(
               'تعديل الموظف',
@@ -95,7 +75,7 @@ class _EditUsersPageState extends State<EditUsersPage> {
                 children: [
                   const Text(
                     'الاسم الكامل',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -112,7 +92,7 @@ class _EditUsersPageState extends State<EditUsersPage> {
                   const SizedBox(height: 8),
                   const Text(
                     'البريد الإلكتروني',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -140,7 +120,7 @@ class _EditUsersPageState extends State<EditUsersPage> {
                   const SizedBox(height: 8),
                   const Text(
                     'رقم الهاتف',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -159,7 +139,7 @@ class _EditUsersPageState extends State<EditUsersPage> {
                   const SizedBox(height: 8),
                   const Text(
                     'الراتب الأساسي',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

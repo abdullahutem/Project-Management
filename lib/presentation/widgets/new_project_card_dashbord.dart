@@ -7,7 +7,7 @@ class NewProjectCardDashbord extends StatelessWidget {
   final ProjectsModel projectModel;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
-  final VoidCallback onTap;
+
   final VoidCallback changeToActive;
   final VoidCallback changeToComplete;
   final VoidCallback changeToPending;
@@ -19,7 +19,7 @@ class NewProjectCardDashbord extends StatelessWidget {
     required this.projectModel,
     required this.onEdit,
     required this.onDelete,
-    required this.onTap,
+
     required this.changeToActive,
     required this.changeToComplete,
     required this.changeToPending,
@@ -46,73 +46,67 @@ class NewProjectCardDashbord extends StatelessWidget {
       }
     }
 
-    double hoursProgress = (projectModel.currentHours / projectModel.maxHours)
-        .clamp(0.0, 1.0);
-
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: InkWell(
-        onTap: onTap,
-        child: Card(
-          color: Colors.white,
-          elevation: 6,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-            side: const BorderSide(color: Color(0xff038187), width: 2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(),
-                const SizedBox(height: 8),
-                const Divider(color: Colors.grey, height: 1),
-                _buildSection(
-                  title: 'تفاصيل المشروع',
-                  children: [
-                    _buildDetailRow(
-                      label: 'الحــالة',
-                      value: projectModel.project.status,
-                      color: _getStatusColor(projectModel.project.status),
-                      assetName: "assets/svgs/ActiveTasks.svg",
-                    ),
-                    SizedBox(width: 5),
-                    _buildDetailRow(
-                      label: 'نشط',
-                      value: projectModel.project.isActive ? 'نشط' : 'غير نشط',
-                      color: statusColor,
-                      assetName: "assets/svgs/IsActive.svg",
-                    ),
-                    SizedBox(width: 5),
-                    _buildDetailRow(
-                      label: 'عدد الموظفين',
-                      value: projectModel.usersCount.toString(),
-                      color: Colors.black87,
-                      assetName: "assets/svgs/EmployeesCounts.svg",
-                    ),
-                  ],
-                ),
-                _buildSection(
-                  title: 'التواريخ',
-                  children: [
-                    _buildDetailRow(
-                      label: 'تاريخ البدء',
-                      value: projectModel.project.startDate,
-                      color: Colors.black87,
-                      assetName: "assets/svgs/StartDate.svg",
-                    ),
-                    SizedBox(width: 25),
-                    _buildDetailRow(
-                      label: 'تاريخ الانتهاء',
-                      value: projectModel.project.endDate,
-                      color: Colors.black87,
-                      assetName: "assets/svgs/EndDate.svg",
-                    ),
-                  ],
-                ),
-              ],
-            ),
+      child: Card(
+        color: Colors.white,
+        elevation: 6,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: const BorderSide(color: Color(0xff038187), width: 2),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(),
+              const SizedBox(height: 8),
+              const Divider(color: Colors.grey, height: 1),
+              _buildSection(
+                title: 'تفاصيل المشروع',
+                children: [
+                  _buildDetailRow(
+                    label: 'الحــالة',
+                    value: projectModel.project.status,
+                    color: _getStatusColor(projectModel.project.status),
+                    assetName: "assets/svgs/ActiveTasks.svg",
+                  ),
+                  SizedBox(width: 5),
+                  _buildDetailRow(
+                    label: 'نشط',
+                    value: projectModel.project.isActive ? 'نشط' : 'غير نشط',
+                    color: statusColor,
+                    assetName: "assets/svgs/IsActive.svg",
+                  ),
+                  SizedBox(width: 5),
+                  _buildDetailRow(
+                    label: 'عدد الموظفين',
+                    value: projectModel.usersCount.toString(),
+                    color: Colors.black87,
+                    assetName: "assets/svgs/EmployeesCounts.svg",
+                  ),
+                ],
+              ),
+              _buildSection(
+                title: 'التواريخ',
+                children: [
+                  _buildDetailRow(
+                    label: 'تاريخ البدء',
+                    value: projectModel.project.startDate,
+                    color: Colors.black87,
+                    assetName: "assets/svgs/StartDate.svg",
+                  ),
+                  SizedBox(width: 25),
+                  _buildDetailRow(
+                    label: 'تاريخ الانتهاء',
+                    value: projectModel.project.endDate,
+                    color: Colors.black87,
+                    assetName: "assets/svgs/EndDate.svg",
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

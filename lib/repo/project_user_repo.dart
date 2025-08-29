@@ -31,10 +31,13 @@ class ProjectUserRepo {
     }
   }
 
-  Future<Either<String, dynamic>> deleteSingleProjectUser(int id) async {
+  Future<Either<String, dynamic>> deleteSingleProjectUser(
+    int project_id,
+    int user_id,
+  ) async {
     try {
       final response = await api.delete(
-        EndPoint.getProjectUserDataEndPoint(id),
+        EndPoint.deletProjectUserDataEndPoint(project_id, user_id),
       );
       return Right(response);
     } on ServerException catch (e) {

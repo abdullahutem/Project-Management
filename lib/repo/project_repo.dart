@@ -226,4 +226,18 @@ class ProjectRepo {
       return Left(e.errorModel.message);
     }
   }
+
+  Future<Either<String, dynamic>> deleteSingleProjectUser(
+    int project_id,
+    int user_id,
+  ) async {
+    try {
+      final response = await api.delete(
+        EndPoint.deletProjectUserDataEndPoint(project_id, user_id),
+      );
+      return Right(response);
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
 }

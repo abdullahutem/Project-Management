@@ -7,8 +7,34 @@ import 'package:cmp/presentation/widgets/new_project_card_dashbord.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProjectsDashbaordPage extends StatelessWidget {
+class ProjectsDashbaordPage extends StatefulWidget {
   const ProjectsDashbaordPage({super.key});
+
+  @override
+  State<ProjectsDashbaordPage> createState() => _ProjectsDashbaordPageState();
+}
+
+class _ProjectsDashbaordPageState extends State<ProjectsDashbaordPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProjectCubit>().getFirstPageProjects();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 20) {
+        context.read<ProjectCubit>().loadMoreProjects();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,20 +54,31 @@ class ProjectsDashbaordPage extends StatelessWidget {
               backgroundColor: Colors.green,
             ),
           );
-        } else if (state is ProjectUpdatedSuccess) {
+        }
+        // else if (state is SingleProjectLoaded) {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => ProjectDetailsPage(project: state.project),
+        //     ),
+        //   ).then((value) {
+        //     context.read<ProjectCubit>().getAllProjects();
+        //   });
+        // }
+        else if (state is ProjectUpdatedSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("تم تحديث المهمة"),
               backgroundColor: Colors.green,
             ),
           );
-          context.read<ProjectCubit>().getAllProjects();
+          context.read<ProjectCubit>().getFirstPageProjects();
         }
       },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.white),
+            iconTheme: const IconThemeData(color: Colors.white),
             title: const Text(
               "المشاريع",
               style: TextStyle(
@@ -71,14 +108,14 @@ class ProjectsDashbaordPage extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
+                      controller: _scrollController,
                       itemCount: projects.length,
-                      // In ProjectsDashbaordPage, inside ListView.builder's itemBuilder:
+                      // In ProjectsPage, inside ListView.builder's itemBuilder:
                       itemBuilder: (context, index) {
                         final project = projects[index];
                         return NewProjectCardDashbord(
                           projectModel: project,
                           onEdit: () async {
-                            // This is your existing edit logic
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -93,7 +130,9 @@ class ProjectsDashbaordPage extends StatelessWidget {
                               ),
                             );
                             if (result == true) {
-                              context.read<ProjectCubit>().getAllProjects();
+                              context
+                                  .read<ProjectCubit>()
+                                  .getFirstPageProjects();
                             }
                           },
                           onDelete: () {
@@ -130,25 +169,24 @@ class ProjectsDashbaordPage extends StatelessWidget {
                               ),
                             );
                           },
-                          onTap: () {},
                           changeToActive: () {
                             context.read<ProjectCubit>().updateTaskStatus(
                               project.project.id,
-                              'active',
+                              'Active',
                               project.project.isActive,
                             );
                           },
                           changeToComplete: () {
                             context.read<ProjectCubit>().updateTaskStatus(
                               project.project.id,
-                              'completed',
+                              'Completed',
                               project.project.isActive,
                             );
                           },
                           changeToPending: () {
                             context.read<ProjectCubit>().updateTaskStatus(
                               project.project.id,
-                              'pending',
+                              'Pending',
                               project.project.isActive,
                             );
                           },

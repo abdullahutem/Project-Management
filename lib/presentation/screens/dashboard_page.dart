@@ -20,7 +20,6 @@ class _DashboardPageState extends State<DashboardPage> {
             color: Colors.white,
             fontSize: 22,
             fontWeight: FontWeight.w500,
-            fontFamily: "EXPOARABIC",
           ),
         ),
         backgroundColor: ColorManager.primaryColor,
@@ -45,7 +44,6 @@ class _DashboardPageState extends State<DashboardPage> {
     return [
       _buildCard('المشاريع', Icons.account_balance_outlined, 'projects'),
       _buildCard('الموظفين', Icons.supervised_user_circle, 'users'),
-      _buildCard("التقارير", Icons.more_time_outlined, 'reports'),
     ];
   }
 
@@ -90,7 +88,6 @@ class _DashboardPageState extends State<DashboardPage> {
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      fontFamily: "EXPOARABIC",
                     ),
                   ),
                 ),
@@ -109,9 +106,6 @@ class _DashboardPageState extends State<DashboardPage> {
         break;
       case 'projects':
         Navigator.pushNamed(context, Routes.projectDashbaordPage);
-        break;
-      case 'reports':
-        Navigator.pushNamed(context, Routes.usersPage);
         break;
       default:
         // Handle unknown route
