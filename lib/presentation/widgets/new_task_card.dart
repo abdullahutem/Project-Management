@@ -29,12 +29,12 @@ class NewTaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color _getStatusColor(String status) {
-      switch (status.toLowerCase()) {
-        case 'active':
+      switch (status) {
+        case 'Active':
           return Colors.blue;
-        case 'completed':
+        case 'Completed':
           return Colors.green;
-        case 'pending':
+        case 'Pending':
           return Colors.orange;
         default:
           return Colors.grey;

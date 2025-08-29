@@ -1,5 +1,5 @@
 import 'package:cmp/controller/tasks/cubit/task_cubit.dart';
-import 'package:cmp/models/user_model.dart';
+
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/screens/tasks/add_task_page.dart';
 import 'package:cmp/presentation/screens/tasks/edit_task_page.dart';

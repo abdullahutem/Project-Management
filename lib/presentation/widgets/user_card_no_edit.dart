@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cmp/models/user_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
+import 'package:flutter_svg/svg.dart';
 
 class UserCardNoEdit extends StatelessWidget {
   final UserModel userModel;
@@ -67,21 +68,21 @@ class UserCardNoEdit extends StatelessWidget {
                     _buildDetailRow(
                       label: 'الدور',
                       value: userModel.role,
-                      icon: Icons.work_outline,
+                      assetName: "assets/svgs/Status.svg",
                       color: _getRoleColor(userModel.role),
                     ),
                     const SizedBox(width: 5),
                     _buildDetailRow(
                       label: 'الراتب الأساسي',
                       value: '${userModel.base_salary.toStringAsFixed(2)}',
-                      icon: Icons.attach_money,
+                      assetName: "assets/svgs/max_cost.svg",
                       color: Colors.black87,
                     ),
                     const SizedBox(width: 5),
                     _buildDetailRow(
                       label: 'عدد المشاريع',
                       value: userModel.projects_count.toString(),
-                      icon: Icons.business_center,
+                      assetName: "assets/svgs/ProjectName.svg",
                       color: Colors.black87,
                     ),
                   ],
@@ -89,17 +90,17 @@ class UserCardNoEdit extends StatelessWidget {
                 _buildSection(
                   title: 'معلومات الاتصال',
                   children: [
-                    _buildDetailRow(
+                    _buildDetailRow2(
                       label: 'البريد الإلكتروني',
                       value: userModel.email,
-                      icon: Icons.email_outlined,
+                      assetName: "assets/svgs/email.svg",
                       color: Colors.black87,
                     ),
                     const SizedBox(width: 5),
-                    _buildDetailRow(
+                    _buildDetailRow2(
                       label: 'الهاتف',
                       value: userModel.phone,
-                      icon: Icons.phone,
+                      assetName: "assets/svgs/phone.svg",
                       color: Colors.black87,
                     ),
                   ],
@@ -110,21 +111,21 @@ class UserCardNoEdit extends StatelessWidget {
                     _buildDetailRow(
                       label: 'المهام النشطة',
                       value: userModel.task_active_counts.toString(),
-                      icon: Icons.check_box_outlined,
+                      assetName: "assets/svgs/ActiveTasks.svg",
                       color: Colors.black87,
                     ),
                     const SizedBox(width: 2),
                     _buildDetailRow(
                       label: 'المهام قيد الانتظار',
                       value: userModel.task_pending_counts.toString(),
-                      icon: Icons.watch_later_outlined,
+                      assetName: "assets/svgs/PendingTasks.svg",
                       color: Colors.black87,
                     ),
                     const SizedBox(width: 2),
                     _buildDetailRow(
                       label: 'المهام المكتملة',
                       value: userModel.task_completed_counts.toString(),
-                      icon: Icons.task_alt,
+                      assetName: "assets/svgs/CompletedTasks.svg",
                       color: Colors.black87,
                     ),
                   ],
@@ -135,14 +136,14 @@ class UserCardNoEdit extends StatelessWidget {
                     _buildDetailRow(
                       label: 'إجمالي الساعات',
                       value: userModel.total_hours.toStringAsFixed(2),
-                      icon: Icons.access_time,
+                      assetName: "assets/svgs/current_hours.svg",
                       color: Colors.black87,
                     ),
                     const SizedBox(width: 2),
                     _buildDetailRow(
                       label: 'إجمالي التكلفة',
                       value: userModel.total_cost.toStringAsFixed(2),
-                      icon: Icons.price_check,
+                      assetName: "assets/svgs/current_cost.svg",
                       color: Colors.black87,
                     ),
                   ],
@@ -252,7 +253,51 @@ class UserCardNoEdit extends StatelessWidget {
   Widget _buildDetailRow({
     required String label,
     required String value,
-    required IconData icon,
+    required String assetName,
+    required Color color,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                color: ColorManager.primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+            const SizedBox(height: 4),
+            SvgPicture.asset(assetName, width: 40, height: 40),
+            const SizedBox(height: 7),
+            Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textDirection: TextDirection.ltr,
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow2({
+    required String label,
+    required String value,
+    required String assetName,
     required Color color,
   }) {
     return Expanded(
@@ -276,7 +321,8 @@ class UserCardNoEdit extends StatelessWidget {
             const SizedBox(height: 4),
             CircleAvatar(
               backgroundColor: ColorManager.primaryColor,
-              child: Icon(icon, color: Colors.white, size: 20),
+              radius: 20,
+              child: SvgPicture.asset(assetName, width: 30, height: 30),
             ),
             const SizedBox(height: 7),
             Text(

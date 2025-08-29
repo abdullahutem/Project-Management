@@ -95,6 +95,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           ),
                         ),
                       ),
+                      DropdownMenuItem(
+                        value: 'Active',
+                        child: Text(
+                          'نشيط',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                     ],
                     onChanged: (val) => cubit.statusController.text = val ?? '',
                   ),

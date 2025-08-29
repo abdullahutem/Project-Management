@@ -1,12 +1,13 @@
 import 'package:cmp/models/task_replies_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class TaskRepliesCard extends StatelessWidget {
   final VoidCallback changeToRejected;
   final VoidCallback changeToApproved;
   final VoidCallback changeToSubmitted;
-  final List<TaskRepliesModel> replies;
+  final TaskRepliesModel replies;
 
   const TaskRepliesCard({
     super.key,
@@ -31,58 +32,54 @@ class TaskRepliesCard extends StatelessWidget {
       }
     }
 
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: replies.length,
-      itemBuilder: (context, index) {
-        final reply = replies[index];
-        return Card(
-          color: Colors.white,
-          margin: const EdgeInsets.symmetric(vertical: 8.0),
-          elevation: 2.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            side: const BorderSide(color: Color(0xff038187), width: 2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Card(
+      color: Colors.white,
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        side: const BorderSide(color: Color(0xff038187), width: 2),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(replies.note, replies.status),
+            const SizedBox(height: 8),
+            const Divider(color: Colors.grey, height: 1),
+            _buildSection(
+              title: 'البيانات الأساسية',
               children: [
-                _buildHeader(reply.note, reply.status),
-                const SizedBox(height: 8),
-                const Divider(color: Colors.grey, height: 1),
-                _buildSection(
-                  title: 'البيانات الأساسية',
-                  children: [
-                    _buildDetailRow(
-                      label: 'الحالة',
-                      value: reply.status,
-                      icon: Icons.info_outline,
-                      color: _getStatusColor(reply.status),
-                    ),
-                    const SizedBox(width: 5),
-                    _buildDetailRow(
-                      label: 'تاريخ البدء',
-                      value: reply.start_date,
-                      icon: Icons.comment_outlined,
-                      color: Colors.black87,
-                    ),
-                    const SizedBox(width: 5),
-                    _buildDetailRow(
-                      label: 'تاريخ الانتهاء',
-                      value: reply.end_date,
-                      icon: Icons.comment_outlined,
-                      color: Colors.black87,
-                    ),
-                  ],
+                SizedBox(
+                  height: 131,
+                  width: 120,
+                  child: _buildDetailRow(
+                    label: 'الحالة',
+                    value: replies.status,
+                    assetName: "assets/svgs/ActiveTasks.svg",
+                    color: _getStatusColor(replies.status),
+                  ),
+                ),
+                const SizedBox(width: 5),
+                _buildDetailRow(
+                  label: 'تاريخ البدء',
+                  value: replies.start_date,
+                  assetName: "assets/svgs/StartDate.svg",
+                  color: Colors.black87,
+                ),
+                const SizedBox(width: 5),
+                _buildDetailRow(
+                  label: 'تاريخ الانتهاء',
+                  value: replies.end_date,
+                  assetName: "assets/svgs/EndDate.svg",
+                  color: Colors.black87,
                 ),
               ],
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 
@@ -223,7 +220,7 @@ class TaskRepliesCard extends StatelessWidget {
   Widget _buildDetailRow({
     required String label,
     required String value,
-    required IconData icon,
+    required String assetName,
     required Color color,
   }) {
     return Expanded(
@@ -245,10 +242,7 @@ class TaskRepliesCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            CircleAvatar(
-              backgroundColor: ColorManager.primaryColor,
-              child: Icon(icon, color: Colors.white, size: 20),
-            ),
+            SvgPicture.asset(assetName, width: 40, height: 40),
             const SizedBox(height: 7),
             Text(
               value,

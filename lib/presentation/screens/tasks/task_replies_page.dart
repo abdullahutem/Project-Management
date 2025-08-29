@@ -33,11 +33,11 @@ class TaskRepliesPageView extends StatefulWidget {
 }
 
 class _TaskRepliesPageStateView extends State<TaskRepliesPageView> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<TaskCubit>().getSingeleTask(widget.taskId);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   context.read<TaskCubit>().getSingeleTask(widget.taskId);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +126,8 @@ class _TaskRepliesPageStateView extends State<TaskRepliesPageView> {
                             itemCount: singleTask.replies.length,
                             itemBuilder: (context, index) {
                               final singleask = singleTask.replies[index];
-                              print(
-                                "======singleTask.replies.length.         ${singleTask.replies.length}",
-                              );
                               return TaskRepliesCard(
-                                replies: singleTask.replies,
+                                replies: singleask,
                                 changeToRejected: () {
                                   context
                                       .read<TaskCubit>()
