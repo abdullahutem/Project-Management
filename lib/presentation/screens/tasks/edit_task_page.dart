@@ -79,6 +79,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                   ),
                   const SizedBox(height: 8),
                   customDropdownField(
+                    hintText: 'إختر الحالة',
                     value: cubit.statusController.text.isEmpty
                         ? "Pending"
                         : cubit.statusController.text,

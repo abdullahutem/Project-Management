@@ -11,8 +11,6 @@ import 'package:cmp/presentation/screens/employee/employee_projects.dart';
 import 'package:cmp/presentation/screens/home_page.dart';
 import 'package:cmp/presentation/screens/profile_page.dart';
 import 'package:cmp/presentation/screens/projects/projects_dashbaord_page.dart';
-import 'package:cmp/presentation/screens/project_user/add_project_user_page.dart';
-import 'package:cmp/presentation/screens/project_user/project_user_page.dart';
 import 'package:cmp/presentation/screens/report/report_page.dart';
 import 'package:cmp/presentation/screens/tasks/all_projects.dart';
 import 'package:cmp/presentation/screens/users/add_users_page.dart';
@@ -22,7 +20,6 @@ import 'package:cmp/presentation/screens/login.dart';
 import 'package:cmp/presentation/screens/projects/add_project_page.dart';
 import 'package:cmp/presentation/screens/projects/projects_page.dart';
 import 'package:cmp/repo/project_repo.dart';
-import 'package:cmp/repo/project_user_repo.dart';
 import 'package:cmp/repo/user_repo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -121,31 +118,6 @@ class RoutesGenerator {
       //   return MaterialPageRoute(builder: (_) => AddTaskPage());
       case Routes.dashboardPage:
         return MaterialPageRoute(builder: (_) => DashboardPage());
-
-      case Routes.projectUserPage:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) =>
-                ProjectUserCubit(ProjectUserRepo(api: DioConsumer(dio: Dio())))
-                  ..getAllProjectUsers(),
-            child: const ProjectUserPage(),
-          ),
-        );
-      // case Routes.addProjectUserPage:
-      //   return MaterialPageRoute(builder: (_) => AddProjectUserPage());
-      // case Routes.userDetailsPage:
-      //   return MaterialPageRoute(
-      //     builder: (_) => UserDetailsPage(
-      //       user: UserModel(
-      //         id: 1,
-      //         name: "name",
-      //         email: "email",
-      //         phone: "1212212",
-      //         role: "admin",
-      //         base_salary: 1212,
-      //       ),
-      //     ),
-      //   );
       case Routes.profilePage:
         return MaterialPageRoute(builder: (_) => ProfilePage());
       case Routes.homePage:

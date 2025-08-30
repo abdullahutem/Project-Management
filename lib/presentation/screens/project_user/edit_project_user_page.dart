@@ -1,117 +1,224 @@
-import 'package:cmp/controller/project/cubit/project_cubit.dart';
-import 'package:cmp/controller/project_user/cubit/project_user_cubit.dart';
-import 'package:cmp/controller/user/cubit/user_cubit.dart';
-import 'package:cmp/models/project_user_model.dart';
-import 'package:cmp/presentation/widgets/custom_dropdown_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cmp/controller/project_user/cubit/project_user_cubit.dart';
+import 'package:cmp/presentation/resources/color_manager.dart';
+import 'package:cmp/presentation/widgets/custom_text_field.dart';
 
 class EditProjectUserPage extends StatefulWidget {
-  final ProjectUserModel model;
-  final int project_id;
-  final int user_id;
+  final int projectid;
+  final int userid;
+  final String userName;
+  final String ptojectName;
 
   const EditProjectUserPage({
-    super.key,
-    required this.model,
-    required this.project_id,
-    required this.user_id,
-  });
+    Key? key,
+    required this.projectid,
+    required this.ptojectName,
+    required this.userid,
+    required this.userName,
+  }) : super(key: key);
 
   @override
   State<EditProjectUserPage> createState() => _EditProjectUserPageState();
 }
 
 class _EditProjectUserPageState extends State<EditProjectUserPage> {
-  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    final userCubit = context.read<UserCubit>();
-    final projectCubit = context.read<ProjectCubit>();
-    userCubit.getAllUsers();
-    projectCubit.getAllProjects();
+    final cubit = context.read<ProjectUserCubit>();
+    cubit.getSingleProjectUser(widget.projectid, widget.userid);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('تعديل المستخدم في المشروع')),
-      body: Form(
-        key: _formKey,
-        child: BlocBuilder<ProjectUserCubit, ProjectUserState>(
-          builder: (context, state) {
-            final cubit = context.read<ProjectUserCubit>();
-
-            return BlocBuilder<UserCubit, UserState>(
-              builder: (context, userState) {
-                return BlocBuilder<ProjectCubit, ProjectState>(
-                  builder: (context, projectState) {
-                    final users = context.watch<UserCubit>().usersList;
-                    final projects = context.watch<ProjectCubit>().projectList;
-
-                    return ListView(
-                      padding: const EdgeInsets.all(16),
-                      children: [
-                        const Text(
-                          'اسم المستخدم',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        customDropdownField(
-                          value: widget.user_id.toString(),
-                          items: users.map((user) {
-                            return DropdownMenuItem<String>(
-                              value: user.id.toString(),
-                              child: Text(user.name),
-                            );
-                          }).toList(),
-                          onChanged: (val) {
-                            cubit.selectedUserId = val ?? '';
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'اسم المشروع',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        customDropdownField(
-                          value: widget.project_id.toString(),
-                          items: projects.map((proj) {
-                            return DropdownMenuItem<String>(
-                              value: proj.id.toString(),
-                              child: Text(proj.name),
-                            );
-                          }).toList(),
-                          onChanged: (val) {
-                            cubit.selectedProjectId = val ?? '';
-                            print(cubit.selectedProjectId);
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              cubit.updateSingleProjectUser(widget.model.id);
-                              Navigator.pop(context, true);
-                            }
-                          },
-                          child: const Text('تحديث'),
-                        ),
-                      ],
-                    );
-                  },
+    final cubit = context.read<ProjectUserCubit>();
+    return BlocConsumer<ProjectUserCubit, ProjectUserState>(
+      listener: (context, state) {
+        if (state is ProjectUserUpdatedSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("تم تعديل البيانات بنجاح")),
+          );
+          Navigator.pop(context, true);
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.white),
+            title: Text(
+              "${widget.ptojectName} تعديل المستخدم للمشروع",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            centerTitle: true,
+            backgroundColor: ColorManager.primaryColor,
+            elevation: 0,
+          ),
+          body: BlocBuilder<ProjectUserCubit, ProjectUserState>(
+            builder: (context, state) {
+              if (state is ProjectUserLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is ProjectUserError) {
+                return Center(
+                  child: Text(
+                    'حدث خطأ: ${state.message}',
+                    style: const TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 16,
+                    ),
+                  ),
                 );
-              },
-            );
-          },
-        ),
-      ),
+              } else {
+                return Form(
+                  key: cubit.formKey,
+                  child: ListView(
+                    padding: const EdgeInsets.all(16),
+                    children: [
+                      Text(
+                        "${widget.userName}  المستخدم",
+                        style: TextStyle(fontWeight: FontWeight.w800),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      // START DATE
+                      const Text(
+                        "تاريخ البدء",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: () async {
+                          DateTime? picked = await showDatePicker(
+                            context: context,
+                            initialDate:
+                                cubit.startDateController.text.isNotEmpty
+                                ? DateTime.parse(cubit.startDateController.text)
+                                : DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (picked != null) {
+                            cubit.updateStartDate(picked);
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: customTextField(
+                            cubit.startDateController,
+                            'تاريخ البدء',
+                            icon: Icons.date_range,
+                            validator: (v) => v == null || v.isEmpty
+                                ? 'الرجاء إدخال تاريخ البدء'
+                                : null,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // END DATE
+                      const Text(
+                        "تاريخ الانتهاء",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: () async {
+                          DateTime? picked = await showDatePicker(
+                            context: context,
+                            initialDate: cubit.endDateController.text.isNotEmpty
+                                ? DateTime.parse(cubit.endDateController.text)
+                                : DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (picked != null) {
+                            cubit.updateEndDate(picked);
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: customTextField(
+                            cubit.endDateController,
+                            'تاريخ الانتهاء',
+                            icon: Icons.event,
+                            validator: (v) => v == null || v.isEmpty
+                                ? 'الرجاء إدخال تاريخ الانتهاء'
+                                : null,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // COST PER HOUR
+                      const Text(
+                        "أجرة الساعة",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      customTextField(
+                        cubit.costPerHourController,
+                        "أجرة الساعة",
+                      ),
+                      const SizedBox(height: 16),
+
+                      // MIN HOURS
+                      const Text(
+                        "عدد الساعات الأدنى",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      customTextField(
+                        cubit.minHoursController,
+                        "عدد الساعات الأدنى",
+                      ),
+                      const SizedBox(height: 16),
+
+                      // MAX HOURS
+                      const Text(
+                        "عدد الساعات الأعلى",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      customTextField(
+                        cubit.maxHoursController,
+                        "عدد الساعات الأعلى",
+                      ),
+                      const SizedBox(height: 30),
+
+                      // SAVE BUTTON
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorManager.primaryColor,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (cubit.formKey.currentState!.validate()) {
+                            cubit.updateSingleProjectUser(
+                              userId: widget.userid.toString(),
+                              projectId: widget.projectid.toString(),
+                            );
+                          }
+                        },
+                        icon: const Icon(Icons.save, color: Colors.white),
+                        label: const Text(
+                          'حفظ التعديلات',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          ),
+        );
+      },
     );
   }
 }

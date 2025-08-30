@@ -66,17 +66,8 @@ class _AddProjectUserPageForUserState extends State<AddProjectUserPageForUser> {
                   "المشروع",
                   style: TextStyle(fontWeight: FontWeight.w800),
                 ),
-                // customDropdownField(
-                //   value: cubit.selectedProjectId,
-                //   items: context.watch<ProjectCubit>().projectList.map((u) {
-                //     return DropdownMenuItem(
-                //       value: u.id.toString(),
-                //       child: Text(u.name),
-                //     );
-                //   }).toList(),
-                //   onChanged: (val) => cubit.selectedUserId = val ?? '',
-                // ),
                 customDropdownField(
+                  hintText: 'إختر المشروع',
                   value: (cubit.selectedProjectId != null)
                       ? cubit.selectedProjectId
                       : null,

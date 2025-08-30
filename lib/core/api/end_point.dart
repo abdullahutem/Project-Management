@@ -40,6 +40,10 @@ class EndPoint {
   static String getProjectUserDataEndPoint(int id) => 'project-user/$id';
   static String deletProjectUserDataEndPoint(int project_id, int user_id) =>
       'project-users/$project_id/$user_id';
+  static String updateProjectUserDataEndPoint(
+    String project_id,
+    String user_id,
+  ) => 'project-users/$project_id/$user_id';
 
   static String updateUserEndPoint(String id) {
     return "users/$id";

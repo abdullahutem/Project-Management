@@ -31,4 +31,10 @@ class AddProjectUserSuccess extends ProjectUserState {
   AddProjectUserSuccess({required this.projectUserModel});
 }
 
+class SingleProjectUserLoaded extends ProjectUserState {
+  final ProjectUserModel projectUserModel;
+
+  SingleProjectUserLoaded({required this.projectUserModel});
+}
+
 class ProjectUserDateUpdated extends ProjectUserState {}

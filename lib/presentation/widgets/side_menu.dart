@@ -17,21 +17,18 @@ class SideMenu extends StatelessWidget {
       child: ListView(
         children: [
           DrawerHeader(
-            child: Container(
-              color: ColorManager.white,
-              child: Center(
-                child: Image.asset(
-                  "assets/images/logo.png",
-                  height: 120,
-                  width: 120,
-                ),
+            child: Center(
+              child: Image.asset(
+                "assets/images/logo.png",
+                height: 120,
+                width: 120,
               ),
             ),
           ),
           if (userRole == "admin") ...[
             DrawerListTile(
               title: "الرئيسية",
-              svgSrc: "assets/icons/menu_dashboard.svg",
+              svgSrc: "assets/icons/menu_store.svg",
               press: () {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
@@ -42,22 +39,21 @@ class SideMenu extends StatelessWidget {
             ),
             DrawerListTile(
               title: "لوحة التحكم",
-              svgSrc: "assets/icons/menu_dashboard.svg",
+              svgSrc: "assets/icons/controll.svg",
               press: () {
                 Navigator.pushNamed(context, Routes.dashboardPage);
               },
             ),
-
             DrawerListTile(
               title: "الموظفين",
-              svgSrc: "assets/icons/menu_profile.svg",
+              svgSrc: "assets/icons/employees.svg",
               press: () {
                 Navigator.pushNamed(context, Routes.usersPage);
               },
             ),
             DrawerListTile(
               title: "المشاريع",
-              svgSrc: "assets/icons/menu_profile.svg",
+              svgSrc: "assets/icons/menu_task.svg",
               press: () {
                 Navigator.pushNamed(context, Routes.projectPage);
               },
@@ -65,7 +61,8 @@ class SideMenu extends StatelessWidget {
 
             DrawerListTile(
               title: "التقارير",
-              svgSrc: "assets/icons/menu_profile.svg",
+
+              svgSrc: "assets/icons/menu_dashboard.svg",
               press: () {
                 Navigator.pushNamed(context, Routes.reportPage);
               },
@@ -74,7 +71,7 @@ class SideMenu extends StatelessWidget {
           if (userRole == "employee") ...[
             DrawerListTile(
               title: "الرئيسية",
-              svgSrc: "assets/icons/menu_dashboard.svg",
+              svgSrc: "assets/icons/menu_store.svg",
               press: () {
                 Navigator.pushNamedAndRemoveUntil(
                   context,
@@ -85,7 +82,7 @@ class SideMenu extends StatelessWidget {
             ),
             DrawerListTile(
               title: "مشاريعي",
-              svgSrc: "assets/icons/menu_profile.svg",
+              svgSrc: "assets/icons/menu_task.svg",
               press: () {
                 Navigator.pushNamed(context, Routes.employeeProjectPage);
               },
@@ -131,15 +128,11 @@ class DrawerListTile extends StatelessWidget {
       leading: SvgPicture.asset(
         svgSrc,
         colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
-        height: 26,
+        height: 30,
       ),
       title: Text(
         title,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-          fontFamily: "EXPOARABIC",
-        ),
+        style: const TextStyle(color: Colors.white, fontSize: 18),
       ),
     );
   }

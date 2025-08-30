@@ -139,6 +139,7 @@ class AddProjectPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   customDropdownField(
+                    hintText: 'إختر الحالة',
                     value: cubit.statusController.text.isEmpty
                         ? "Pending"
                         : cubit.statusController.text,

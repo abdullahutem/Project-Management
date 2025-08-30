@@ -66,6 +66,7 @@ class _ReportPageState extends State<ReportPage> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               customDropdownField(
+                hintText: 'إختر المشروع',
                 value: (cubit.selectedProjectId != null)
                     ? cubit.selectedProjectId
                     : null,
@@ -93,6 +94,7 @@ class _ReportPageState extends State<ReportPage> {
                         } else if (state is UsersLoaded) {
                           final users = state.usersList;
                           return customDropdownField(
+                            hintText: 'إختر الموظف',
                             value: (users.first.id).toString(),
                             items: context.watch<UserCubit>().usersList.map((
                               u,
@@ -109,6 +111,7 @@ class _ReportPageState extends State<ReportPage> {
                           final users = state.users;
                           if (users.isNotEmpty) {
                             return customDropdownField(
+                              hintText: 'إختر الموظف',
                               value: (users.first.id).toString(),
                               items: context
                                   .watch<UserCubit>()
@@ -146,7 +149,7 @@ class _ReportPageState extends State<ReportPage> {
                   IconButton(
                     onPressed: () {
                       cubit.selectedUserId = null;
-                      context.read<UserCubit>().getAllUsers();
+                      context.read<UserCubit>().getAllUserNames();
                     },
                     icon: Icon(Icons.cancel, color: Colors.red),
                   ),
@@ -173,6 +176,7 @@ class _ReportPageState extends State<ReportPage> {
                           final assignedTasks = state.tasks.tasks;
                           if (assignedTasks.isNotEmpty) {
                             return customDropdownField(
+                              hintText: 'إختر المهمة',
                               value: assignedTasks.first.id.toString(),
                               items: assignedTasks.map((p) {
                                 return DropdownMenuItem(

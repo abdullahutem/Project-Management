@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget customDropdownField({
   required String? value,
+  required String hintText,
   required List<DropdownMenuItem<String>> items,
   required Function(String?) onChanged,
   IconData? icon,
@@ -25,13 +26,10 @@ Widget customDropdownField({
             value: value,
             isExpanded: true,
             icon: const Icon(Icons.arrow_drop_down),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: 'اختر الدور',
-              hintStyle: TextStyle(
-                fontFamily: "EXPOARABIC",
-                color: Colors.grey,
-              ),
+              hintText: hintText,
+              hintStyle: TextStyle(color: Colors.grey),
             ),
             items: items,
             onChanged: onChanged,

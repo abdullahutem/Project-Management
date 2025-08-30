@@ -64,24 +64,27 @@ class ProjectUserCubit extends Cubit<ProjectUserState> {
     });
   }
 
-  Future<void> updateSingleProjectUser(int id) async {
+  Future<void> updateSingleProjectUser({
+    required String userId,
+    required String projectId,
+    // required String startDate,
+    // required String endDate,
+    // required String costPerHour,
+    // required String minHours,
+    // required String maxHours,
+  }) async {
     emit(ProjectUserLoading());
     final response = await repository.updateProjectUser(
-      id: id,
-      userId: selectedUserId.toString(),
-      projectId: selectedProjectId.toString(),
-      // projectName: projectNameController.text,
-      // userName: userNameController.text,
-      // startDate: startDateController.text,
-      // endDate: endDateController.text,
-      // costPerHour: costPerHourController.text,
-      // minHours: int.parse(minHoursController.text),
-      // maxHours: int.parse(maxHoursController.text),
+      userId: userId,
+      projectId: projectId,
+      startDate: startDateController.text,
+      endDate: endDateController.text,
+      costPerHour: costPerHourController.text,
+      minHours: minHoursController.text,
+      maxHours: maxHoursController.text,
     );
-
     response.fold((error) => emit(ProjectUserError(message: error)), (data) {
       emit(ProjectUserUpdatedSuccess());
-      getAllProjectUsers();
     });
   }
 
@@ -102,5 +105,20 @@ class ProjectUserCubit extends Cubit<ProjectUserState> {
       (projectUser) =>
           emit(AddProjectUserSuccess(projectUserModel: projectUser)),
     );
+  }
+
+  getSingleProjectUser(int projectid, int userid) async {
+    emit(ProjectUserLoading());
+    final result = await repository.getSingleProjectUserData(projectid, userid);
+    result.fold((error) => emit(ProjectUserError(message: error)), (project) {
+      emit(SingleProjectUserLoaded(projectUserModel: project));
+      userIdController.text = project.user_id?.toString() ?? '';
+      projectIdController.text = project.project_id?.toString() ?? '';
+      startDateController.text = project.start_date ?? '';
+      endDateController.text = project.end_date ?? '';
+      costPerHourController.text = project.cost_per_hour?.toString() ?? '';
+      minHoursController.text = project.min_hours?.toString() ?? '';
+      maxHoursController.text = project.max_hours?.toString() ?? '';
+    });
   }
 }

@@ -55,6 +55,7 @@ class _AddProjectUserPageState extends State<AddProjectUserPage> {
             centerTitle: true,
             backgroundColor: ColorManager.primaryColor,
             elevation: 0,
+            iconTheme: IconThemeData(color: Colors.white),
           ),
           body: Form(
             key: cubit.formKey,
@@ -66,6 +67,7 @@ class _AddProjectUserPageState extends State<AddProjectUserPage> {
                   style: TextStyle(fontWeight: FontWeight.w800),
                 ),
                 customDropdownField(
+                  hintText: 'إختر المستخدم',
                   value: cubit.selectedUserId,
                   items: context.watch<UserCubit>().usersList.map((u) {
                     return DropdownMenuItem(

@@ -45,27 +45,28 @@ class ProjectUserRepo {
     }
   }
 
-  Future<Either<String, dynamic>> updateProjectUser({
-    required int id,
-    required String userId,
+  Future<Either<String, ProjectUserModel>> updateProjectUser({
     required String projectId,
-    // required String projectName,
-    // required String userName,
-    // required String costPerHour,
-    // required int minHours,
-    // required int maxHours,
+    required String userId,
+    required String startDate,
+    required String endDate,
+    required String costPerHour,
+    required String minHours,
+    required String maxHours,
   }) async {
     try {
-      final response = await api.patch(
-        EndPoint.getProjectUserDataEndPoint(id),
+      final response = await api.put(
+        EndPoint.updateProjectUserDataEndPoint(projectId, userId),
         data: {
-          'user_id': userId,
-          'project_id': projectId,
-          'user_name': projectId,
-          'project_name': projectId,
+          'start_date': startDate,
+          'end_date': endDate,
+          'cost_per_hour': costPerHour,
+          'min_hours': minHours,
+          'max_hours': maxHours,
         },
       );
-      return Right(response);
+      final model = ProjectUserModel.fromJson(response);
+      return Right(model);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
     }
@@ -96,6 +97,23 @@ class ProjectUserRepo {
         },
       );
       return Right(ProjectUserModel.fromJson(response));
+    } on ServerException catch (e) {
+      return Left(e.errorModel.message);
+    }
+  }
+
+  Future<Either<String, ProjectUserModel>> getSingleProjectUserData(
+    int projectid,
+    int userid,
+  ) async {
+    try {
+      final response = await api.get(
+        EndPoint.getUserTaskInSpecificProjectEndPoint(projectid, userid),
+      );
+      final ProjectUserModel singleProjectUser = ProjectUserModel.fromJson(
+        response,
+      );
+      return Right(singleProjectUser);
     } on ServerException catch (e) {
       return Left(e.errorModel.message);
     }

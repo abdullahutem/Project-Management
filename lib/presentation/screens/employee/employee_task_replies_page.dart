@@ -9,17 +9,33 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Create this widget below
 
-class EmployeeTaskRepliesPage extends StatefulWidget {
+class EmployeeTaskRepliesPage extends StatelessWidget {
   final int taskId;
-
-  const EmployeeTaskRepliesPage({super.key, required this.taskId});
+  const EmployeeTaskRepliesPage({Key? key, required this.taskId})
+    : super(key: key);
 
   @override
-  State<EmployeeTaskRepliesPage> createState() =>
-      _EmployeeTaskRepliesPageState();
+  Widget build(BuildContext context) {
+    final TaskRepo repo = TaskRepo(api: DioConsumer(dio: Dio()));
+    return BlocProvider(
+      create: (_) => TaskCubit(repo)..getSingeleTask(taskId),
+      child: EmployeeTaskRepliesPageView(taskId: taskId),
+    );
+  }
 }
 
-class _EmployeeTaskRepliesPageState extends State<EmployeeTaskRepliesPage> {
+class EmployeeTaskRepliesPageView extends StatefulWidget {
+  final int taskId;
+
+  const EmployeeTaskRepliesPageView({super.key, required this.taskId});
+
+  @override
+  State<EmployeeTaskRepliesPageView> createState() =>
+      _EmployeeTaskRepliesPageViewState();
+}
+
+class _EmployeeTaskRepliesPageViewState
+    extends State<EmployeeTaskRepliesPageView> {
   final TaskCubit taskCubit = TaskCubit(TaskRepo(api: DioConsumer(dio: Dio())));
   @override
   void initState() {

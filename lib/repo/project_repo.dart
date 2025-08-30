@@ -42,7 +42,6 @@ class ProjectRepo {
 
         allProjects.addAll(projects);
 
-        // update pagination info
         lastPage = response['meta']['last_page'];
         currentPage++;
       } while (currentPage <= lastPage);

@@ -156,7 +156,7 @@ class UserDetailsPage extends StatelessWidget {
                               changeToComplete: () {
                                 context.read<TaskCubit>().updateTaskStatus(
                                   task.id.toString(),
-                                  'Completted',
+                                  'Completed',
                                   task.is_active,
                                 );
                               },

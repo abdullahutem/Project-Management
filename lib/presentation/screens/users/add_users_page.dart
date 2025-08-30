@@ -111,21 +111,10 @@ class _AddUsersPageState extends State<AddUsersPage> {
                   const SizedBox(height: 16),
                   customDropdownField(
                     value: context.read<UserCubit>().selectedRole,
+                    hintText: 'إختر الدور',
                     items: const [
-                      DropdownMenuItem(
-                        value: 'employee',
-                        child: Text(
-                          'موظف',
-                          style: TextStyle(fontFamily: "EXPOARABIC"),
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: 'admin',
-                        child: Text(
-                          'مدير',
-                          style: TextStyle(fontFamily: "EXPOARABIC"),
-                        ),
-                      ),
+                      DropdownMenuItem(value: 'employee', child: Text('موظف')),
+                      DropdownMenuItem(value: 'admin', child: Text('مدير')),
                     ],
                     onChanged: (val) =>
                         context.read<UserCubit>().updateRole(val),

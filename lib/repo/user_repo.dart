@@ -100,8 +100,6 @@ class UserRepo {
             .toList();
 
         allUsers.addAll(users);
-
-        // update pagination info
         lastPage = response['meta']['last_page'];
         currentPage++;
       } while (currentPage <= lastPage);

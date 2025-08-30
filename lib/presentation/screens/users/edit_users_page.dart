@@ -170,6 +170,7 @@ class _EditUsersPageState extends State<EditUsersPage> {
                       DropdownMenuItem(value: 'admin', child: Text('مدير')),
                     ],
                     onChanged: (val) => cubit.updateRole(val),
+                    hintText: 'إختر الدور',
                   ),
                   const SizedBox(height: 30),
                   ElevatedButton.icon(

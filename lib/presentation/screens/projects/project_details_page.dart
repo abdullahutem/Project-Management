@@ -1,5 +1,6 @@
 import 'package:cmp/core/api/dio_consumer.dart';
 import 'package:cmp/presentation/screens/project_user/add_project_user_page.dart';
+import 'package:cmp/presentation/screens/project_user/edit_project_user_page.dart';
 import 'package:cmp/presentation/widgets/user_card_no_edit.dart';
 import 'package:cmp/repo/project_repo.dart';
 import 'package:dio/dio.dart';
@@ -138,8 +139,8 @@ class _ProjectDetailsViewState extends State<ProjectDetailsView> {
                           final user = project.users[index];
                           return UserCardNoEdit(
                             userModel: user,
-                            onTap: () {
-                              Navigator.push(
+                            onTap: () async {
+                              final result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => UserDetailsPage(
@@ -149,8 +150,30 @@ class _ProjectDetailsViewState extends State<ProjectDetailsView> {
                                   ),
                                 ),
                               );
+                              if (result == true) {
+                                context.read<ProjectCubit>().getSingleProjects(
+                                  widget.project_id,
+                                );
+                              }
                             },
-                            onEdit: () {},
+                            onEdit: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => EditProjectUserPage(
+                                    projectid: project.projectModel.id,
+                                    ptojectName: project.projectModel.name,
+                                    userid: user.id,
+                                    userName: user.name,
+                                  ),
+                                ),
+                              );
+                              if (result == true) {
+                                context.read<ProjectCubit>().getSingleProjects(
+                                  widget.project_id,
+                                );
+                              }
+                            },
                             onDelete: () {
                               showDialog(
                                 context: context,

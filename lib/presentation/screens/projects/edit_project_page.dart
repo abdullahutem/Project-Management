@@ -148,9 +148,7 @@ class _EditProjectPageState extends State<EditProjectPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 8),
-
                   const Text(
                     "حالة المشروع",
                     style: const TextStyle(
@@ -161,11 +159,12 @@ class _EditProjectPageState extends State<EditProjectPage> {
                   ),
                   const SizedBox(height: 8),
                   customDropdownField(
+                    hintText: 'إختر الحالة',
                     value: cubit.statusController.text,
                     icon: Icons.info,
                     items: const [
                       DropdownMenuItem(
-                        value: 'pending',
+                        value: 'Pending',
                         child: Text(
                           'قيد الانتظار',
                           style: const TextStyle(
@@ -176,7 +175,7 @@ class _EditProjectPageState extends State<EditProjectPage> {
                         ),
                       ),
                       DropdownMenuItem(
-                        value: 'completed',
+                        value: 'Completed',
                         child: Text(
                           'مكتمل',
                           style: const TextStyle(
@@ -187,7 +186,7 @@ class _EditProjectPageState extends State<EditProjectPage> {
                         ),
                       ),
                       DropdownMenuItem(
-                        value: 'active',
+                        value: 'Active',
                         child: Text(
                           'مفعل',
                           style: const TextStyle(

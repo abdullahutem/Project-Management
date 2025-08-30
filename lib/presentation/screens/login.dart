@@ -33,18 +33,18 @@ class Login extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 // Background and title
-                Container(
+                SizedBox(
                   height: 400,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/background.png'),
-                      fit: BoxFit.fill,
-                      colorFilter: ColorFilter.mode(
-                        ColorManager.primaryColor,
-                        BlendMode.darken,
-                      ),
-                    ),
-                  ),
+                  // decoration: const BoxDecoration(
+                  //   image: DecorationImage(
+                  //     image: AssetImage('assets/images/background.png'),
+                  //     fit: BoxFit.fill,
+                  //     colorFilter: ColorFilter.mode(
+                  //       ColorManager.primaryColor,
+                  //       BlendMode.darken,
+                  //     ),
+                  //   ),
+                  // ),
                   child: Stack(
                     children: <Widget>[
                       Positioned(
@@ -85,15 +85,15 @@ class Login extends StatelessWidget {
                         child: FadeInUp(
                           duration: const Duration(milliseconds: 1600),
                           child: Container(
+                            // color: Colors.white,
+                            height: 200,
+                            width: 200,
                             margin: const EdgeInsets.only(top: 50),
-                            child: const Center(
-                              child: Text(
-                                "تسجيل الدخول",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                            child: Center(
+                              child: Image.asset(
+                                "assets/images/logowhite.png",
+                                height: 200,
+                                width: 200,
                               ),
                             ),
                           ),
