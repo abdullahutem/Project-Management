@@ -33,12 +33,6 @@ class TaskRepliesPageView extends StatefulWidget {
 }
 
 class _TaskRepliesPageStateView extends State<TaskRepliesPageView> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   context.read<TaskCubit>().getSingeleTask(widget.taskId);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<TaskCubit, TaskState>(
@@ -47,7 +41,7 @@ class _TaskRepliesPageStateView extends State<TaskRepliesPageView> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("تم تحديث المهمة"),
-              backgroundColor: Colors.green,
+              backgroundColor: ColorManager.primaryColor,
             ),
           );
           context.read<TaskCubit>().getSingeleTask(widget.taskId);
@@ -88,7 +82,6 @@ class _TaskRepliesPageStateView extends State<TaskRepliesPageView> {
                 final singleTask = state.task;
                 return Column(
                   children: [
-                    // Fixed at top
                     TaskDetailsCard(singleTask: singleTask),
                     const SizedBox(height: 15),
                     Padding(

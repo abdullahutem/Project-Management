@@ -20,9 +20,12 @@ class _AddUsersPageState extends State<AddUsersPage> {
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
         if (state is AddUserSucsess) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("تم إضافة الموظف الجديد")));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("تم إضافة الموظف الجديد"),
+              backgroundColor: ColorManager.primaryColor,
+            ),
+          );
         } else if (state is AddUserFaliure) {
           ScaffoldMessenger.of(
             context,
@@ -34,7 +37,7 @@ class _AddUsersPageState extends State<AddUsersPage> {
           appBar: AppBar(
             title: const Text(
               'إضافة موظف',
-              style: TextStyle(color: Colors.white, fontFamily: "EXPOARABIC"),
+              style: TextStyle(color: Colors.white),
             ),
             backgroundColor: ColorManager.primaryColor,
             iconTheme: const IconThemeData(color: Colors.white),
@@ -138,11 +141,7 @@ class _AddUsersPageState extends State<AddUsersPage> {
                     icon: const Icon(Icons.save, color: Colors.white),
                     label: const Text(
                       'إضافة الموظف',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontFamily: "EXPOARABIC",
-                      ),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                 ],

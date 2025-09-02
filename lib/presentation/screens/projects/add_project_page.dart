@@ -16,13 +16,19 @@ class AddProjectPage extends StatelessWidget {
       listener: (context, state) {
         if (state is AddProjectSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("تم إضافة الموظف للمشروع بنجاح")),
+            const SnackBar(
+              content: Text("تم المشروع بنجاح"),
+              backgroundColor: ColorManager.primaryColor,
+            ),
           );
           Navigator.pop(context, true);
         } else if (state is AddProjectFailure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errormessage)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errormessage),
+              backgroundColor: ColorManager.error,
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -202,7 +208,6 @@ class AddProjectPage extends StatelessWidget {
                     onPressed: () {
                       if (cubit.formKey.currentState!.validate()) {
                         cubit.addNewProject();
-                        Navigator.pop(context, true);
                       }
                     },
                     icon: const Icon(Icons.save, color: Colors.white),

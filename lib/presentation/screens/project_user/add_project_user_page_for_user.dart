@@ -176,7 +176,6 @@ class _AddProjectUserPageForUserState extends State<AddProjectUserPageForUser> {
                   onPressed: () {
                     if (cubit.formKey.currentState!.validate()) {
                       cubit.addNewProjectUser();
-                      // Navigator.pop(context, true);
                     }
                   },
                   icon: const Icon(Icons.save, color: Colors.white),

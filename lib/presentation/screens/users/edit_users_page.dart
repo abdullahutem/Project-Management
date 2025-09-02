@@ -47,12 +47,18 @@ class _EditUsersPageState extends State<EditUsersPage> {
       listener: (context, state) {
         if (state is UsersUpdated) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("تم تعديل الموظف بنجاح")),
+            const SnackBar(
+              content: Text("تم تعديل الموظف بنجاح"),
+              backgroundColor: ColorManager.primaryColor,
+            ),
           );
         } else if (state is UsersFaliure) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errormessage)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errormessage),
+              backgroundColor: ColorManager.error,
+            ),
+          );
         }
       },
       builder: (context, state) {

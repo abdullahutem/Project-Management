@@ -243,7 +243,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
                 Routes.addProjectPage,
               );
               if (result == true) {
-                // context.read<ProjectCubit>().getAllProjects();
+                context.read<ProjectCubit>().getFirstPageProjects();
               }
             },
             icon: const Icon(Icons.add, color: Colors.white),

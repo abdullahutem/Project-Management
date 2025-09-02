@@ -270,15 +270,22 @@ class UserDetailsPage extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: projectUserId == null
-                ? null // Disable the button if projectUserId is not yet loaded
+                ? null
                 : () async {
-                    Navigator.push(
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
                             AddTaskPage(projectUserId: projectUserId!),
                       ),
                     );
+                    if (result == true) {
+                      // ✅ Refresh tasks after adding a new one
+                      context.read<TaskCubit>().getUserTasksForSpecificProjet(
+                        project_id,
+                        user_id,
+                      );
+                    }
                   },
             icon: const Icon(Icons.task, color: Colors.white),
             label: const Text(
@@ -290,6 +297,7 @@ class UserDetailsPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(16.0),
             ),
           ),
+
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
         );

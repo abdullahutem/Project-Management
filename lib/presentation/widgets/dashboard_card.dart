@@ -49,18 +49,13 @@ class DashboardCard extends StatelessWidget {
               // Icon at the top-left
               Icon(
                 icon,
-                size: 48, // Large icon size
-                color: Colors.white.withValues(
-                  alpha: 0.9,
-                ), // White icon with slight transparency
+                size: 45, // Large icon size
+                color: Colors.white.withValues(alpha: 0.9),
               ),
-              // Use a Spacer or SizedBox for flexible spacing
               const Spacer(),
-              // Label
               Text(
                 label,
                 style: TextStyle(
-                  fontFamily: "EXPOARABIC",
                   fontSize: 18,
                   fontWeight: FontWeight.w600, // Semi-bold for label
                   color: Colors.white.withOpacity(
@@ -74,8 +69,7 @@ class DashboardCard extends StatelessWidget {
                 Text(
                   count.toString(),
                   style: const TextStyle(
-                    fontFamily: "EXPOARABIC",
-                    fontSize: 38, // Very large and bold for impact
+                    fontSize: 32, // Very large and bold for impact
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
                   ),

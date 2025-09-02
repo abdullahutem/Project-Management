@@ -28,9 +28,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
       listener: (context, state) {
         if (state is AddTaskSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("تم إضافة المهمة بنجاح")),
+            const SnackBar(
+              content: Text("تم إضافة المهمة بنجاح"),
+              backgroundColor: ColorManager.primaryColor,
+            ),
           );
-          Navigator.pop(context);
+          Navigator.pop(context, true);
         } else if (state is TaskError) {
           ScaffoldMessenger.of(
             context,
@@ -148,7 +151,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         cubit.projectUserIdController.clear();
                         cubit.titleController.clear();
                         cubit.statusController.clear();
-                        Navigator.pop(context);
                       }
                     },
                     icon: const Icon(Icons.save, color: Colors.white),
