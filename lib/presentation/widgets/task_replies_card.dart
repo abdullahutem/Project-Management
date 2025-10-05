@@ -51,15 +51,11 @@ class TaskRepliesCard extends StatelessWidget {
             _buildSection(
               title: 'البيانات الأساسية',
               children: [
-                SizedBox(
-                  height: 131,
-                  width: 120,
-                  child: _buildDetailRow(
-                    label: 'الحالة',
-                    value: replies.status,
-                    assetName: "assets/svgs/ActiveTasks.svg",
-                    color: _getStatusColor(replies.status),
-                  ),
+                _buildDetailRow(
+                  label: 'الحالة',
+                  value: replies.status,
+                  assetName: "assets/svgs/ActiveTasks.svg",
+                  color: _getStatusColor(replies.status),
                 ),
                 const SizedBox(width: 5),
                 _buildDetailRow(

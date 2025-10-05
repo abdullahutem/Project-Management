@@ -52,21 +52,10 @@ class _ProjectsPageState extends State<ProjectsPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("تم حذف المشروع بنجاح"),
-              backgroundColor: Colors.green,
+              backgroundColor: ColorManager.primaryColor,
             ),
           );
-        }
-        // else if (state is SingleProjectLoaded) {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => ProjectDetailsPage(project: state.project),
-        //     ),
-        //   ).then((value) {
-        //     context.read<ProjectCubit>().getAllProjects();
-        //   });
-        // }
-        else if (state is ProjectUpdatedSuccess) {
+        } else if (state is ProjectUpdatedSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("تم تحديث المهمة"),

@@ -26,14 +26,19 @@ class _AddRepliesTaskPageState extends State<AddRepliesTaskPage> {
     return BlocConsumer<TaskCubit, TaskState>(
       listener: (context, state) {
         if (state is AddRepliesTaskSuccess) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text("تم إضافة الرد بنجاح")));
-          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("تم إضافة الرد بنجاح"),
+              backgroundColor: ColorManager.primaryColor,
+            ),
+          );
         } else if (state is TaskError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.error)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.error),
+              backgroundColor: ColorManager.error,
+            ),
+          );
         }
       },
       builder: (context, state) {

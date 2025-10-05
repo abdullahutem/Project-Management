@@ -1,5 +1,5 @@
 class EndPoint {
-  static String baseUrl = "http://127.0.0.1:8000/api/";
+  static String baseUrl = "https://projectmanag.codebrains.net/api/";
   static String login = "login";
   static String logout = "logout";
   static String users = "users";

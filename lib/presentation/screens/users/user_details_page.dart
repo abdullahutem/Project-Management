@@ -58,7 +58,6 @@ class UserDetailsPage extends StatelessWidget {
         if (state is TasksUserLoaded) {
           projectUserId = state.tasks.id;
         }
-
         return Scaffold(
           appBar: AppBar(
             backgroundColor: ColorManager.primaryColor,

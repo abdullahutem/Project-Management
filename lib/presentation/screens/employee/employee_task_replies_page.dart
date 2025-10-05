@@ -7,7 +7,7 @@ import 'package:cmp/presentation/widgets/task_details_card.dart';
 import 'package:cmp/repo/task_repo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart'; // Create this widget below
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EmployeeTaskRepliesPage extends StatelessWidget {
   final int taskId;
@@ -36,7 +36,6 @@ class EmployeeTaskRepliesPageView extends StatefulWidget {
 
 class _EmployeeTaskRepliesPageViewState
     extends State<EmployeeTaskRepliesPageView> {
-  final TaskCubit taskCubit = TaskCubit(TaskRepo(api: DioConsumer(dio: Dio())));
   @override
   void initState() {
     super.initState();
@@ -69,7 +68,7 @@ class _EmployeeTaskRepliesPageViewState
                 ),
               );
               if (result == true) {
-                // context.read<ProjectCubit>().getAllProjects();
+                context.read<TaskCubit>().getSingeleTask(widget.taskId);
               }
             },
             icon: const Icon(Icons.add, color: Colors.white),
