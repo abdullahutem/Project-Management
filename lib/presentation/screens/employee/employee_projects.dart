@@ -2,7 +2,7 @@ import 'package:cmp/controller/project/cubit/project_cubit.dart';
 import 'package:cmp/core/api/dio_consumer.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/screens/employee/employee_tasks.dart';
-import 'package:cmp/presentation/widgets/employee_project_card.dart';
+import 'package:cmp/presentation/widgets/project_card_no_edit.dart';
 import 'package:cmp/repo/project_repo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class _EmployeeProjectsState extends State<EmployeeProjects> {
     return BlocProvider(
       create: (context) =>
           ProjectCubit(ProjectRepo(api: DioConsumer(dio: Dio())))
-            ..getPrjectsForSpecificUser(widget.id),
+            ..getProjectsForSpecificUser(widget.id),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorManager.primaryColor,
@@ -96,7 +96,7 @@ class _EmployeeProjectsState extends State<EmployeeProjects> {
                         itemCount: projects.length,
                         itemBuilder: (context, index) {
                           final project = projects[index];
-                          return EmployeeProjectCard(
+                          return ProjectCardNoEdit(
                             projectModel: project,
                             onTap: () {
                               Navigator.push(

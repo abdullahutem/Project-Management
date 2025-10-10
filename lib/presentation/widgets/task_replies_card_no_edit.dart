@@ -3,19 +3,10 @@ import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class TaskRepliesCard extends StatelessWidget {
-  final VoidCallback changeToRejected;
-  final VoidCallback changeToApproved;
-  final VoidCallback changeToSubmitted;
+class TaskRepliesCardNoEdit extends StatelessWidget {
   final TaskRepliesModel replies;
 
-  const TaskRepliesCard({
-    super.key,
-    required this.replies,
-    required this.changeToRejected,
-    required this.changeToApproved,
-    required this.changeToSubmitted,
-  });
+  const TaskRepliesCardNoEdit({super.key, required this.replies});
 
   @override
   Widget build(BuildContext context) {
@@ -89,109 +80,6 @@ class TaskRepliesCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-                PopupMenuButton<String>(
-                  color: Colors.white,
-                  icon: const Icon(Icons.more_vert, color: Colors.white),
-                  onSelected: (value) {
-                    if (value == 'Rejected') {
-                      changeToRejected();
-                    } else if (value == 'Approved') {
-                      changeToApproved();
-                    } else if (value == 'Submitted') {
-                      changeToSubmitted();
-                    }
-                  },
-                  itemBuilder: (BuildContext context) => [
-                    if (replies.status == "Approved") ...[
-                      PopupMenuItem<String>(
-                        value: 'Rejected',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              'مرفوض',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            // Using a more suitable icon for "Rejected"
-                            Icon(Icons.cancel_outlined, color: Colors.red),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'Submitted',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text('مسلم', style: TextStyle(color: Colors.black)),
-                            // Correct icon for "Submitted"
-                            Icon(Icons.access_time, color: Colors.orange),
-                          ],
-                        ),
-                      ),
-                    ],
-                    // If the status is Submitted, show options to change to Approved or Rejected
-                    if (replies.status == "Submitted") ...[
-                      PopupMenuItem<String>(
-                        value: 'Approved',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              'موافقة',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            // Using a more suitable icon for "Approved"
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: Colors.green,
-                            ),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'Rejected',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              'مرفوض',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Icon(Icons.cancel_outlined, color: Colors.red),
-                          ],
-                        ),
-                      ),
-                    ],
-                    if (replies.status == "Rejected") ...[
-                      PopupMenuItem<String>(
-                        value: 'Approved',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              'موافقة',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: Colors.green,
-                            ),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'Submitted',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text('مسلم', style: TextStyle(color: Colors.black)),
-                            Icon(Icons.access_time, color: Colors.orange),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ],
                 ),
               ],
             ),

@@ -2,7 +2,7 @@ import 'package:cmp/controller/user/cubit/user_cubit.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:cmp/presentation/screens/users/edit_users_page.dart';
 import 'package:cmp/presentation/screens/users/user_details_with_project_page.dart';
-import 'package:cmp/presentation/widgets/new_user_card.dart';
+import 'package:cmp/presentation/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +25,6 @@ class _UsersPageState extends State<UsersPage> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 20) {
-        // Near the bottom, load more
         context.read<UserCubit>().loadMoreUsers();
       }
     });
@@ -95,99 +94,115 @@ class _UsersPageState extends State<UsersPage> {
             elevation: 0,
             iconTheme: const IconThemeData(color: Colors.white),
           ),
-          body: BlocBuilder<UserCubit, UserState>(
-            builder: (context, state) {
-              if (state is UsersLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is UsersLoaded) {
-                final employees = state.usersList;
-                return ListView.builder(
-                  controller: _scrollController,
-                  itemCount: employees.length + 1, // +1 for loading indicator
-                  itemBuilder: (context, index) {
-                    if (index < employees.length) {
-                      final user = employees[index];
-                      return NewUserCard(
-                        userModel: user,
-                        onEdit: () async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => EditUsersPage(
-                                name: user.name,
-                                email: user.email,
-                                phone: user.phone,
-                                id: user.id.toString(),
-                                salary: user.base_salary.toString(),
-                                role: user.role,
-                              ),
-                            ),
-                          );
-                          if (result == true) {
-                            context.read<UserCubit>().getFirstPageUsers();
-                          }
-                        },
-                        onDelete: () {
-                          showDialog(
-                            context: context,
-                            builder: (ctx) => AlertDialog(
-                              title: const Text("حذف"),
-                              content: const Text("هل تريد حقا حذف المستخدم؟"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.of(ctx).pop(),
-                                  child: const Text("إلغاء"),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(ctx).pop();
-                                    context
-                                        .read<UserCubit>()
-                                        .deletelSingleUsers(user.id);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.error,
-                                    foregroundColor: Theme.of(
-                                      context,
-                                    ).colorScheme.onError,
+          body: Padding(
+            padding: const EdgeInsets.only(
+              top: 20.0,
+              bottom: 20,
+              right: 8,
+              left: 8,
+            ),
+            child: BlocBuilder<UserCubit, UserState>(
+              builder: (context, state) {
+                if (state is UsersLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is UsersLoaded) {
+                  final employees = state.usersList;
+                  return ListView.builder(
+                    controller: _scrollController,
+                    itemCount: employees.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index < employees.length) {
+                        final user = employees[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 20.0),
+                          child: UserCard(
+                            userModel: user,
+                            onEdit: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => EditUsersPage(
+                                    name: user.name,
+                                    email: user.email,
+                                    phone: user.phone,
+                                    id: user.id.toString(),
+                                    salary: user.base_salary.toString(),
+                                    role: user.role,
                                   ),
-                                  child: const Text("حذف"),
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => UserDetailsWithProjectPage(
-                                user_id: user.id,
-                                user_name: user.name,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    } else {
-                      // Show loading indicator at bottom if more pages exist
-                      final cubit = context.read<UserCubit>();
-                      return cubit.currentPage < cubit.lastPage
-                          ? const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Center(child: CircularProgressIndicator()),
-                            )
-                          : const SizedBox(); // no more data
-                    }
-                  },
-                );
-              } else if (state is UsersFaliure) {
-                return Center(child: Text('خطأ: ${state.errormessage}'));
-              }
-              return const SizedBox();
-            },
+                              );
+                              if (result == true) {
+                                context.read<UserCubit>().getFirstPageUsers();
+                              }
+                            },
+                            onDelete: () {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: const Text("حذف"),
+                                  content: const Text(
+                                    "هل تريد حقا حذف المستخدم؟",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(ctx).pop(),
+                                      child: const Text("إلغاء"),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(ctx).pop();
+                                        context
+                                            .read<UserCubit>()
+                                            .deletelSingleUsers(user.id);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.error,
+                                        foregroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.onError,
+                                      ),
+                                      child: const Text("حذف"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      UserDetailsWithProjectPage(
+                                        user_id: user.id,
+                                        user_name: user.name,
+                                      ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      } else {
+                        // Show loading indicator at bottom if more pages exist
+                        final cubit = context.read<UserCubit>();
+                        return cubit.currentPage < cubit.lastPage
+                            ? const Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              )
+                            : const SizedBox(); // no more data
+                      }
+                    },
+                  );
+                } else if (state is UsersFaliure) {
+                  return Center(child: Text('خطأ: ${state.errormessage}'));
+                }
+                return const SizedBox();
+              },
+            ),
           ),
         );
       },

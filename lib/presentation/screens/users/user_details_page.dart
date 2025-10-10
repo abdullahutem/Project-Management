@@ -4,7 +4,7 @@ import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/screens/tasks/add_task_page.dart';
 import 'package:cmp/presentation/screens/tasks/edit_task_page.dart';
 import 'package:cmp/presentation/screens/tasks/task_replies_page.dart';
-import 'package:cmp/presentation/widgets/new_task_card.dart';
+import 'package:cmp/presentation/widgets/task_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -143,118 +143,121 @@ class UserDetailsPage extends StatelessWidget {
                           itemCount: assignedTasks.length,
                           itemBuilder: (context, index) {
                             final task = assignedTasks[index];
-                            return NewTaskCard(
-                              taskModel: task,
-                              changeToActive: () {
-                                context.read<TaskCubit>().updateTaskStatus(
-                                  task.id.toString(),
-                                  'Active',
-                                  task.is_active,
-                                );
-                              },
-                              changeToComplete: () {
-                                context.read<TaskCubit>().updateTaskStatus(
-                                  task.id.toString(),
-                                  'Completed',
-                                  task.is_active,
-                                );
-                              },
-                              changeToPending: () {
-                                context.read<TaskCubit>().updateTaskStatus(
-                                  task.id.toString(),
-                                  'Pending',
-                                  task.is_active,
-                                );
-                              },
-                              changeToTrue: () {
-                                context.read<TaskCubit>().updateTaskStatus(
-                                  task.id.toString(),
-                                  task.status,
-                                  true,
-                                );
-                              },
-                              changeToFalse: () {
-                                context.read<TaskCubit>().updateTaskStatus(
-                                  task.id.toString(),
-                                  task.status,
-                                  false,
-                                );
-                              },
-                              onEdit: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => EditTaskPage(
-                                      id: task.id.toString(),
-                                      task: task.task,
-                                      status: task.status,
-                                      isActive: task.is_active,
-                                      projectUserId: task.project_user_id
-                                          .toString(),
-                                    ),
-                                  ),
-                                );
-                                // if (result == true) {
-                                //   context
-                                //       .read<TaskCubit>()
-                                //       .getUserTasksForSpecificProjet(
-                                //         project_id,
-                                //         user.id,
-                                //       );
-                                // }
-                              },
-                              onDelete: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (ctx) => AlertDialog(
-                                    title: const Text("حذف"),
-                                    content: const Text(
-                                      "هل تريد حقا حذف المهمة؟",
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.of(ctx).pop(),
-                                        child: const Text("إلغاء"),
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 20.0),
+                              child: TaskCard(
+                                taskModel: task,
+                                changeToActive: () {
+                                  context.read<TaskCubit>().updateTaskStatus(
+                                    task.id.toString(),
+                                    'Active',
+                                    task.is_active,
+                                  );
+                                },
+                                changeToComplete: () {
+                                  context.read<TaskCubit>().updateTaskStatus(
+                                    task.id.toString(),
+                                    'Completed',
+                                    task.is_active,
+                                  );
+                                },
+                                changeToPending: () {
+                                  context.read<TaskCubit>().updateTaskStatus(
+                                    task.id.toString(),
+                                    'Pending',
+                                    task.is_active,
+                                  );
+                                },
+                                changeToTrue: () {
+                                  context.read<TaskCubit>().updateTaskStatus(
+                                    task.id.toString(),
+                                    task.status,
+                                    true,
+                                  );
+                                },
+                                changeToFalse: () {
+                                  context.read<TaskCubit>().updateTaskStatus(
+                                    task.id.toString(),
+                                    task.status,
+                                    false,
+                                  );
+                                },
+                                onEdit: () async {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => EditTaskPage(
+                                        id: task.id.toString(),
+                                        task: task.task,
+                                        status: task.status,
+                                        isActive: task.is_active,
+                                        projectUserId: task.project_user_id
+                                            .toString(),
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(ctx).pop();
-                                          context
-                                              .read<TaskCubit>()
-                                              .deletelSingleTask(task.id);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Theme.of(
-                                            context,
-                                          ).colorScheme.error,
-                                          foregroundColor: Theme.of(
-                                            context,
-                                          ).colorScheme.onError,
+                                    ),
+                                  );
+                                  // if (result == true) {
+                                  //   context
+                                  //       .read<TaskCubit>()
+                                  //       .getUserTasksForSpecificProjet(
+                                  //         project_id,
+                                  //         user.id,
+                                  //       );
+                                  // }
+                                },
+                                onDelete: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                      title: const Text("حذف"),
+                                      content: const Text(
+                                        "هل تريد حقا حذف المهمة؟",
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(ctx).pop(),
+                                          child: const Text("إلغاء"),
                                         ),
-                                        child: const Text("حذف"),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                              onTap: () async {
-                                final result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        TaskRepliesPage(taskId: task.id),
-                                  ),
-                                );
-                                if (result == true) {
-                                  context
-                                      .read<TaskCubit>()
-                                      .getUserTasksForSpecificProjet(
-                                        project_id,
-                                        user_id,
-                                      );
-                                }
-                              },
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(ctx).pop();
+                                            context
+                                                .read<TaskCubit>()
+                                                .deletelSingleTask(task.id);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Theme.of(
+                                              context,
+                                            ).colorScheme.error,
+                                            foregroundColor: Theme.of(
+                                              context,
+                                            ).colorScheme.onError,
+                                          ),
+                                          child: const Text("حذف"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                onTap: () async {
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          TaskRepliesPage(taskId: task.id),
+                                    ),
+                                  );
+                                  if (result == true) {
+                                    context
+                                        .read<TaskCubit>()
+                                        .getUserTasksForSpecificProjet(
+                                          project_id,
+                                          user_id,
+                                        );
+                                  }
+                                },
+                              ),
                             );
                           },
                         );

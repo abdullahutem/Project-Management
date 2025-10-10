@@ -157,9 +157,9 @@ class TaskCubit extends Cubit<TaskState> {
       start_date: startDateController.text,
       end_date: endDateController.text,
     );
-    response.fold(
-      (error) => emit(TaskError(error)),
-      (newTask) => emit(AddRepliesTaskSuccess(replies: newTask)),
-    );
+
+    response.fold((error) => emit(TaskError(error)), (newTask) {
+      emit(AddRepliesTaskSuccess(replies: newTask));
+    });
   }
 }

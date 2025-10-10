@@ -1,7 +1,7 @@
 import 'package:cmp/controller/tasks/cubit/task_cubit.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/screens/employee/employee_task_replies_page.dart';
-import 'package:cmp/presentation/widgets/employee_new_task_card.dart';
+import 'package:cmp/presentation/widgets/task_card_no_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -119,7 +119,7 @@ class _EmployeeTasksState extends State<EmployeeTasks> {
                       itemCount: assignedTasks.length,
                       itemBuilder: (context, index) {
                         final task = assignedTasks[index];
-                        return EmployeeNewTaskCard(
+                        return TaskCardNoEdit(
                           taskModel: task,
                           onTap: () async {
                             final result = await Navigator.push(

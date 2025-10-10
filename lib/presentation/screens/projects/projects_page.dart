@@ -4,7 +4,7 @@ import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:cmp/presentation/screens/projects/edit_project_page.dart';
 import 'package:cmp/presentation/screens/projects/project_details_page.dart';
-import 'package:cmp/presentation/widgets/new_project_card.dart';
+import 'package:cmp/presentation/widgets/project_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -100,111 +100,115 @@ class _ProjectsPageState extends State<ProjectsPage> {
                     child: ListView.builder(
                       controller: _scrollController,
                       itemCount: projects.length,
-                      // In ProjectsPage, inside ListView.builder's itemBuilder:
                       itemBuilder: (context, index) {
                         final project = projects[index];
-                        return NewProjectCard(
-                          projectModel: project,
-                          onEdit: () async {
-                            final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => EditProjectPage(
-                                  id: project.project.id,
-                                  name: project.project.name,
-                                  startDate: project.project.startDate,
-                                  endDate: project.project.endDate,
-                                  status: project.project.status,
-                                  isActive: project.project.isActive,
-                                ),
-                              ),
-                            );
-                            if (result == true) {
-                              context
-                                  .read<ProjectCubit>()
-                                  .getFirstPageProjects();
-                            }
-                          },
-                          onDelete: () {
-                            showDialog(
-                              context: context,
-                              builder: (ctx) => AlertDialog(
-                                title: const Text("حذف"),
-                                content: const Text("هل تريد حقا حذف المشروع؟"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.of(ctx).pop(),
-                                    child: const Text("إلغاء"),
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 20.0),
+                          child: ProjectCard(
+                            projectModel: project,
+                            onEdit: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => EditProjectPage(
+                                    id: project.project.id,
+                                    name: project.project.name,
+                                    startDate: project.project.startDate,
+                                    endDate: project.project.endDate,
+                                    status: project.project.status,
+                                    isActive: project.project.isActive,
                                   ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(ctx).pop();
-                                      context
-                                          .read<ProjectCubit>()
-                                          .deleteSingleProject(
-                                            project.project.id,
-                                          );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Theme.of(
-                                        context,
-                                      ).colorScheme.error,
-                                      foregroundColor: Theme.of(
-                                        context,
-                                      ).colorScheme.onError,
+                                ),
+                              );
+                              if (result == true) {
+                                context
+                                    .read<ProjectCubit>()
+                                    .getFirstPageProjects();
+                              }
+                            },
+                            onDelete: () {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: const Text("حذف"),
+                                  content: const Text(
+                                    "هل تريد حقا حذف المشروع؟",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(ctx).pop(),
+                                      child: const Text("إلغاء"),
                                     ),
-                                    child: const Text("حذف"),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          onTap: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProjectDetailsPage(
-                                  project_id: project.project.id,
-                                  project_name: project.project.name,
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(ctx).pop();
+                                        context
+                                            .read<ProjectCubit>()
+                                            .deleteSingleProject(
+                                              project.project.id,
+                                            );
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.error,
+                                        foregroundColor: Theme.of(
+                                          context,
+                                        ).colorScheme.onError,
+                                      ),
+                                      child: const Text("حذف"),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            );
-                          },
-                          changeToActive: () {
-                            context.read<ProjectCubit>().updateTaskStatus(
-                              project.project.id,
-                              'Active',
-                              project.project.isActive,
-                            );
-                          },
-                          changeToComplete: () {
-                            context.read<ProjectCubit>().updateTaskStatus(
-                              project.project.id,
-                              'Completed',
-                              project.project.isActive,
-                            );
-                          },
-                          changeToPending: () {
-                            context.read<ProjectCubit>().updateTaskStatus(
-                              project.project.id,
-                              'Pending',
-                              project.project.isActive,
-                            );
-                          },
-                          changeToTrue: () {
-                            context.read<ProjectCubit>().updateTaskStatus(
-                              project.project.id,
-                              project.project.status,
-                              true,
-                            );
-                          },
-                          changeToFalse: () {
-                            context.read<ProjectCubit>().updateTaskStatus(
-                              project.project.id,
-                              project.project.status,
-                              false,
-                            );
-                          },
+                              );
+                            },
+                            onTap: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProjectDetailsPage(
+                                    project_id: project.project.id,
+                                    project_name: project.project.name,
+                                  ),
+                                ),
+                              );
+                            },
+                            changeToActive: () {
+                              context.read<ProjectCubit>().updateTaskStatus(
+                                project.project.id,
+                                'Active',
+                                project.project.isActive,
+                              );
+                            },
+                            changeToComplete: () {
+                              context.read<ProjectCubit>().updateTaskStatus(
+                                project.project.id,
+                                'Completed',
+                                project.project.isActive,
+                              );
+                            },
+                            changeToPending: () {
+                              context.read<ProjectCubit>().updateTaskStatus(
+                                project.project.id,
+                                'Pending',
+                                project.project.isActive,
+                              );
+                            },
+                            changeToTrue: () {
+                              context.read<ProjectCubit>().updateTaskStatus(
+                                project.project.id,
+                                project.project.status,
+                                true,
+                              );
+                            },
+                            changeToFalse: () {
+                              context.read<ProjectCubit>().updateTaskStatus(
+                                project.project.id,
+                                project.project.status,
+                                false,
+                              );
+                            },
+                          ),
                         );
                       },
                     ),

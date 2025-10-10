@@ -3,7 +3,7 @@ import 'package:cmp/models/projects_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:cmp/presentation/screens/projects/edit_project_page.dart';
-import 'package:cmp/presentation/widgets/new_project_card_dashbord.dart';
+import 'package:cmp/presentation/widgets/project_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -113,7 +113,7 @@ class _ProjectsDashbaordPageState extends State<ProjectsDashbaordPage> {
                       // In ProjectsPage, inside ListView.builder's itemBuilder:
                       itemBuilder: (context, index) {
                         final project = projects[index];
-                        return NewProjectCardDashbord(
+                        return ProjectCard(
                           projectModel: project,
                           onEdit: () async {
                             final result = await Navigator.push(
@@ -204,6 +204,7 @@ class _ProjectsDashbaordPageState extends State<ProjectsDashbaordPage> {
                               false,
                             );
                           },
+                          onTap: () {},
                         );
                       },
                     ),

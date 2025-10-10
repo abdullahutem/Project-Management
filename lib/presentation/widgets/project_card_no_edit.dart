@@ -3,35 +3,21 @@ import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class ProjectCard extends StatefulWidget {
+class ProjectCardNoEdit extends StatefulWidget {
   final ProjectsModel projectModel;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
   final VoidCallback onTap;
-  final VoidCallback changeToActive;
-  final VoidCallback changeToComplete;
-  final VoidCallback changeToPending;
-  final VoidCallback changeToTrue;
-  final VoidCallback changeToFalse;
 
-  const ProjectCard({
+  const ProjectCardNoEdit({
     Key? key,
     required this.projectModel,
     required this.onTap,
-    required this.onEdit,
-    required this.onDelete,
-    required this.changeToActive,
-    required this.changeToComplete,
-    required this.changeToPending,
-    required this.changeToTrue,
-    required this.changeToFalse,
   }) : super(key: key);
 
   @override
-  State<ProjectCard> createState() => _ProjectCardState();
+  State<ProjectCardNoEdit> createState() => _ProjectCardNoEditState();
 }
 
-class _ProjectCardState extends State<ProjectCard> {
+class _ProjectCardNoEditState extends State<ProjectCardNoEdit> {
   bool isExpanded = false;
 
   Color _getStatusColor(String status) {
@@ -138,179 +124,6 @@ class _ProjectCardState extends State<ProjectCard> {
                         ),
                       ],
                     ),
-                  ),
-                  PopupMenuButton<String>(
-                    color: Colors.white,
-                    icon: Icon(Icons.more_vert, color: Colors.white),
-                    onSelected: (value) {
-                      if (value == 'edit') {
-                        widget.onEdit();
-                      } else if (value == 'delete') {
-                        widget.onDelete();
-                      } else if (value == 'Active') {
-                        widget.changeToActive();
-                      } else if (value == 'Completed') {
-                        widget.changeToComplete();
-                      } else if (value == 'Pending') {
-                        widget.changeToPending();
-                      } else if (value == 'true') {
-                        widget.changeToTrue();
-                      } else if (value == 'false') {
-                        widget.changeToFalse();
-                      }
-                    },
-                    itemBuilder: (BuildContext context) => [
-                      if (widget.projectModel.project.status == "Active") ...[
-                        PopupMenuItem<String>(
-                          value: 'Completed',
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                'مكتمل',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Icon(
-                                Icons.check_circle_outline,
-                                color: Colors.blue,
-                              ),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem<String>(
-                          value: 'Pending',
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                'قيد الانتظار',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Icon(Icons.hourglass_empty, color: Colors.orange),
-                            ],
-                          ),
-                        ),
-                      ],
-                      if (widget.projectModel.project.status ==
-                          "Completed") ...[
-                        PopupMenuItem<String>(
-                          value: 'Active',
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                'نشيط',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Icon(Icons.directions_run, color: Colors.green),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem<String>(
-                          value: 'Pending',
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                'قيد الانتظار',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Icon(Icons.hourglass_empty, color: Colors.orange),
-                            ],
-                          ),
-                        ),
-                      ],
-                      if (widget.projectModel.project.status == "Pending") ...[
-                        PopupMenuItem<String>(
-                          value: 'Active',
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                'نشيط',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Icon(Icons.directions_run, color: Colors.green),
-                            ],
-                          ),
-                        ),
-                        PopupMenuItem<String>(
-                          value: 'Completed',
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                'مكتمل',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Icon(
-                                Icons.check_circle_outline,
-                                color: Colors.blue,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                      PopupMenuItem<String>(
-                        value: 'edit',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              'تعديل',
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                            Icon(Icons.edit_outlined, color: Colors.blue),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'delete',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              'حذف',
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                            Icon(Icons.delete_outline, color: Colors.red),
-                          ],
-                        ),
-                      ),
-                      if (widget.projectModel.project.isActive == true) ...[
-                        PopupMenuItem<String>(
-                          value: 'false',
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                'إلغاء التفعيل',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Icon(Icons.stop_circle, color: Colors.red),
-                            ],
-                          ),
-                        ),
-                      ],
-                      if (widget.projectModel.project.isActive == false) ...[
-                        PopupMenuItem<String>(
-                          value: 'true',
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                'تفعيل',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              Icon(
-                                Icons.check_circle_outline,
-                                color: Colors.green,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ],
                   ),
                 ],
               ),

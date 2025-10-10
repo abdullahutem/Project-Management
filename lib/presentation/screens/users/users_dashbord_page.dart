@@ -1,7 +1,7 @@
 import 'package:cmp/controller/user/cubit/user_cubit.dart';
 import 'package:cmp/presentation/resources/routes_manager.dart';
 import 'package:cmp/presentation/screens/users/edit_users_page.dart';
-import 'package:cmp/presentation/widgets/new_user_card_dashbord.dart';
+import 'package:cmp/presentation/widgets/user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,7 +106,7 @@ class _UsersDashbordPageState extends State<UsersDashbordPage> {
                   itemBuilder: (context, index) {
                     if (index < employees.length) {
                       final user = employees[index];
-                      return NewUserCardDashbord(
+                      return UserCard(
                         userModel: user,
                         onEdit: () async {
                           final result = await Navigator.push(
@@ -158,6 +158,7 @@ class _UsersDashbordPageState extends State<UsersDashbordPage> {
                             ),
                           );
                         },
+                        onTap: () {},
                       );
                     } else {
                       // Show loading indicator at bottom if more pages exist

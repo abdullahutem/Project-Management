@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:cmp/models/task_model.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cmp/models/projects_model.dart';
 
-class TaskCard extends StatelessWidget {
-  final TaskModel taskModel;
+class ProjectGeneralInfoCard extends StatelessWidget {
+  final ProjectsModel projectModel;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
   final VoidCallback onTap;
@@ -14,12 +14,12 @@ class TaskCard extends StatelessWidget {
   final VoidCallback changeToTrue;
   final VoidCallback changeToFalse;
 
-  const TaskCard({
+  const ProjectGeneralInfoCard({
     Key? key,
-    required this.taskModel,
+    required this.projectModel,
+    required this.onTap,
     required this.onEdit,
     required this.onDelete,
-    required this.onTap,
     required this.changeToActive,
     required this.changeToComplete,
     required this.changeToPending,
@@ -27,34 +27,36 @@ class TaskCard extends StatelessWidget {
     required this.changeToFalse,
   }) : super(key: key);
 
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'Active':
+        return const Color(0xff4CAF50);
+      case 'Completed':
+        return const Color(0xff2196F3);
+      case 'Pending':
+        return const Color(0xffFF9800);
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Color _getStatusColor(String status) {
-      switch (status) {
-        case 'Active':
-          return Colors.blue;
-        case 'Completed':
-          return Colors.green;
-        case 'Pending':
-          return Colors.orange;
-        default:
-          return Colors.grey;
-      }
-    }
+    final Color statusColor = projectModel.project.isActive
+        ? const Color(0xff4CAF50)
+        : const Color(0xffF44336);
 
-    final Color activeColor = taskModel.is_active ? Colors.green : Colors.red;
-
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
-        // margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Gradient Header
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -84,9 +86,9 @@ class TaskCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          taskModel.task,
+                          projectModel.project.name,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -97,22 +99,13 @@ class TaskCard extends StatelessWidget {
                         Row(
                           children: [
                             _buildStatusChip(
-                              taskModel.status,
-                              _getStatusColor(taskModel.status),
+                              projectModel.project.status,
+                              _getStatusColor(projectModel.project.status),
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 8),
                             _buildStatusChip(
-                              taskModel.is_active ? 'نشط' : 'غير نشط',
-                              activeColor,
-                            ),
-                            const SizedBox(width: 4),
-                            _buildStatusChip(
-                              taskModel.replies_count == 1
-                                  ? "${taskModel.replies_count} رد"
-                                  : taskModel.replies_count > 1
-                                  ? "${taskModel.replies_count} ردود"
-                                  : "بدون ردود",
-                              ColorManager.primaryColor,
+                              projectModel.project.isActive ? 'نشط' : 'غير نشط',
+                              statusColor,
                             ),
                           ],
                         ),
@@ -121,18 +114,18 @@ class TaskCard extends StatelessWidget {
                   ),
                   PopupMenuButton<String>(
                     color: Colors.white,
-                    icon: const Icon(Icons.more_vert, color: Colors.white),
+                    icon: Icon(Icons.more_vert, color: Colors.white),
                     onSelected: (value) {
-                      if (value == 'Active') {
+                      if (value == 'edit') {
+                        onEdit();
+                      } else if (value == 'delete') {
+                        onDelete();
+                      } else if (value == 'Active') {
                         changeToActive();
                       } else if (value == 'Completed') {
                         changeToComplete();
                       } else if (value == 'Pending') {
                         changeToPending();
-                      } else if (value == 'edit') {
-                        onEdit();
-                      } else if (value == 'delete') {
-                        onDelete();
                       } else if (value == 'true') {
                         changeToTrue();
                       } else if (value == 'false') {
@@ -140,7 +133,7 @@ class TaskCard extends StatelessWidget {
                       }
                     },
                     itemBuilder: (BuildContext context) => [
-                      if (taskModel.status == "Active") ...[
+                      if (projectModel.project.status == "Active") ...[
                         PopupMenuItem<String>(
                           value: 'Completed',
                           child: Row(
@@ -171,7 +164,7 @@ class TaskCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                      if (taskModel.status == "Completed") ...[
+                      if (projectModel.project.status == "Completed") ...[
                         PopupMenuItem<String>(
                           value: 'Active',
                           child: Row(
@@ -199,7 +192,7 @@ class TaskCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                      if (taskModel.status == "Pending") ...[
+                      if (projectModel.project.status == "Pending") ...[
                         PopupMenuItem<String>(
                           value: 'Active',
                           child: Row(
@@ -230,7 +223,33 @@ class TaskCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                      if (taskModel.is_active == true) ...[
+                      PopupMenuItem<String>(
+                        value: 'edit',
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              'تعديل',
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                            Icon(Icons.edit_outlined, color: Colors.blue),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'delete',
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              'حذف',
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                            Icon(Icons.delete_outline, color: Colors.red),
+                          ],
+                        ),
+                      ),
+                      if (projectModel.project.isActive == true) ...[
                         PopupMenuItem<String>(
                           value: 'false',
                           child: Row(
@@ -245,7 +264,7 @@ class TaskCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                      if (taskModel.is_active == false) ...[
+                      if (projectModel.project.isActive == false) ...[
                         PopupMenuItem<String>(
                           value: 'true',
                           child: Row(
@@ -263,56 +282,43 @@ class TaskCard extends StatelessWidget {
                           ),
                         ),
                       ],
-
-                      PopupMenuItem<String>(
-                        value: 'edit',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text(
-                              'تعديل',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            Icon(Icons.edit, color: Colors.blue),
-                          ],
-                        ),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'delete',
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
-                            Text('حذف', style: TextStyle(color: Colors.black)),
-                            Icon(Icons.delete, color: Colors.red),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 8),
-            const Divider(color: Colors.grey, height: 1),
+
+            // Content
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _buildSection(
-                title: 'حالة المهمة',
+              padding: const EdgeInsets.all(20),
+              child: Column(
                 children: [
-                  _buildDetailRow(
-                    label: 'التكلفة الشهرية',
-                    value: "غير مدرجة",
-                    icon: Icons.money_outlined,
-                    color: Colors.black87,
-                  ),
-                  const SizedBox(width: 8),
-                  _buildDetailRow(
-                    label: 'إجمالي التكلفة',
-                    value: taskModel.current_cost % 1 == 0
-                        ? taskModel.current_cost.toInt().toString()
-                        : taskModel.current_cost.toStringAsFixed(2),
-                    icon: Icons.price_check,
-                    color: Colors.black87,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildDateCard(
+                          icon: "assets/svgs/EmployeesCounts.svg",
+                          label: 'عدد الموظفين',
+                          date: projectModel.usersCount.toString(),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _buildDateCard(
+                          icon: "assets/svgs/StartDate.svg",
+                          label: 'تاريخ البدء',
+                          date: projectModel.project.startDate,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _buildDateCard(
+                          icon: "assets/svgs/EndDate.svg",
+                          label: 'تاريخ الانتهاء',
+                          date: projectModel.project.endDate,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -343,7 +349,7 @@ class TaskCard extends StatelessWidget {
             label,
             style: TextStyle(
               color: color,
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -352,70 +358,41 @@ class TaskCard extends StatelessWidget {
     );
   }
 
-  Widget _buildSection({
-    required String title,
-    required List<Widget> children,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 10),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Color(0xff038187),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Row(children: children),
-        const SizedBox(height: 8),
-        const Divider(color: Colors.grey, height: 2),
-      ],
-    );
-  }
-
-  Widget _buildDetailRow({
+  Widget _buildDateCard({
+    required String icon,
     required String label,
-    required String value,
-    required IconData icon,
-    required Color color,
+    required String date,
   }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: ColorManager.primaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 10,
-              ),
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          SvgPicture.asset(icon, width: 40, height: 40),
+          const SizedBox(height: 10),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
             ),
-            const SizedBox(height: 4),
-            CircleAvatar(
-              backgroundColor: ColorManager.primaryColor,
-              child: Icon(icon, color: Colors.white, size: 15),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            date,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
-            const SizedBox(height: 7),
-            Text(
-              value,
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 10,
-              ),
-            ),
-          ],
-        ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

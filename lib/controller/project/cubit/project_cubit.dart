@@ -108,7 +108,7 @@ class ProjectCubit extends Cubit<ProjectState> {
     });
   }
 
-  getPrjectsForSpecificUser(int id) async {
+  getProjectsForSpecificUser(int id) async {
     emit(ProjectLoading());
     final result = await projectRepo.getPrjectsForSpecificUserData(id);
     result.fold(
@@ -122,7 +122,7 @@ class ProjectCubit extends Cubit<ProjectState> {
     final response = await projectRepo.deleteSingleProjectData(id);
     response.fold((error) => emit(ProjectError(error)), (message) {
       emit(ProjectDeletedSuccess());
-      getAllProjects();
+      getFirstPageProjects();
     });
   }
 
@@ -138,7 +138,7 @@ class ProjectCubit extends Cubit<ProjectState> {
     );
     response.fold((error) => emit(ProjectError(error)), (project) {
       emit(ProjectUpdatedSuccess(projectModel: project));
-      getAllProjects();
+      getFirstPageProjects();
     });
   }
 
@@ -166,6 +166,7 @@ class ProjectCubit extends Cubit<ProjectState> {
     );
     response.fold((error) => emit(ProjectError(error)), (message) {
       emit(ProjectUpdatedSuccess(projectModel: message));
+      getFirstPageProjects();
     });
   }
 

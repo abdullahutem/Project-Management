@@ -2,7 +2,8 @@ import 'package:cmp/controller/project/cubit/project_cubit.dart';
 import 'package:cmp/presentation/resources/color_manager.dart';
 import 'package:cmp/presentation/screens/project_user/add_project_user_page_for_user.dart';
 import 'package:cmp/presentation/screens/users/user_details_page.dart';
-import 'package:cmp/presentation/widgets/employee_project_card.dart';
+
+import 'package:cmp/presentation/widgets/project_card_no_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,7 +25,7 @@ class _UserDetailsWithProjectPageState
     extends State<UserDetailsWithProjectPage> {
   @override
   void initState() {
-    context.read<ProjectCubit>().getPrjectsForSpecificUser(widget.user_id);
+    context.read<ProjectCubit>().getProjectsForSpecificUser(widget.user_id);
     super.initState();
   }
 
@@ -58,14 +59,14 @@ class _UserDetailsWithProjectPageState
           );
           if (result == true) {
             // ✅ refresh projects after successful add
-            context.read<ProjectCubit>().getPrjectsForSpecificUser(
+            context.read<ProjectCubit>().getProjectsForSpecificUser(
               widget.user_id,
             );
           }
         },
         icon: const Icon(Icons.person_add, color: Colors.white),
         label: const Text(
-          'أضف موظف للمشروع',
+          'أضف مشروع للموظف',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: ColorManager.primaryColor,
@@ -125,7 +126,7 @@ class _UserDetailsWithProjectPageState
                       itemCount: theprojects.length,
                       itemBuilder: (context, index) {
                         final project = theprojects[index];
-                        return EmployeeProjectCard(
+                        return ProjectCardNoEdit(
                           projectModel: project,
                           onTap: () {
                             Navigator.push(

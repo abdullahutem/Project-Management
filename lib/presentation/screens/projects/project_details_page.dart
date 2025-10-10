@@ -1,7 +1,7 @@
 import 'package:cmp/core/api/dio_consumer.dart';
 import 'package:cmp/presentation/screens/project_user/add_project_user_page.dart';
 import 'package:cmp/presentation/screens/project_user/edit_project_user_page.dart';
-import 'package:cmp/presentation/widgets/user_card_no_edit.dart';
+import 'package:cmp/presentation/widgets/user_card.dart';
 import 'package:cmp/repo/project_repo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +137,7 @@ class _ProjectDetailsViewState extends State<ProjectDetailsView> {
                         itemCount: project.users.length,
                         itemBuilder: (context, index) {
                           final user = project.users[index];
-                          return UserCardNoEdit(
+                          return UserCard(
                             userModel: user,
                             onTap: () async {
                               final result = await Navigator.push(
