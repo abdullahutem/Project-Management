@@ -88,7 +88,7 @@ class TaskRepliesCard extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Color(0xff038187),
             ),
@@ -195,7 +195,7 @@ class TaskRepliesCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),
@@ -234,18 +234,19 @@ class TaskRepliesCard extends StatelessWidget {
               style: TextStyle(
                 color: ColorManager.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             const SizedBox(height: 4),
-            SvgPicture.asset(assetName, width: 40, height: 40),
+            SvgPicture.asset(assetName, width: 20, height: 30),
             const SizedBox(height: 7),
             Text(
               value,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: color,
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: 10,
               ),
             ),
           ],

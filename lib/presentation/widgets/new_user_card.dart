@@ -74,7 +74,9 @@ class NewUserCard extends StatelessWidget {
                     const SizedBox(width: 5),
                     _buildDetailRow(
                       label: 'الراتب الأساسي',
-                      value: '${userModel.base_salary.toStringAsFixed(2)}',
+                      value: userModel.base_salary % 1 == 0
+                          ? userModel.base_salary.toInt().toString()
+                          : userModel.base_salary.toStringAsFixed(2),
                       assetName: "assets/svgs/max_cost.svg",
                       color: Colors.black87,
                     ),
@@ -135,14 +137,18 @@ class NewUserCard extends StatelessWidget {
                   children: [
                     _buildDetailRow(
                       label: 'إجمالي الساعات',
-                      value: userModel.total_hours.toStringAsFixed(2),
+                      value: userModel.total_hours % 1 == 0
+                          ? userModel.total_hours.toInt().toString()
+                          : userModel.total_hours.toStringAsFixed(2),
                       assetName: "assets/svgs/current_hours.svg",
                       color: Colors.black87,
                     ),
                     const SizedBox(width: 2),
                     _buildDetailRow(
                       label: 'إجمالي التكلفة',
-                      value: userModel.total_cost.toStringAsFixed(2),
+                      value: userModel.total_cost % 1 == 0
+                          ? userModel.total_cost.toInt().toString()
+                          : userModel.total_cost.toStringAsFixed(2),
                       assetName: "assets/svgs/current_cost.svg",
                       color: Colors.black87,
                     ),
@@ -181,7 +187,7 @@ class NewUserCard extends StatelessWidget {
           child: Text(
             userModel.name,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Color(0xff038187),
             ),
@@ -272,10 +278,11 @@ class NewUserCard extends StatelessWidget {
           children: [
             Text(
               label,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: ColorManager.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             const SizedBox(height: 4),
@@ -286,10 +293,11 @@ class NewUserCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textDirection: TextDirection.ltr,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
               ),
             ),
           ],
@@ -316,10 +324,11 @@ class NewUserCard extends StatelessWidget {
           children: [
             Text(
               label,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: ColorManager.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             const SizedBox(height: 4),
@@ -334,10 +343,11 @@ class NewUserCard extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textDirection: TextDirection.ltr,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
               ),
             ),
           ],
@@ -359,16 +369,18 @@ class NewUserCard extends StatelessWidget {
           children: [
             Text(
               label,
+              textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),
             ),
             Text(
               '${(value * 100).toStringAsFixed(0)}%',
+              textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),

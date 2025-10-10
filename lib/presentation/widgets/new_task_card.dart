@@ -92,7 +92,9 @@ class NewTaskCard extends StatelessWidget {
                   children: [
                     _buildDetailRow(
                       label: 'التكلفة الحالية',
-                      value: '${taskModel.current_cost.toStringAsFixed(2)}',
+                      value: taskModel.current_cost % 1 == 0
+                          ? taskModel.current_cost.toInt().toString()
+                          : taskModel.current_cost.toStringAsFixed(2),
                       icon: Icons.price_check,
                       color: Colors.black87,
                     ),
@@ -122,7 +124,7 @@ class NewTaskCard extends StatelessWidget {
           child: Text(
             taskModel.task,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Color(0xff038187),
             ),
@@ -281,7 +283,7 @@ class NewTaskCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),
@@ -320,13 +322,13 @@ class NewTaskCard extends StatelessWidget {
               style: TextStyle(
                 color: ColorManager.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             const SizedBox(height: 4),
             CircleAvatar(
               backgroundColor: ColorManager.primaryColor,
-              child: Icon(icon, color: Colors.white, size: 20),
+              child: Icon(icon, color: Colors.white, size: 15),
             ),
             const SizedBox(height: 7),
             Text(
@@ -334,7 +336,7 @@ class NewTaskCard extends StatelessWidget {
               style: TextStyle(
                 color: color,
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: 10,
               ),
             ),
           ],

@@ -74,35 +74,14 @@ class TaskDetailsCard extends StatelessWidget {
                   const SizedBox(width: 5),
                   _buildDetailRow(
                     label: 'التكلفة الحالية',
-                    value: singleTask.task.current_cost.toStringAsFixed(2),
+                    value: singleTask.task.current_cost % 1 == 0
+                        ? singleTask.task.current_cost.toInt().toString()
+                        : singleTask.task.current_cost.toStringAsFixed(2),
                     icon: Icons.info_outline,
                     color: Colors.black87,
                   ),
                 ],
               ),
-              // _buildSection(
-              //   title: 'التكاليف',
-              //   children: [
-              //     _buildDetailRow(
-              //       label: 'التكلفة الحالية',
-              //       value: singleTask.task.current_cost.toStringAsFixed(2),
-              //       icon: Icons.info_outline,
-              //       color: Colors.black87,
-              //     ),
-              //   ],
-              // ),
-              //               _buildRow(
-              //                 "التكلفة",
-              //                 "${singleTask.task.current_cost.toStringAsFixed(2)}",
-              //                 Icons.price_check,
-              //                 Colors.brown,
-              //               ),
-              //               _buildRow(
-              //                 "عدد الردود",
-              //                 singleTask.task.replies_count.toString(),
-              //                 Icons.comment_outlined,
-              //                 Colors.deepPurple,
-              //               ),
             ],
           ),
         ),
@@ -119,7 +98,7 @@ class TaskDetailsCard extends StatelessWidget {
           child: Text(
             singleTask.task.task,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Color(0xff038187),
             ),
@@ -143,7 +122,7 @@ class TaskDetailsCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),
@@ -182,13 +161,13 @@ class TaskDetailsCard extends StatelessWidget {
               style: TextStyle(
                 color: ColorManager.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             const SizedBox(height: 4),
             CircleAvatar(
               backgroundColor: ColorManager.primaryColor,
-              child: Icon(icon, color: Colors.white, size: 20),
+              child: Icon(icon, color: Colors.white, size: 15),
             ),
             const SizedBox(height: 7),
             Text(
@@ -196,7 +175,7 @@ class TaskDetailsCard extends StatelessWidget {
               style: TextStyle(
                 color: color,
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: 10,
               ),
             ),
           ],

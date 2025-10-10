@@ -141,22 +141,28 @@ class NewProjectCard extends StatelessWidget {
                   children: [
                     _buildDetailRow(
                       label: 'الساعات المنجزة',
-                      value:
-                          '${projectModel.currentHours.toStringAsFixed(2)} من ${projectModel.maxHours.toStringAsFixed(2)}',
+                      value: projectModel.currentHours % 1 == 0
+                          ? projectModel.currentHours.toInt().toString()
+                          : projectModel.currentHours.toStringAsFixed(2),
                       color: Colors.black87,
                       assetName: "assets/svgs/current_hours.svg",
                     ),
+
                     SizedBox(width: 2),
                     _buildDetailRow(
                       label: 'التكلفة الحالية',
-                      value: projectModel.currentCost.toStringAsFixed(2),
+                      value: projectModel.currentCost % 1 == 0
+                          ? projectModel.currentCost.toInt().toString()
+                          : projectModel.currentCost.toStringAsFixed(2),
                       color: Colors.black87,
                       assetName: "assets/svgs/current_cost.svg",
                     ),
                     SizedBox(width: 2),
                     _buildDetailRow(
                       label: 'التكلفة الشهرية',
-                      value: projectModel.currentMonthCost.toStringAsFixed(2),
+                      value: projectModel.currentMonthCost % 1 == 0
+                          ? projectModel.currentMonthCost.toInt().toString()
+                          : projectModel.currentMonthCost.toStringAsFixed(2),
                       color: Colors.black87,
                       assetName: "assets/svgs/current_month_cost.svg",
                     ),
@@ -176,7 +182,7 @@ class NewProjectCard extends StatelessWidget {
                     _buildDetailRow(
                       label: 'نطاق التكلفة',
                       value:
-                          '${projectModel.minCost.toStringAsFixed(2)} - ${projectModel.maxCost.toStringAsFixed(2)}',
+                          '${formatNumber(projectModel.minCost)} - ${formatNumber(projectModel.maxCost)}',
                       assetName: "assets/svgs/min_cost.svg",
                       color: Colors.black87,
                     ),
@@ -202,16 +208,22 @@ class NewProjectCard extends StatelessWidget {
     );
   }
 
+  String formatNumber(double value) {
+    return value % 1 == 0
+        ? value.toInt().toString()
+        : value.toStringAsFixed(2); // or (1) if you want only 1 digit
+  }
+
   Widget _buildHeader() {
     return Row(
       children: [
-        SvgPicture.asset("assets/svgs/ProjectName.svg", height: 60, width: 60),
+        SvgPicture.asset("assets/svgs/ProjectName.svg", height: 50, width: 50),
         const SizedBox(width: 5),
         Expanded(
           child: Text(
             projectModel.project.name,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Color(0xff038187),
             ),
@@ -369,7 +381,7 @@ class NewProjectCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),
@@ -406,27 +418,22 @@ class NewProjectCard extends StatelessWidget {
           children: [
             Text(
               label,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: ColorManager.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             const SizedBox(height: 4),
             SvgPicture.asset(assetName, width: 40, height: 40),
-            // Image.asset(assetName, height: 40, width: 40),
-
-            // CircleAvatar(
-            //   backgroundColor: ColorManager.primaryColor,
-            //   child: Icon(icon, color: Colors.white, size: 20),
-            // ),
             const SizedBox(height: 7),
             Text(
               value,
               style: TextStyle(
                 color: color,
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: 12,
               ),
             ),
           ],
@@ -449,7 +456,7 @@ class NewProjectCard extends StatelessWidget {
             Text(
               label,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),
@@ -457,7 +464,7 @@ class NewProjectCard extends StatelessWidget {
             Text(
               '${(value * 100).toStringAsFixed(0)}%',
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),

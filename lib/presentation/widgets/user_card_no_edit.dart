@@ -74,7 +74,9 @@ class UserCardNoEdit extends StatelessWidget {
                     const SizedBox(width: 5),
                     _buildDetailRow(
                       label: 'الراتب الأساسي',
-                      value: '${userModel.base_salary.toStringAsFixed(2)}',
+                      value: userModel.base_salary % 1 == 0
+                          ? userModel.base_salary.toInt().toString()
+                          : userModel.base_salary.toStringAsFixed(2),
                       assetName: "assets/svgs/max_cost.svg",
                       color: Colors.black87,
                     ),
@@ -135,14 +137,18 @@ class UserCardNoEdit extends StatelessWidget {
                   children: [
                     _buildDetailRow(
                       label: 'إجمالي الساعات',
-                      value: userModel.total_hours.toStringAsFixed(2),
+                      value: userModel.total_hours % 1 == 0
+                          ? userModel.total_hours.toInt().toString()
+                          : userModel.total_hours.toStringAsFixed(2),
                       assetName: "assets/svgs/current_hours.svg",
                       color: Colors.black87,
                     ),
                     const SizedBox(width: 2),
                     _buildDetailRow(
                       label: 'إجمالي التكلفة',
-                      value: userModel.total_cost.toStringAsFixed(2),
+                      value: userModel.total_cost % 1 == 0
+                          ? userModel.total_cost.toInt().toString()
+                          : userModel.total_cost.toStringAsFixed(2),
                       assetName: "assets/svgs/current_cost.svg",
                       color: Colors.black87,
                     ),
@@ -177,7 +183,7 @@ class UserCardNoEdit extends StatelessWidget {
           child: Text(
             userModel.name,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Color(0xff038187),
             ),
@@ -232,7 +238,7 @@ class UserCardNoEdit extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),
@@ -268,10 +274,11 @@ class UserCardNoEdit extends StatelessWidget {
           children: [
             Text(
               label,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: ColorManager.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             const SizedBox(height: 4),
@@ -284,8 +291,8 @@ class UserCardNoEdit extends StatelessWidget {
               textDirection: TextDirection.ltr,
               style: TextStyle(
                 color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
               ),
             ),
           ],
@@ -315,7 +322,7 @@ class UserCardNoEdit extends StatelessWidget {
               style: TextStyle(
                 color: ColorManager.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             const SizedBox(height: 4),
@@ -332,8 +339,8 @@ class UserCardNoEdit extends StatelessWidget {
               textDirection: TextDirection.ltr,
               style: TextStyle(
                 color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                fontSize: 10,
               ),
             ),
           ],
@@ -356,7 +363,7 @@ class UserCardNoEdit extends StatelessWidget {
             Text(
               label,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),
@@ -364,7 +371,7 @@ class UserCardNoEdit extends StatelessWidget {
             Text(
               '${(value * 100).toStringAsFixed(0)}%',
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Color(0xff038187),
               ),

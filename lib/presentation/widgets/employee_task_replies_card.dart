@@ -86,7 +86,7 @@ class EmployeeTaskRepliesCard extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
               color: Color(0xff038187),
             ),
@@ -110,8 +110,8 @@ class EmployeeTaskRepliesCard extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
                 color: Color(0xff038187),
               ),
             ),
@@ -146,10 +146,11 @@ class EmployeeTaskRepliesCard extends StatelessWidget {
           children: [
             Text(
               label,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: ColorManager.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 10,
               ),
             ),
             const SizedBox(height: 4),
@@ -160,10 +161,11 @@ class EmployeeTaskRepliesCard extends StatelessWidget {
             const SizedBox(height: 7),
             Text(
               value,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: color,
                 fontWeight: FontWeight.w600,
-                fontSize: 14,
+                fontSize: 10,
               ),
             ),
           ],
